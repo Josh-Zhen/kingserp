@@ -1,0 +1,28 @@
+server:
+  port: 8804
+
+spring:
+  application:
+    name: hystrix-dashboard-turbine
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8801/eureka/
+  instance:
+    status-page-url: http://localhost:${server.port}/hystrix
+
+# 熔断器turbine
+turbine:
+  app-config: Admin-Server, Login-Server, Task-Server
+  cluster-name-expression: new String("default")
+  combine-host-port: true
+  instanceUrlSuffix:
+    default: /hystrix.stream
+
+# 熔断器DashBoard: actuator在boot2.0调整后开关web端点的配置，*代表开启所有
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

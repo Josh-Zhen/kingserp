@@ -1,0 +1,23 @@
+server:
+  port: 8811
+
+spring:
+  application:
+    name: Admin-Server
+  profiles:
+    active: dev
+  datasource:
+    name: local
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath*:/mapping/**/*.xml,/mapping.auth/*.xml
+  type-aliases-package: com.moonlit.springclouddemo.admin
+  configuration:
+    map-underscore-to-camel-case: true
+
+# hystrix
+feign:
+  hystrix:
+    enabled: true

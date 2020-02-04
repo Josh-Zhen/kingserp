@@ -1,0 +1,25 @@
+###########################################
+#            单Eureka Server 配置         #
+#             本地数据库，Redis            #
+#               本地Nginx代理              #
+############################################
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8801/eureka/
+  instance:
+    status-page-url: http://localhost:8805/login/swagger-ui.html#/
+#    status-page-url: http://localhost:${server.port}/swagger-ui.html
+
+spring:
+  datasource:
+    name: dev
+    url: jdbc:mysql://127.0.0.1:3306/kings_erp?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+    username: root
+    password: qwe123
+    hikari:
+      maximumPoolSize: 10
+      minimumIdle: 2
+      idleTimeout: 600000
+      connectionTimeout: 30000
+      maxLifetime: 1800000

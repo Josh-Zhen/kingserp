@@ -1,0 +1,36 @@
+server:
+  port: 8805
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8801/eureka/
+#      defaultZone: http://peer1:8801/eureka/
+
+spring:
+  application:
+    name: Gateway-Server
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lowerCaseServiceId: true
+      routes:
+        - id: Admin-Server
+          uri: lb://Admin-Server
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+        - id: Login-Server
+          uri: lb://Login-Server
+          predicates:
+            - Path=/login/**
+          filters:
+            - StripPrefix=1
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
