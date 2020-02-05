@@ -27,15 +27,15 @@ public class Swagger2 {
                 .apiInfo(apiInfo())
                 .ignoredParameterTypes(LoginUser.class)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.moonlit.springclouddemo"))
+                .apis(RequestHandlerSelectors.basePackage("com.moonlit.kingserp"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring Cloud APIs")
-                .description("Spring Cloud Demo")
+                .title("Kings ERP APIs")
+                .description("Kings ERP")
                 .termsOfServiceUrl("")
                 .version("1.0")
                 .build();

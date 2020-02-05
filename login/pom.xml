@@ -14,4 +14,13 @@
     <name>login</name>
     <packaging>jar</packaging>
     <description>Login-Service</description>
+
+    <dependencies>
+        <!-- 应用实体 -->
+        <dependency>
+            <groupId>com.moonlit.kingserp.common</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

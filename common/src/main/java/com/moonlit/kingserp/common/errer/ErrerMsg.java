@@ -24,7 +24,11 @@ public enum ErrerMsg {
     ERRER10009(10009, "验证码错误"),
     ERRER10010(10010, "密码不能为空"),
     ERRER10011(10011, "该手机号码已注册"),
-    ERRER10012(10012, "注册失败");
+    ERRER10012(10012, "注册失败"),
+    ERRER20502(20502, "更新失败"),
+    ERRER20505(20505, "删除失败"),
+    ERRER20506(20506, "修改失败"),
+    ERRER20509(20509, "添加失败");
 
     private int code;
     private String message;
