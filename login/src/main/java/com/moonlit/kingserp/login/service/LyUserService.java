@@ -36,7 +36,7 @@ public interface LyUserService {
     void insetUser(LyUser user);
 
     /**
-     * 更新用户基本信息
+     * 更新用户信息
      *
      * @param user
      */

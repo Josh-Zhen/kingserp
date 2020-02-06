@@ -41,7 +41,6 @@ public class LyUserController {
     @PostMapping("/insetUser")
     @ApiOperation(value = "新增一個客戶")
     public ResponseObj insetUser(@RequestBody LyUser user) {
-        int i = 0;
         if (user.getUserName() != null && !user.getUserName().isEmpty()) {
             // 判斷該用戶是否存在
             if (0 == userService.seleUserByUserName(user.getUserName())) {
@@ -104,12 +103,12 @@ public class LyUserController {
      */
     @GetMapping("/getUsers")
     @ApiOperation(value = "根據關鍵字查詢用戶")
-    @ApiImplicitParam(name = "Keywords", value = "關鍵字", paramType = "query", dataType = "String")
-    public ResponseObj getUsers(@RequestBody(required = false) String Keywords) {
+    @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
+    public ResponseObj getUsers(@RequestBody(required = false) String keywords) {
         //查询用户信息
         ArrayList<LyUser> userInfo = null;
         try {
-            userInfo = userService.getUserByUserKeywords(Keywords);
+            userInfo = userService.getUserByUserKeywords(keywords);
         } catch (Exception e) {
             e.printStackTrace();
         }
