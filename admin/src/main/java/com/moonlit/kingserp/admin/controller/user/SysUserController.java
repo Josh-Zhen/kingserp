@@ -9,8 +9,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 系统用户 前端控制器
@@ -28,6 +37,47 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     /**
+     * 后台用户登录
+     *
+     * @param sysUser
+     * @return
+     */
+    @PostMapping("/login")
+    @ApiOperation(value = "后台用户登录")
+    public ResponseObj login(@RequestBody SysUser sysUser) {
+        System.out.println("-----loginName----" + sysUser.getUserName());
+        System.out.println("-----password----" + sysUser.getPassword());
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserName(), sysUser.getPassword());
+        String sessionId = "";
+        Map<String, Object> map = new HashMap<>(2);
+        try {
+            subject.login(token);
+            //12.21 新增 设置登陆时的session失效时间为1h * 24  ==> 1天时间
+            //设置永不过期
+            SecurityUtils.getSubject().getSession().setTimeout(-1000);
+            sessionId = subject.getSession().getId().toString();
+            System.out.println("------sessionId----" + sessionId);
+            SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
+            //设置最后登录时间
+            SysUser syUser = new SysUser();
+            syUser.setId(user.getId());
+            syUser.setLastTime(new Date());
+            sysUserService.updateSysUser(syUser);
+
+            map.put("sysUserInfo", user);
+            map.put("token", sessionId);
+        } catch (IncorrectCredentialsException e) {
+            e.printStackTrace();
+            return ResponseObj.createErrResponse("密码错误");
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            return ResponseObj.createErrResponse(e.getMessage());
+        }
+        return ResponseObj.createSuccessResponse(map);
+    }
+
+    /**
      * 添加账号
      *
      * @param sysUser
@@ -36,7 +86,7 @@ public class SysUserController {
     @PostMapping("/addSysUser")
     @ApiOperation(value = "添加账号")
     public ResponseObj addSysUser(@RequestBody SysUser sysUser) {
-        SysUser admin = sysUserService.getInfo();
+//        SysUser admin = sysUserService.getInfo();
         //判断用户名是否注册
         SysUser sysUserInfo = sysUserService.exitSysUser(sysUser);
         if (sysUserInfo != null) {
@@ -89,8 +139,14 @@ public class SysUserController {
         return ResponseObj.createSuccessResponse();
     }
 
+    /**
+     * 根據關鍵字查詢管理者
+     *
+     * @param keywords
+     * @return
+     */
     @GetMapping("/selectSysUsers")
-    @ApiOperation(value = "根據關鍵字查詢用戶")
+    @ApiOperation(value = "根據關鍵字查詢管理者")
     @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
     public ResponseObj selectSysUsers(@RequestBody(required = false) String keywords) {
         PageInfo<SysUser> pageInfo = null;

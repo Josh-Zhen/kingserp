@@ -58,4 +58,12 @@ public interface SysUserService {
      * @return
      */
     ArrayList<SysUser> selectSysUsers(String keywords);
+
+    /**
+     * 獲取當前用戶
+     *
+     * @param userName
+     * @return
+     */
+    SysUser getUserInfo(String userName);
 }

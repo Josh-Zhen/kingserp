@@ -137,5 +137,21 @@ public class SysUserServiceImpl implements SysUserService {
         return sysUsers;
     }
 
+    /**
+     * 獲取當前用戶
+     *
+     * @param userName
+     * @return
+     */
+    @Override
+    public SysUser getUserInfo(String userName) {
+        try {
+            return sysUserMapper.userInfo(userName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

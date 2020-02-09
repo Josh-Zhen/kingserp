@@ -28,4 +28,13 @@ public interface SysUserMapper extends MyMapper<SysUser> {
             "ORDER BY create_time DESC",
             "</script>"})
     ArrayList<SysUser> selectUserByUserKeywords(String keywords);
+
+    /**
+     * 獲取當前用戶
+     *
+     * @param userName
+     * @return
+     */
+    @Select("select * from sys_user u inner join sys_user_role ur on(u.user_id=ur.user_id) inner join sys_role r on(ur.role_id=r.role_id) where u.username=#{username}")
+    SysUser userInfo(String userName);
 }
