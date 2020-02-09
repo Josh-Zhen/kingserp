@@ -94,6 +94,6 @@ public class LyUser {
      * 用户状态（0-存活、1-禁用）
      */
     @ApiModelProperty(value = "用户状态（0-存活、1-禁用）", name = "type")
-    private Boolean type;
+    private int type;
 
 }

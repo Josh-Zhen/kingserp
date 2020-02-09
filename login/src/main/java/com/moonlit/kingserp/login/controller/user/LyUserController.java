@@ -43,13 +43,16 @@ public class LyUserController {
     public ResponseObj insetUser(@RequestBody LyUser user) {
         if (user.getUserName() != null && !user.getUserName().isEmpty()) {
             // 判斷該用戶是否存在
-            if (0 == userService.seleUserByUserName(user.getUserName())) {
-                user.setRegistrationTime(new Date());
-                String nameShorthand = ChineseToEnUtil.getPinYinHeadChar(user.getNickName());
-                user.setNameShorthand(nameShorthand);
-                userService.insetUser(user);
-            } else {
-                return ResponseObj.createErrResponse("該客戶已經存在!!");
+            LyUser lyUser = userService.checkUser(user.getUserName());
+            if (null != lyUser) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
+            }
+            user.setRegistrationTime(new Date());
+            String nameShorthand = ChineseToEnUtil.getPinYinHeadChar(user.getNickName());
+            user.setNameShorthand(nameShorthand);
+            int i = userService.insetUser(user);
+            if (i < 0) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
             }
         } else {
             return ResponseObj.createErrResponse("請輸入客戶名稱!!");
@@ -65,15 +68,14 @@ public class LyUserController {
      */
     @PostMapping("/updateUser")
     @ApiOperation(value = "修改用户信息")
-    public ResponseObj updateUser(LyUser user) {
-        try {
-            if (user.getId() != null) {
-                userService.updateUser(user);
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER20506);
+    public ResponseObj updateUser(@RequestBody LyUser user) {
+        if (user.getId() != null) {
+            int i = userService.updateUser(user);
+            if (i < 0) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }
-        } catch (Exception e) {
-            log.error("修改用户信息失敗", e);
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
         return ResponseObj.createSuccessResponse();
     }
@@ -86,11 +88,10 @@ public class LyUserController {
      */
     @GetMapping("/deleteUser")
     @ApiOperation(value = "删除用户")
-    public ResponseObj deleteUser(Integer userId) {
-        try {
-            userService.deleteUser(userId);
-        } catch (Exception e) {
-            log.error("删除用户", e);
+    public ResponseObj deleteUser(@RequestParam Integer userId) {
+        int i = userService.deleteUser(userId);
+        if (i < 0) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
         }
         return ResponseObj.createSuccessResponse();
     }

@@ -45,16 +45,10 @@ public class LyUserServiceImpl implements LyUserService {
      * @return
      */
     @Override
-    public int seleUserByUserName(String userName) {
-        int nuber = 0;
-        try {
-            Example example = new Example(LyUser.class);
-            example.createCriteria().andEqualTo("userName", userName);
-            nuber = lyUserMapper.selectCountByExample(example);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return nuber;
+    public LyUser checkUser(String userName) {
+        LyUser user = new LyUser();
+        user.setUserName(userName);
+        return lyUserMapper.selectOne(user);
     }
 
     /**
@@ -63,8 +57,14 @@ public class LyUserServiceImpl implements LyUserService {
      * @param user
      */
     @Override
-    public void insetUser(LyUser user) {
-        lyUserMapper.insertSelective(user);
+    public int insetUser(LyUser user) {
+        int i = 0;
+        try {
+            i = lyUserMapper.insertSelective(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return i;
     }
 
     /**
@@ -73,12 +73,14 @@ public class LyUserServiceImpl implements LyUserService {
      * @param user
      */
     @Override
-    public void updateUser(LyUser user) {
+    public int updateUser(LyUser user) {
+        int i = 0;
         try {
-            lyUserMapper.updateByPrimaryKeySelective(user);
+            i = lyUserMapper.updateByPrimaryKeySelective(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return i;
     }
 
     /**
@@ -87,11 +89,13 @@ public class LyUserServiceImpl implements LyUserService {
      * @param userId
      */
     @Override
-    public void deleteUser(Integer userId) {
+    public int deleteUser(Integer userId) {
+        int i = 0;
         try {
-            lyUserMapper.deleteByPrimaryKey(userId);
+            i = lyUserMapper.deleteByPrimaryKey(userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return i;
     }
 }

@@ -26,26 +26,27 @@ public interface LyUserService {
      * @param userName
      * @return
      */
-    int seleUserByUserName(String userName);
+    LyUser checkUser(String userName);
 
     /**
      * 新增客戶
      *
      * @param user
      */
-    void insetUser(LyUser user);
+    int insetUser(LyUser user);
 
     /**
      * 更新用户信息
      *
      * @param user
      */
-    void updateUser(LyUser user);
+    int updateUser(LyUser user);
 
     /**
      * 删除用户
      *
      * @param userId
      */
-    void deleteUser(Integer userId);
+    int deleteUser(Integer userId);
+
 }
