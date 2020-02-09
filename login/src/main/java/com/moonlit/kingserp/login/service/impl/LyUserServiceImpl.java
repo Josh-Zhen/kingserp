@@ -5,7 +5,6 @@ import com.moonlit.kingserp.login.mapper.LyUserMapper;
 import com.moonlit.kingserp.login.service.LyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 

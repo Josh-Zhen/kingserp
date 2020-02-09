@@ -1,5 +1,6 @@
 package com.moonlit.kingserp.login.controller.user;
 
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.common.util.ChineseToEnUtil;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -69,7 +69,7 @@ public class LyUserController {
     @PostMapping("/updateUser")
     @ApiOperation(value = "修改用户信息")
     public ResponseObj updateUser(@RequestBody LyUser user) {
-        if (user.getId() != null) {
+        if (null != user.getId()) {
             int i = userService.updateUser(user);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
@@ -89,9 +89,13 @@ public class LyUserController {
     @GetMapping("/deleteUser")
     @ApiOperation(value = "删除用户")
     public ResponseObj deleteUser(@RequestParam Integer userId) {
-        int i = userService.deleteUser(userId);
-        if (i < 0) {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+        if (null != userId) {
+            int i = userService.deleteUser(userId);
+            if (i < 0) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+            }
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
         return ResponseObj.createSuccessResponse();
     }
@@ -106,14 +110,13 @@ public class LyUserController {
     @ApiOperation(value = "根據關鍵字查詢用戶")
     @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
     public ResponseObj getUsers(@RequestBody(required = false) String keywords) {
-        //查询用户信息
-        ArrayList<LyUser> userInfo = null;
+        PageInfo<LyUser> pageInfo = null;
         try {
-            userInfo = userService.getUserByUserKeywords(keywords);
+            pageInfo = new PageInfo(userService.getUserByUserKeywords(keywords));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseObj.createSuccessResponse(userInfo);
+        return ResponseObj.createSuccessResponse(pageInfo);
     }
 
 }

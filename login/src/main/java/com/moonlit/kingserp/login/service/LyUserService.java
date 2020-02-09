@@ -32,6 +32,7 @@ public interface LyUserService {
      * 新增客戶
      *
      * @param user
+     * @return
      */
     int insetUser(LyUser user);
 
@@ -39,6 +40,7 @@ public interface LyUserService {
      * 更新用户信息
      *
      * @param user
+     * @return
      */
     int updateUser(LyUser user);
 
@@ -46,6 +48,7 @@ public interface LyUserService {
      * 删除用户
      *
      * @param userId
+     * @return
      */
     int deleteUser(Integer userId);
 

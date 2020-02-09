@@ -2,6 +2,8 @@ package com.moonlit.kingserp.admin.service;
 
 import com.moonlit.kingserp.entity.admin.SysUser;
 
+import java.util.ArrayList;
+
 /**
  * 系统用户 服务类
  *
@@ -37,6 +39,7 @@ public interface SysUserService {
      * 修改成員信息
      *
      * @param sysUser
+     * @return
      */
     int updateSysUser(SysUser sysUser);
 
@@ -47,4 +50,12 @@ public interface SysUserService {
      * @return
      */
     int delSysUserById(Integer sysUserId);
+
+    /**
+     * 模糊查詢管理者
+     *
+     * @param keywords
+     * @return
+     */
+    ArrayList<SysUser> selectSysUsers(String keywords);
 }

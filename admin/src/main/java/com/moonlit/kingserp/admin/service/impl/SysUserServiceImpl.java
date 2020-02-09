@@ -13,6 +13,7 @@ import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -117,6 +118,23 @@ public class SysUserServiceImpl implements SysUserService {
             e.printStackTrace();
         }
         return i;
+    }
+
+    /**
+     * 模糊查詢管理者
+     *
+     * @param keywords
+     * @return
+     */
+    @Override
+    public ArrayList<SysUser> selectSysUsers(String keywords) {
+        ArrayList<SysUser> sysUsers = null;
+        try {
+            sysUsers = sysUserMapper.selectUserByUserKeywords(keywords);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sysUsers;
     }
 
 
