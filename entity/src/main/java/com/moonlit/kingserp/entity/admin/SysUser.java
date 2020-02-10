@@ -110,4 +110,11 @@ public class SysUser {
     @Transient
     @ApiModelProperty(value = "角色ID", name = "roleId")
     private Integer roleId;
+
+    /**
+     * 角色状态,
+     */
+    @ApiModelProperty(value = "角色状态", name = "state")
+    @Transient
+    private Integer state;
 }

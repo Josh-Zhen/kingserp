@@ -145,13 +145,13 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public SysUser getUserInfo(String userName) {
+        SysUser sysUser = new SysUser();
         try {
-            return sysUserMapper.userInfo(userName);
+            sysUser = sysUserMapper.userInfo(userName);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return sysUser;
     }
-
 
 }

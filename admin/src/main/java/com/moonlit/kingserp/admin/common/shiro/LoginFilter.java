@@ -1,4 +1,4 @@
-package com.moonlit.kingserp.admin.shiro;
+package com.moonlit.kingserp.admin.common.shiro;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;

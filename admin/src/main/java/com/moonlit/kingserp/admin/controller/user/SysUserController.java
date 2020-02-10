@@ -59,6 +59,7 @@ public class SysUserController {
             sessionId = subject.getSession().getId().toString();
             System.out.println("------sessionId----" + sessionId);
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
+
             //设置最后登录时间
             SysUser syUser = new SysUser();
             syUser.setId(user.getId());
@@ -67,6 +68,7 @@ public class SysUserController {
 
             map.put("sysUserInfo", user);
             map.put("token", sessionId);
+            return ResponseObj.createSuccessResponse(map);
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
             return ResponseObj.createErrResponse("密码错误");
@@ -74,7 +76,17 @@ public class SysUserController {
             e.printStackTrace();
             return ResponseObj.createErrResponse(e.getMessage());
         }
-        return ResponseObj.createSuccessResponse(map);
+    }
+
+    /**
+     * 用户登出
+     */
+    @GetMapping("/logout")
+    @ApiOperation(value = "用户登出")
+    public ResponseObj userLogout() {
+        SecurityUtils.getSubject().logout();
+        SecurityUtils.getSubject().getSession().setAttribute(null, null);
+        return ResponseObj.createSuccessResponse();
     }
 
     /**

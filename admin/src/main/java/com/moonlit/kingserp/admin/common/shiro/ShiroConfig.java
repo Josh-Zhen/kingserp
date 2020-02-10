@@ -1,5 +1,6 @@
-package com.moonlit.kingserp.admin.shiro;
+package com.moonlit.kingserp.admin.common.shiro;
 
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -15,25 +16,13 @@ import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 /**
  * Shiro 配置
  * <p>
  * Apache Shiro 核心通过 Filter 来实现，就好像SpringMvc 通过DispachServlet 来主控制一样。
  * 既然是使用 Filter 一般也就能猜到，是通过URL规则来进行过滤和权限校验，所以我们需要定义一系列关于URL的规则和访问权限。
- */
-
-/**
+ *
  * @author Joshua
- * @Shiro内置过滤器 anon         org.apache.shiro.web.filter.authc.AnonymousFilter
- * authc        org.apache.shiro.web.filter.authc.FormAuthenticationFilter
- * authcBasic   org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
- * perms        org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
- * port         org.apache.shiro.web.filter.authz.PortFilter
- * rest         org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
- * roles        org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
- * ssl          org.apache.shiro.web.filter.authz.SslFilter
- * user         org.apache.shiro.web.filter.authc.UserFilter
  */
 @Configuration
 public class ShiroConfig {
@@ -64,9 +53,26 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager());
 
-        shiroFilterFactoryBean.setLoginUrl("/**/sysUser/login");
         //过滤器
         Map<String, String> map = new LinkedHashMap<>();
+
+        /**
+         * Shiro内置的FilterChain
+         * Filter Name      Class
+         * anon             org.apache.shiro.web.filter.authc.AnonymousFilter
+         * authc            org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+         * authcBasic       org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+         * perms            org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
+         * port             org.apache.shiro.web.filter.authz.PortFilter
+         * rest             org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
+         * roles            org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
+         * ssl              org.apache.shiro.web.filter.authz.SslFilter
+         * user             org.apache.shiro.web.filter.authc.UserFilter
+         *
+         * anon:所有url都都可以匿名访问
+         * authc: 需要认证才能进行访问
+         * user:配置记住我或认证通过可以访问
+         */
         map.put("/", "anon");
         //swagger开发拦截start
         map.put("/swagger-ui.html/**", "anon");
@@ -76,12 +82,26 @@ public class ShiroConfig {
         map.put("/**/sysUser/login", "anon");
         //swagger开发拦截end
         map.put("/**", "authc");
+
+        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
+        shiroFilterFactoryBean.setLoginUrl("/**/sysUser/login");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 
         Map<String, Filter> filterMap = new LinkedHashMap<>();
         filterMap.put("authc", new LoginFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
         return shiroFilterFactoryBean;
+    }
+
+
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new RetryLimitCredentialsMatcher();
+        // 散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");
+        // 散列的次数
+        hashedCredentialsMatcher.setHashIterations(1);
+        return hashedCredentialsMatcher;
     }
 
     /**
@@ -112,6 +132,5 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
         return authorizationAttributeSourceAdvisor;
     }
-
 
 }
