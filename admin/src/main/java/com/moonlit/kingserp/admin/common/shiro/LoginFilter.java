@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * @author Joshua
  */
@@ -48,10 +47,15 @@ public class LoginFilter extends FormAuthenticationFilter {
                 logger.trace("Attempting to access a path which requires authentication.  Forwarding to the " +
                         "Authentication url [" + getLoginUrl() + "]");
             }
+            resp.setHeader("Access-Control-Allow-Origin", req.getHeader("Origin"));
+            resp.setHeader("Access-Control-Allow-Credentials", "true");
+            resp.setHeader("Access-Control-Allow-Headers", "authorization, content-type");
+            resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+            resp.setHeader("Access-Control-Expose-Headers", "X-forwared-port, X-forwarded-host");
+            resp.setHeader("Vary", "Origin,Access-Control-Request-Method,Access-Control-Request-Headers");
             JSONObject responseObj = new JSONObject();
             responseObj.put("message", "用户未登录");
-            responseObj.put("code", 10004);
-            logger.info("用户没有登录");
+            responseObj.put("code", 401);
             return true;
         }
     }
