@@ -38,6 +38,54 @@ public class ShiroConfig {
     @Value("${spring.redis.password}")
     private String password;
 
+    /**
+     * ShiroFilterFactoryBean 处理拦截资源文件问题。
+     * 注意：单独一个ShiroFilterFactoryBean配置是或报错的，以为在
+     * 初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager
+     * <p>
+     * Filter Chain定义说明
+     * 1、一个URL可以配置多个Filter，使用逗号分隔
+     * 2、当设置多个过滤器时，全部验证通过，才视为通过
+     * 3、部分过滤器可指定参数，如perms，roles
+     */
+    @Bean
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+        ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
+        filterFactoryBean.setSecurityManager(securityManager);
+
+        //过滤器
+        Map<String, String> map = new LinkedHashMap<>();
+
+        /**
+         * anon:所有url都都可以匿名访问
+         * authc: 需要认证才能进行访问
+         * user:配置记住我或认证通过可以访问
+         */
+        map.put("/", "anon");
+        //swagger开发拦截start
+        map.put("/swagger-ui.html/**", "anon");
+        map.put("/webjars/**", "anon");
+        map.put("/v2/**", "anon");
+        map.put("/swagger-resources/**", "anon");
+        map.put("/**/sysUser/login", "anon");
+        //swagger开发拦截end
+        map.put("/**", "authc");
+
+        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
+        filterFactoryBean.setLoginUrl("/**/sysUser/login");
+        filterFactoryBean.setFilterChainDefinitionMap(map);
+
+        Map<String, Filter> filterMap = new LinkedHashMap<>();
+        filterMap.put("authc", new LoginFilter());
+        filterFactoryBean.setFilters(filterMap);
+        return filterFactoryBean;
+    }
+
+    /**
+     * 使用自定義Realm
+     *
+     * @return
+     */
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
@@ -61,49 +109,6 @@ public class ShiroConfig {
     }
 
     /**
-     * ShiroFilterFactoryBean 处理拦截资源文件问题。
-     * 注意：单独一个ShiroFilterFactoryBean配置是或报错的，以为在
-     * 初始化ShiroFilterFactoryBean的时候需要注入：SecurityManager
-     * <p>
-     * Filter Chain定义说明
-     * 1、一个URL可以配置多个Filter，使用逗号分隔
-     * 2、当设置多个过滤器时，全部验证通过，才视为通过
-     * 3、部分过滤器可指定参数，如perms，roles
-     */
-    @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-
-        //过滤器
-        Map<String, String> map = new LinkedHashMap<>();
-
-        /**
-         * anon:所有url都都可以匿名访问
-         * authc: 需要认证才能进行访问
-         * user:配置记住我或认证通过可以访问
-         */
-        map.put("/", "anon");
-        //swagger开发拦截start
-        map.put("/swagger-ui.html/**", "anon");
-        map.put("/webjars/**", "anon");
-        map.put("/v2/**", "anon");
-        map.put("/swagger-resources/**", "anon");
-        map.put("/**/sysUser/login", "anon");
-        //swagger开发拦截end
-        map.put("/**", "authc");
-
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        shiroFilterFactoryBean.setLoginUrl("/**/sysUser/login");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-
-        Map<String, Filter> filterMap = new LinkedHashMap<>();
-        filterMap.put("authc", new LoginFilter());
-        shiroFilterFactoryBean.setFilters(filterMap);
-        return shiroFilterFactoryBean;
-    }
-
-    /**
      * 散列加密
      *
      * @return
@@ -119,7 +124,7 @@ public class ShiroConfig {
     }
 
     /**
-     * Shiro緩存管理
+     * Redis緩存管理
      *
      * @return
      */
@@ -190,9 +195,9 @@ public class ShiroConfig {
     }
 
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
 
