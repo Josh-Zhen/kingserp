@@ -1,16 +1,23 @@
 package com.moonlit.kingserp.admin.common.shiro;
 
+import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.admin.service.SysRoleService;
 import com.moonlit.kingserp.admin.service.SysUserService;
+import com.moonlit.kingserp.entity.admin.SysMenu;
+import com.moonlit.kingserp.entity.admin.SysRole;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Joshua
@@ -27,7 +34,8 @@ public class MyShiroRealm extends AuthorizingRealm {
     private SysUserService sysUserService;
     @Autowired
     private SysRoleService sysRoleService;
-
+    @Autowired
+    private SysMenuService menuService;
 
     /**
      * 權限校驗
@@ -37,8 +45,20 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
-        return null;
+        System.out.println("權限校驗。。。。。");
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        SysUser sysUser = (SysUser) principals.getPrimaryPrincipal();
+        //根据用户id查询角色
+        SysRole sysRoles = sysRoleService.getSysRoleByUserId(sysUser.getId());
+        authorizationInfo.addRole(sysRoles.getRoleName());
+        log.info("角色打印{}", sysRoles.getRoleName());
+        //根據角色id查詢權限
+        List<SysMenu> menus = menuService.getSysMenuByRolesId(sysRoles.getRoleId());
+        for (SysMenu menu : menus) {
+            authorizationInfo.addStringPermissions(Arrays.asList(menu.getPerms().trim().split(",")));
+            log.info("权限打印{}", menu.getPerms());
+        }
+        return authorizationInfo;
     }
 
     /**
@@ -51,7 +71,7 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         System.out.println("用户登录认证。。。。。");
-        //获取用户的输入的账号
+        //获取用户的输入的账号名
         String username = (String) authenticationToken.getPrincipal();
         SysUser sysUser = sysUserService.getUserInfo(username);
         if (null == sysUser) {
@@ -60,7 +80,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         if (sysUser.getStatus() == 0 || sysUser.getState() == 0) {
             throw new UnknownAccountException("用户被禁用");
         }
-        // 用戶、密碼、領域(realm name)
+        // 用戶、密碼、領域(,獲取當前Realm名稱)
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(sysUser, sysUser.getPassword(), getName());
         // 加鹽
         authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(sysUser.getUserSalt().getBytes()));

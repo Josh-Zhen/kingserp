@@ -65,13 +65,19 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>2.2.4.RELEASE</version>
         </dependency>
-
         <!-- shiro-spring -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-web-starter</artifactId>
             <version>1.5.0</version>
         </dependency>
+        <!-- shiro-redis -->
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+
         <!-- redisson -->
         <dependency>
             <groupId>org.redisson</groupId>
@@ -102,6 +108,12 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>5.1.11</version>
+        </dependency>
+        <!-- pagehelper-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.13</version>
         </dependency>
 
         <!-- 获取汉字拼音首字母 pinyin4j -->

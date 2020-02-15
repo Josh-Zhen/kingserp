@@ -25,6 +25,13 @@ public class MD5Util {
         return cipherText;
     }
 
+    /**
+     * 鹽加密
+     *
+     * @param password
+     * @param salf
+     * @return
+     */
     public static String getMd5insalf(String password, String salf) {
         String md5 = new Md5Hash(password, ByteSource.Util.bytes(salf.getBytes())).toString();
         return md5;

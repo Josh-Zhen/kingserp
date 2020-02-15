@@ -13,9 +13,20 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:/mapping/**/*.xml,/mapping.auth/*.xml
-  type-aliases-package: com.moonlit.springclouddemo.admin
+  type-aliases-package: com.moonlit.kingserp.admin
   configuration:
     map-underscore-to-camel-case: true
+
+# 分页插件 PageHelper, 通用 Mapper
+mapper:
+  mappers: com.moonlit.kingserp.common.tkmapper.MyMapper
+  not-empty: true
+  identity: MYSQL
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 
 # hystrix
 feign:

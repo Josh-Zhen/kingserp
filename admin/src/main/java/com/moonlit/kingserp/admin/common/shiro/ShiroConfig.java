@@ -18,9 +18,6 @@ import java.util.Map;
 
 /**
  * Shiro 配置
- * <p>
- * Apache Shiro 核心通过 Filter 来实现，就好像SpringMvc 通过DispachServlet 来主控制一样。
- * 既然是使用 Filter 一般也就能猜到，是通过URL规则来进行过滤和权限校验，所以我们需要定义一系列关于URL的规则和访问权限。
  *
  * @author Joshua
  */
@@ -28,9 +25,17 @@ import java.util.Map;
 public class ShiroConfig {
     @Bean
     public MyShiroRealm myShiroRealm() {
-        return new MyShiroRealm();
+        MyShiroRealm myShiroRealm = new MyShiroRealm();
+        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return myShiroRealm;
     }
 
+    /**
+     * SecurityManager容器
+     * 加載Realm，並交由Shiro完成驗證
+     *
+     * @return
+     */
     @Bean
     SecurityManager securityManager() {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
@@ -57,18 +62,6 @@ public class ShiroConfig {
         Map<String, String> map = new LinkedHashMap<>();
 
         /**
-         * Shiro内置的FilterChain
-         * Filter Name      Class
-         * anon             org.apache.shiro.web.filter.authc.AnonymousFilter
-         * authc            org.apache.shiro.web.filter.authc.FormAuthenticationFilter
-         * authcBasic       org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
-         * perms            org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
-         * port             org.apache.shiro.web.filter.authz.PortFilter
-         * rest             org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
-         * roles            org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
-         * ssl              org.apache.shiro.web.filter.authz.SslFilter
-         * user             org.apache.shiro.web.filter.authc.UserFilter
-         *
          * anon:所有url都都可以匿名访问
          * authc: 需要认证才能进行访问
          * user:配置记住我或认证通过可以访问
@@ -93,7 +86,11 @@ public class ShiroConfig {
         return shiroFilterFactoryBean;
     }
 
-
+    /**
+     * 散列加密
+     *
+     * @return
+     */
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new RetryLimitCredentialsMatcher();

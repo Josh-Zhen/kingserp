@@ -95,6 +95,7 @@ public class SysUserServiceImpl implements SysUserService {
         int i = 0;
         try {
             i = sysUserMapper.updateByPrimaryKeySelective(sysUser);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

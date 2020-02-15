@@ -9,6 +9,8 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * 密碼多次錯誤保護
+ *
  * @author Joshua
  */
 public class RetryLimitCredentialsMatcher extends HashedCredentialsMatcher {

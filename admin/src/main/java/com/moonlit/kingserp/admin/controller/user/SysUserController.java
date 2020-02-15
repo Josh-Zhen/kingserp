@@ -68,7 +68,6 @@ public class SysUserController {
 
             map.put("sysUserInfo", user);
             map.put("token", sessionId);
-            return ResponseObj.createSuccessResponse(map);
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
             return ResponseObj.createErrResponse("密码错误");
@@ -76,6 +75,7 @@ public class SysUserController {
             e.printStackTrace();
             return ResponseObj.createErrResponse(e.getMessage());
         }
+        return ResponseObj.createSuccessResponse(map);
     }
 
     /**
