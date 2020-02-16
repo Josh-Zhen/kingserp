@@ -54,6 +54,11 @@ public class SysUserController {
         try {
             subject.login(token);
 
+            //设置永不过期
+//            SecurityUtils.getSubject().getSession().setTimeout(-1000);
+//            sessionId = subject.getSession().getId().toString();
+//            System.out.println("------sessionId----" + sessionId);
+
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
             SysUser syUser = new SysUser();
@@ -62,7 +67,7 @@ public class SysUserController {
             sysUserService.updateSysUser(syUser);
 
             map.put("sysUserInfo", user);
-            map.put("token", sessionId);
+//            map.put("token", sessionId);
             return ResponseObj.createSuccessResponse(map);
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
