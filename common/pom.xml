@@ -12,6 +12,7 @@
     <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>common</name>
+    <packaging>jar</packaging>
     <description>Common-Service</description>
 
     <dependencies>
@@ -142,17 +143,5 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>add.your.main.class.application.reference.here</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
