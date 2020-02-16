@@ -51,6 +51,7 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
+        // 设置 SecurityManager
         filterFactoryBean.setSecurityManager(securityManager);
 
         //过滤器
@@ -194,6 +195,15 @@ public class ShiroConfig {
         return advisorAutoProxyCreator;
     }
 
+    /**
+     * 开启shiro aop注解支持.
+     * 使用代理方式;所以需要开启代码支持;
+     * 开启 权限注解
+     * Controller才能使用@RequiresPermissions
+     *
+     * @param securityManager
+     * @return
+     */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();

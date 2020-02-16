@@ -14,18 +14,19 @@ import java.io.Serializable;
 public class MySessionManager extends DefaultWebSessionManager {
     private static final String TOKEN = "token";
 
-    public MySessionManager(){
+    public MySessionManager() {
         super();
     }
+
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
-        String token= WebUtils.toHttp(request).getParameter(TOKEN);
+        String token = WebUtils.toHttp(request).getParameter(TOKEN);
         if (StringUtils.isEmpty(token)) {
             token = WebUtils.toHttp(request).getHeader(TOKEN);
         }
-        if (!StringUtils.isEmpty(token)){
+        if (!StringUtils.isEmpty(token)) {
             return token;
-        }else {
+        } else {
             return super.getSessionId(request, response);
         }
     }

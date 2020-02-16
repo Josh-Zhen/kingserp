@@ -85,6 +85,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         // 加鹽
         authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(sysUser.getUserSalt().getBytes()));
         SecurityUtils.getSubject().getSession().setAttribute("tokenInfo", sysUser);
+        System.out.println("完成");
         return authenticationInfo;
     }
 }
