@@ -17,4 +17,20 @@ public interface SysRoleService {
      * @return
      */
     SysRole getSysRoleByUserId(Integer id);
+
+    /**
+     * 校驗角色是否存在
+     *
+     * @param roleName
+     * @return
+     */
+    SysRole selectName(String roleName);
+
+    /**
+     * 添加一個角色
+     *
+     * @param sysRole
+     * @return
+     */
+    int insert(SysRole sysRole);
 }

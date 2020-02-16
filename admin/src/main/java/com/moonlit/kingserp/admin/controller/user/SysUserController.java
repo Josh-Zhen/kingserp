@@ -169,5 +169,26 @@ public class SysUserController {
         }
         return ResponseObj.createSuccessResponse(pageInfo);
     }
-}
 
+    /**
+     * 启用/禁用 管理者
+     */
+    @PostMapping("/updateSysUserStatus")
+    @ApiOperation(value = "启用/禁用 管理者")
+    public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
+        SysUser sysUser = new SysUser();
+        int i = 0;
+        if (null != sysUserId) {
+            type = Math.abs(type - 1);
+            sysUser.setId(sysUserId);
+            sysUser.setStatus(type);
+            i = sysUserService.updateSysUser(sysUser);
+        }
+        if (i < 0) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+        }
+        return ResponseObj.createSuccessResponse();
+    }
+
+
+}

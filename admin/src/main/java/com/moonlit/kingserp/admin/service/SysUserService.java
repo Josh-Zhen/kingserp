@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public interface SysUserService {
 
     /**
-     * 当前登录用户的权限等信息
+     * 從中session获取用户信息
      *
      * @return SysUser
      */
