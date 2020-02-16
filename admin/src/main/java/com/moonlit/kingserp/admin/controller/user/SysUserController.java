@@ -85,8 +85,8 @@ public class SysUserController {
     @ApiOperation(value = "用户登出")
     public ResponseObj userLogout() {
         SecurityUtils.getSubject().logout();
-        SecurityUtils.getSubject().getSession().setAttribute(null, null);
-        return ResponseObj.createSuccessResponse();
+//        SecurityUtils.getSubject().getSession().setAttribute(null, null);
+        return ResponseObj.createSuccessResponse("用戶已登出");
     }
 
     /**
