@@ -53,13 +53,8 @@ public class SysUserController {
         Map<String, Object> map = new HashMap<>(2);
         try {
             subject.login(token);
-            //12.21 新增 设置登陆时的session失效时间为1h * 24  ==> 1天时间
-            //设置永不过期
-            SecurityUtils.getSubject().getSession().setTimeout(-1000);
-            sessionId = subject.getSession().getId().toString();
-            System.out.println("------sessionId----" + sessionId);
-            SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
 
+            SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
             SysUser syUser = new SysUser();
             syUser.setId(user.getId());
@@ -68,6 +63,7 @@ public class SysUserController {
 
             map.put("sysUserInfo", user);
             map.put("token", sessionId);
+            return ResponseObj.createSuccessResponse(map);
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
             return ResponseObj.createErrResponse("密码错误");
@@ -75,7 +71,6 @@ public class SysUserController {
             e.printStackTrace();
             return ResponseObj.createErrResponse(e.getMessage());
         }
-        return ResponseObj.createSuccessResponse(map);
     }
 
     /**

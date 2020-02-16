@@ -70,7 +70,7 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        System.out.println("用户登录认证。。。。。");
+        System.out.println("Admin管理者登录认证.....");
         //获取用户的输入的账号名
         String username = (String) authenticationToken.getPrincipal();
         SysUser sysUser = sysUserService.getUserInfo(username);
@@ -85,7 +85,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         // 加鹽
         authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(sysUser.getUserSalt().getBytes()));
         SecurityUtils.getSubject().getSession().setAttribute("tokenInfo", sysUser);
-        System.out.println("完成");
+        System.out.println("完成登錄校驗.....");
         return authenticationInfo;
     }
 }
