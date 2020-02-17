@@ -84,8 +84,8 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(sysUser, sysUser.getPassword(), getName());
         // 加鹽
         authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(sysUser.getUserSalt().getBytes()));
-//        SecurityUtils.getSubject().getSession().setAttribute("tokenInfo", sysUser);
-        System.out.println("完成登錄校驗.....");
+        SecurityUtils.getSubject().getSession().setAttribute("tokenInfo", sysUser);
+        System.out.println("----------完成登錄校驗----------");
         return authenticationInfo;
     }
 }

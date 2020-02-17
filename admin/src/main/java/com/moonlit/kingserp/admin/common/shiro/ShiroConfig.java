@@ -37,6 +37,12 @@ public class ShiroConfig {
     private String host;
     @Value("${spring.redis.password}")
     private String password;
+    @Value("${spring.redis.port}")
+    private int port;
+    @Value("${spring.redis.database:0}")
+    private int database;
+    @Value("${spring.redis.timeout}")
+    private int timeout;
 
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件问题。
@@ -103,8 +109,8 @@ public class ShiroConfig {
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-//        securityManager.setCacheManager(redisCacheManager());
-//        securityManager.setSessionManager(mySessionManager());
+        securityManager.setCacheManager(redisCacheManager());
+        securityManager.setSessionManager(mySessionManager());
         securityManager.setRealm(myShiroRealm());
         return securityManager;
     }
@@ -145,11 +151,10 @@ public class ShiroConfig {
     @Bean
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
+        redisManager.setHost(host + ":" + port);
         redisManager.setPassword(password);
-        redisManager.setTimeout(3000);
-        //redis数据存储db位置
-        redisManager.setDatabase(0);
+        redisManager.setTimeout(timeout);
+        redisManager.setDatabase(database);
         return redisManager;
     }
 
@@ -161,7 +166,6 @@ public class ShiroConfig {
     }
 
     /**
-     * StringRedisTemplate
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      * 使用的是shiro-redis开源插件
      */
@@ -196,8 +200,6 @@ public class ShiroConfig {
     }
 
     /**
-     * 开启shiro aop注解支持.
-     * 使用代理方式;所以需要开启代码支持;
      * 开启 权限注解
      * Controller才能使用@RequiresPermissions
      *

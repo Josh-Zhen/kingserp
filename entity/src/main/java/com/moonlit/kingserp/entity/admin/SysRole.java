@@ -18,7 +18,7 @@ import java.util.Date;
  * @author Joshua
  * @since 2020-02-08
  */
-@ApiModel(value = "sysRole", description = "角色")
+@ApiModel(value = "SysRole", description = "角色")
 @Data
 public class SysRole implements Serializable {
 

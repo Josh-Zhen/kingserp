@@ -1,6 +1,7 @@
 package com.moonlit.kingserp.admin.controller.user;
 
 import com.github.pagehelper.PageInfo;
+import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -55,9 +56,9 @@ public class SysUserController {
             subject.login(token);
 
             //设置永不过期
-//            SecurityUtils.getSubject().getSession().setTimeout(-1000);
-//            sessionId = subject.getSession().getId().toString();
-//            System.out.println("------sessionId----" + sessionId);
+            SecurityUtils.getSubject().getSession().setTimeout(-1000);
+            sessionId = subject.getSession().getId().toString();
+            System.out.println("------sessionId----" + sessionId);
 
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
@@ -67,7 +68,7 @@ public class SysUserController {
             sysUserService.updateSysUser(syUser);
 
             map.put("sysUserInfo", user);
-//            map.put("token", sessionId);
+            map.put("token", sessionId);
             return ResponseObj.createSuccessResponse(map);
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
@@ -79,13 +80,13 @@ public class SysUserController {
     }
 
     /**
-     * 用户登出
+     * 用户登出.並清除緩存
      */
     @GetMapping("/logout")
     @ApiOperation(value = "用户登出")
     public ResponseObj userLogout() {
-        SecurityUtils.getSubject().logout();
-//        SecurityUtils.getSubject().getSession().setAttribute(null, null);
+        ShiroUtils.logout();
+        ShiroUtils.deleteCache();
         return ResponseObj.createSuccessResponse("用戶已登出");
     }
 

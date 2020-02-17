@@ -19,6 +19,10 @@ import java.io.Serializable;
 public class SysUserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

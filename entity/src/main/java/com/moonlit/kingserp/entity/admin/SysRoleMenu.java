@@ -21,6 +21,9 @@ public class SysRoleMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     */
     @ApiModelProperty(value = "id", name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

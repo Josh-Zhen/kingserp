@@ -27,13 +27,13 @@ spring:
 
   redis:
     database: 0
-    host: 127.0.0.1
+    host: localhost
     password: qwe123
     port: 6379
     timeout: 7000
     jedis:
       pool:
-        max-idle: 500
-        min-idle: 50
+        max-idle: 100
+        min-idle: 10
         max-active: 2000
         max-wait: 1000
