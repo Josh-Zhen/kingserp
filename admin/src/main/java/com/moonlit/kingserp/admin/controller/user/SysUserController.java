@@ -1,7 +1,9 @@
 package com.moonlit.kingserp.admin.controller.user;
 
 import com.github.pagehelper.PageInfo;
+import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
+import com.moonlit.kingserp.admin.common.utils.Utils;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -50,7 +52,7 @@ public class SysUserController {
         System.out.println("-----password----" + sysUser.getPassword());
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserName(), sysUser.getPassword());
-        String sessionId = "";
+        String sessionId;
         Map<String, Object> map = new HashMap<>(2);
         try {
             subject.login(token);
@@ -96,18 +98,25 @@ public class SysUserController {
      * @param sysUser
      * @return
      */
+    @NeedAuth
     @PostMapping("/addSysUser")
     @ApiOperation(value = "添加账号")
     public ResponseObj addSysUser(@RequestBody SysUser sysUser) {
-//        SysUser admin = sysUserService.getInfo();
-        //判断用户名是否注册
-        SysUser sysUserInfo = sysUserService.exitSysUser(sysUser);
-        if (sysUserInfo != null) {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
-        }
-        int i = sysUserService.addSysUser(sysUser);
-        if (i < 0) {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+        // 獲取當前操作管理者
+        SysUser adminUser = ShiroUtils.getUserInfo();
+        if (adminUser.getUserIsSuper() == 1) {
+            //判断用户名是否注册
+            SysUser sysUserInfo = sysUserService.exitSysUser(sysUser);
+            if (sysUserInfo != null) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
+            }
+            sysUser.setCreateUserId(adminUser.getId());
+            int i = sysUserService.addSysUser(sysUser);
+            if (i < 0) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+            }
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         return ResponseObj.createSuccessResponse();
     }
@@ -118,6 +127,7 @@ public class SysUserController {
      * @param sysUser
      * @return
      */
+    @NeedAuth
     @PostMapping("/updateSysUser")
     @ApiOperation(value = "修改成員信息")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
@@ -138,16 +148,21 @@ public class SysUserController {
      * @param sysUserId
      * @return
      */
+    @NeedAuth
     @PostMapping("/delSysUser")
     @ApiOperation(value = "刪除成員")
     public ResponseObj delSysUser(@RequestParam Integer sysUserId) {
-        if (null != sysUserId) {
-            int i = sysUserService.delSysUserById(sysUserId);
-            if (i < 0) {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+        if (Utils.checkUserIsSuper()) {
+            if (null != sysUserId) {
+                int i = sysUserService.delSysUserById(sysUserId);
+                if (i < 0) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+                }
+            } else {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
             }
         } else {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
+            ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         return ResponseObj.createSuccessResponse();
     }
@@ -174,22 +189,26 @@ public class SysUserController {
     /**
      * 启用/禁用 管理者
      */
+    @NeedAuth
     @PostMapping("/updateSysUserStatus")
     @ApiOperation(value = "启用/禁用 管理者")
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
-        SysUser sysUser = new SysUser();
-        int i = 0;
-        if (null != sysUserId) {
-            type = Math.abs(type - 1);
-            sysUser.setId(sysUserId);
-            sysUser.setStatus(type);
-            i = sysUserService.updateSysUser(sysUser);
-        }
-        if (i < 0) {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+        if (Utils.checkUserIsSuper()) {
+            SysUser sysUser = new SysUser();
+            int i = 0;
+            if (null != sysUserId) {
+                type = Math.abs(type - 1);
+                sysUser.setId(sysUserId);
+                sysUser.setStatus(type);
+                i = sysUserService.updateSysUser(sysUser);
+            }
+            if (i < 0) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+            }
+        } else {
+            ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         return ResponseObj.createSuccessResponse();
     }
-
 
 }
