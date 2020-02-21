@@ -66,6 +66,6 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public int updateRole(SysRole sysRole) {
-        return 0;
+        return roleMapper.updateByPrimaryKeySelective(sysRole);
     }
 }
