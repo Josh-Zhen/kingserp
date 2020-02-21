@@ -57,4 +57,15 @@ public class SysRoleServiceImpl implements SysRoleService {
         sysRole.setCreateTime(new Date());
         return roleMapper.insert(sysRole);
     }
+
+    /**
+     * 更新角色信息
+     *
+     * @param sysRole
+     * @return
+     */
+    @Override
+    public int updateRole(SysRole sysRole) {
+        return 0;
+    }
 }

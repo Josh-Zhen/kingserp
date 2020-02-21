@@ -33,4 +33,12 @@ public interface SysRoleService {
      * @return
      */
     int insert(SysRole sysRole);
+
+    /**
+     * 更新角色信息
+     *
+     * @param sysRole
+     * @return
+     */
+    int updateRole(SysRole sysRole);
 }
