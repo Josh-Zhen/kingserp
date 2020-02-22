@@ -1,5 +1,6 @@
 package com.moonlit.kingserp.admin.controller.user;
 
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.annotation.SupperAdminFilter;
 import com.moonlit.kingserp.admin.service.LogService;
@@ -75,7 +76,7 @@ public class SysRoleController {
      * @return
      */
     @NeedAuth
-    @PostMapping("/updateRole")
+    @PutMapping("/updateRole")
     @ApiOperation("修改角色信息")
     public ResponseObj updateRole(@RequestBody SysRole sysRole) {
         if (SupperAdminFilter.CheckSupperAdmin()) {
@@ -102,7 +103,7 @@ public class SysRoleController {
      * @return
      */
     @NeedAuth
-    @PostMapping("/updateRoleState")
+    @PutMapping("/updateRoleState")
     @ApiOperation("修改角色狀態")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
@@ -138,7 +139,7 @@ public class SysRoleController {
      * @return
      */
     @NeedAuth
-    @GetMapping("/delectRole")
+    @DeleteMapping("/delectRole")
     @ApiOperation("刪除角色")
     @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
     public ResponseObj delectRole(@RequestParam Integer roleId) {
@@ -157,6 +158,24 @@ public class SysRoleController {
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色ID為：" + roleId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
+    }
+
+    /**
+     * 查詢角色
+     *
+     * @return
+     */
+    @GetMapping("/selectRoles")
+    @ApiOperation("查詢角色")
+    public ResponseObj selectRoles(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
+                                   @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        PageInfo<SysRole> sysUserPageInfo = null;
+        try {
+            sysUserPageInfo = roleService.selectRoles(currentPage, pageSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseObj.createSuccessResponse(sysUserPageInfo);
     }
 }
 

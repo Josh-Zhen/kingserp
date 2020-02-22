@@ -4,6 +4,8 @@ import com.moonlit.kingserp.common.tkmapper.MyMapper;
 import com.moonlit.kingserp.entity.admin.SysRole;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * <p>
  * 角色 Mapper 接口
@@ -22,4 +24,12 @@ public interface SysRoleMapper extends MyMapper<SysRole> {
      */
     @Select("SELECT r.* FROM sys_user u INNER JOIN sys_user_role ur ON ( u.id = ur.user_id ) INNER JOIN sys_role r ON ( ur.role_id = r.role_id ) WHERE u.id = #{id}")
     SysRole getSysRoleByUserId(Integer id);
+
+    /**
+     * 查詢角色
+     *
+     * @return
+     */
+    @Select("SELECT *, ( SELECT COUNT(*) FROM `sys_user_role` WHERE role_id = r.role_id ) AS userCount FROM `sys_role` r ORDER BY role_id")
+    List<SysRole> selectRoles();
 }

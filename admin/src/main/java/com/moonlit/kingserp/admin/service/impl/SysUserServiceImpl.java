@@ -1,5 +1,7 @@
 package com.moonlit.kingserp.admin.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.mapper.SysUserMapper;
 import com.moonlit.kingserp.admin.mapper.SysUserRoleMapper;
 import com.moonlit.kingserp.admin.service.SysUserService;
@@ -124,18 +126,21 @@ public class SysUserServiceImpl implements SysUserService {
     /**
      * 模糊查詢管理者
      *
+     * @param currentPage
+     * @param pageSize
      * @param keywords
      * @return
      */
     @Override
-    public ArrayList<SysUser> selectSysUsers(String keywords) {
-        ArrayList<SysUser> sysUsers = null;
+    public PageInfo<SysUser> selectSysUsers(Integer currentPage, Integer pageSize, String keywords) {
+        PageInfo pageInfo = null;
         try {
-            sysUsers = sysUserMapper.selectUserByUserKeywords(keywords);
+            PageHelper.startPage(currentPage, pageSize);
+            pageInfo = new PageInfo(sysUserMapper.selectUserByUserKeywords(keywords));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return sysUsers;
+        return pageInfo;
     }
 
     /**

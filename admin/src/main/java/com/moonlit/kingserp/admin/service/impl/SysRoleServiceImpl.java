@@ -1,5 +1,7 @@
 package com.moonlit.kingserp.admin.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.mapper.SysRoleMapper;
 import com.moonlit.kingserp.admin.service.SysRoleService;
 import com.moonlit.kingserp.entity.admin.SysRole;
@@ -80,5 +82,24 @@ public class SysRoleServiceImpl implements SysRoleService {
         SysRole sysRole = new SysRole();
         sysRole.setRoleId(roleId);
         return roleMapper.delete(sysRole);
+    }
+
+    /**
+     * 查詢角色
+     *
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfo<SysRole> selectRoles(Integer currentPage, Integer pageSize) {
+        PageInfo pageInfo = null;
+        try {
+            PageHelper.startPage(currentPage, pageSize);
+            pageInfo = new PageInfo(roleMapper.selectRoles());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pageInfo;
     }
 }

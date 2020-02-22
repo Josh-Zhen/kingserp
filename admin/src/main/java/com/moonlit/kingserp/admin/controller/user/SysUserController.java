@@ -136,7 +136,7 @@ public class SysUserController {
      * @return
      */
     @NeedAuth
-    @PostMapping("/updateSysUser")
+    @PutMapping("/updateSysUser")
     @ApiOperation(value = "修改成員信息")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
@@ -159,7 +159,7 @@ public class SysUserController {
      * @return
      */
     @NeedAuth
-    @PostMapping("/delSysUser")
+    @DeleteMapping("/delSysUser")
     @ApiOperation(value = "刪除成員")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
@@ -191,21 +191,23 @@ public class SysUserController {
     @GetMapping("/selectSysUsers")
     @ApiOperation(value = "根據關鍵字查詢管理者")
     @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
-    public ResponseObj selectSysUsers(@RequestParam(required = false) String keywords) {
-        PageInfo<SysUser> pageInfo = null;
+    public ResponseObj selectSysUsers(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
+                                      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                      @RequestParam(required = false) String keywords) {
+        PageInfo<SysUser> SysUsers = null;
         try {
-            pageInfo = new PageInfo(sysUserService.selectSysUsers(keywords));
+            SysUsers = sysUserService.selectSysUsers(currentPage, pageSize, keywords);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseObj.createSuccessResponse(pageInfo);
+        return ResponseObj.createSuccessResponse(SysUsers);
     }
 
     /**
      * 启用/禁用 管理者
      */
     @NeedAuth
-    @PostMapping("/updateSysUserStatus")
+    @PutMapping("/updateSysUserStatus")
     @ApiOperation(value = "启用/禁用 管理者")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),

@@ -1,5 +1,6 @@
 package com.moonlit.kingserp.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.entity.admin.SysRole;
 
 /**
@@ -49,4 +50,13 @@ public interface SysRoleService {
      * @return
      */
     int delectRole(Integer roleId);
+
+    /**
+     * 查詢角色
+     *
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    PageInfo<SysRole> selectRoles(Integer currentPage, Integer pageSize);
 }

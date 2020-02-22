@@ -1,5 +1,6 @@
 package com.moonlit.kingserp.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.entity.admin.SysUser;
 
 import java.util.ArrayList;
@@ -54,10 +55,12 @@ public interface SysUserService {
     /**
      * 模糊查詢管理者
      *
+     * @param currentPage
+     * @param pageSize
      * @param keywords
      * @return
      */
-    ArrayList<SysUser> selectSysUsers(String keywords);
+    PageInfo<SysUser> selectSysUsers(Integer currentPage, Integer pageSize, String keywords);
 
     /**
      * 獲取當前用戶
