@@ -4,12 +4,14 @@ import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.common.utils.Utils;
+import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -18,6 +20,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -35,9 +38,12 @@ import java.util.Map;
 @Api(value = "后台成员管理相关操作", tags = {"后台成员管理相关操作"})
 @RequestMapping("/sysUser")
 public class SysUserController {
-
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    LogService logService;
+    @Autowired
+    ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
      * 后台用户登录
@@ -65,7 +71,7 @@ public class SysUserController {
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
             SysUser syUser = new SysUser();
-            syUser.setId(user.getId());
+            syUser.setSysUserId(user.getSysUserId());
             syUser.setLastTime(new Date());
             sysUserService.updateSysUser(syUser);
 
@@ -101,6 +107,7 @@ public class SysUserController {
     @NeedAuth
     @PostMapping("/addSysUser")
     @ApiOperation(value = "添加账号")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj addSysUser(@RequestBody SysUser sysUser) {
         // 獲取當前操作管理者
         SysUser adminUser = ShiroUtils.getUserInfo();
@@ -110,7 +117,7 @@ public class SysUserController {
             if (sysUserInfo != null) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
             }
-            sysUser.setCreateUserId(adminUser.getId());
+            sysUser.setCreateUserId(adminUser.getSysUserId());
             int i = sysUserService.addSysUser(sysUser);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
@@ -118,6 +125,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("addSysUser", "添加账号，賬戶名：" + sysUser.getUserName()));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -130,8 +138,9 @@ public class SysUserController {
     @NeedAuth
     @PostMapping("/updateSysUser")
     @ApiOperation(value = "修改成員信息")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
-        if (null != sysUser.getId()) {
+        if (null != sysUser.getSysUserId()) {
             int i = sysUserService.updateSysUser(sysUser);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
@@ -139,6 +148,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUser", "修改成員信息，Id為：" + sysUser.getSysUserId()));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -151,6 +161,10 @@ public class SysUserController {
     @NeedAuth
     @PostMapping("/delSysUser")
     @ApiOperation(value = "刪除成員")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
+            @ApiImplicitParam(name = "sysUserId", value = "管理員Id", paramType = "query", dataType = "Integer")
+    })
     public ResponseObj delSysUser(@RequestParam Integer sysUserId) {
         if (Utils.checkUserIsSuper()) {
             if (null != sysUserId) {
@@ -164,6 +178,7 @@ public class SysUserController {
         } else {
             ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除一個管理員，Id為：" + sysUserId));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -176,7 +191,7 @@ public class SysUserController {
     @GetMapping("/selectSysUsers")
     @ApiOperation(value = "根據關鍵字查詢管理者")
     @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
-    public ResponseObj selectSysUsers(@RequestBody(required = false) String keywords) {
+    public ResponseObj selectSysUsers(@RequestParam(required = false) String keywords) {
         PageInfo<SysUser> pageInfo = null;
         try {
             pageInfo = new PageInfo(sysUserService.selectSysUsers(keywords));
@@ -192,13 +207,18 @@ public class SysUserController {
     @NeedAuth
     @PostMapping("/updateSysUserStatus")
     @ApiOperation(value = "启用/禁用 管理者")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
+            @ApiImplicitParam(name = "sysUserId", value = "管理員Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "狀態", paramType = "query", dataType = "Integer")
+    })
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
         if (Utils.checkUserIsSuper()) {
-            SysUser sysUser = new SysUser();
             int i = 0;
             if (null != sysUserId) {
+                SysUser sysUser = new SysUser();
                 type = Math.abs(type - 1);
-                sysUser.setId(sysUserId);
+                sysUser.setSysUserId(sysUserId);
                 sysUser.setStatus(type);
                 i = sysUserService.updateSysUser(sysUser);
             }
@@ -208,6 +228,7 @@ public class SysUserController {
         } else {
             ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUserStatus", "修改管理者Id為：" + sysUserId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
     }
 

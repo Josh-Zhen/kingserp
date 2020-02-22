@@ -2,9 +2,13 @@ package com.moonlit.kingserp.common.response;
 
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
+/**
+ * @author Joshua
+ */
 @ApiModel(value = "服务端响应基础类")
 public class ResponseObj<T> implements Serializable {
 
@@ -12,10 +16,13 @@ public class ResponseObj<T> implements Serializable {
 
     public static final String SUCCESS_MSG = "发送成功";
 
+    @ApiModelProperty(value = "響應號")
     private int code;
 
+    @ApiModelProperty(value = "返回对象")
     private T data;
 
+    @ApiModelProperty(value = "信息日志")
     private String message;
 
     public int getCode() {

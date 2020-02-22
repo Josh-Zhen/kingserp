@@ -25,7 +25,7 @@ public class SysMenu implements Serializable {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id", name = "menuId", example = "1")
+    @ApiModelProperty(value = "菜单id", name = "menuId", example = "123")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer menuId;
@@ -69,6 +69,7 @@ public class SysMenu implements Serializable {
      */
     @ApiModelProperty(value = "状态（0.不可用1.可用）", name = "status", example = "1")
     private Integer status;
+
     @Transient
     private String checked;
 

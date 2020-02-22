@@ -28,10 +28,10 @@ public class SysUser implements Serializable {
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "id", name = "id", example = "1")
+    @ApiModelProperty(value = "sysUserId", name = "sysUserId", example = "123")
     @Id
     @GeneratedValue(generator = "JDBC")
-    private Integer id;
+    private Integer sysUserId;
 
     /**
      * 账号
@@ -66,7 +66,7 @@ public class SysUser implements Serializable {
     /**
      * 创建者ID
      */
-    @ApiModelProperty(value = "创建者ID", name = "createUserId", example = "1")
+    @ApiModelProperty(value = "创建者ID", name = "createUserId", example = "123")
     private Integer createUserId;
 
     /**
@@ -79,7 +79,7 @@ public class SysUser implements Serializable {
     /**
      * 是否管理员（1.是0.否）
      */
-    @ApiModelProperty(value = "是否管理员（1.是0.否）", name = "userIsSuper", example = "1")
+    @ApiModelProperty(value = "是否管理员（1.是0.否）", name = "userIsSuper", example = "0")
     private Integer userIsSuper;
 
     /**
@@ -111,7 +111,7 @@ public class SysUser implements Serializable {
     @Transient
     private String roleName;
     @Transient
-    @ApiModelProperty(value = "角色ID", name = "roleId", example = "1")
+    @ApiModelProperty(value = "角色ID", name = "roleId", example = "123")
     private Integer roleId;
 
     /**

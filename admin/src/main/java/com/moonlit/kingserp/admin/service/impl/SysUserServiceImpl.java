@@ -77,7 +77,7 @@ public class SysUserServiceImpl implements SysUserService {
 
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setRoleId(sysUser.getRoleId());
-            sysUserRole.setUserId(sysUser.getId());
+            sysUserRole.setUserId(sysUser.getSysUserId());
             i = sysUserRoleMapper.insertSelective(sysUserRole);
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +112,7 @@ public class SysUserServiceImpl implements SysUserService {
     public int delSysUserById(Integer sysUserId) {
         int i = 0;
         SysUser sysUser = new SysUser();
-        sysUser.setId(sysUserId);
+        sysUser.setSysUserId(sysUserId);
         try {
             i = sysUserMapper.delete(sysUser);
         } catch (Exception e) {

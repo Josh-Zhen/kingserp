@@ -9,14 +9,13 @@ import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.SysRole;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 角色表
@@ -38,7 +37,6 @@ public class SysRoleController {
     @Autowired
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-
     /**
      * 添加角色
      *
@@ -58,7 +56,7 @@ public class SysRoleController {
         }
         // 校驗是否是超級管理員
         if (SupperAdminFilter.CheckSupperAdmin()) {
-            sysRole.setCreateUserId(userService.getInfo().getId());
+            sysRole.setCreateUserId(userService.getInfo().getSysUserId());
             int i = roleService.insert(sysRole);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
@@ -79,7 +77,7 @@ public class SysRoleController {
     @NeedAuth
     @PostMapping("/updateRole")
     @ApiOperation("修改角色信息")
-    public ResponseObj updateRole(SysRole sysRole) {
+    public ResponseObj updateRole(@RequestBody SysRole sysRole) {
         if (SupperAdminFilter.CheckSupperAdmin()) {
             if (sysRole.getRoleId() != null) {
                 int i = roleService.updateRole(sysRole);
@@ -96,5 +94,69 @@ public class SysRoleController {
         return ResponseObj.createSuccessResponse();
     }
 
+    /**
+     * 修改角色狀態（0.禁用 1.存活）
+     *
+     * @param roleId
+     * @param state
+     * @return
+     */
+    @NeedAuth
+    @PostMapping("/updateRoleState")
+    @ApiOperation("修改角色狀態")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "state", value = "狀態", paramType = "query", dataType = "Integer")
+    })
+    public ResponseObj updateRoleState(@RequestParam Integer roleId, @RequestParam Integer state) {
+        if (SupperAdminFilter.CheckSupperAdmin()) {
+
+            if (null != roleId) {
+                int i;
+                SysRole role = new SysRole();
+                state = Math.abs(state - 1);
+                role.setRoleId(roleId);
+                role.setState(state);
+                i = roleService.updateRole(role);
+                if (i < 0) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
+                }
+            } else {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+            }
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色ID為：" + roleId + " 的狀態"));
+        return ResponseObj.createSuccessResponse();
+    }
+
+    /**
+     * 刪除角色
+     *
+     * @param roleId
+     * @return
+     */
+    @NeedAuth
+    @GetMapping("/delectRole")
+    @ApiOperation("刪除角色")
+    @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
+    public ResponseObj delectRole(@RequestParam Integer roleId) {
+        if (SupperAdminFilter.CheckSupperAdmin()) {
+            int i;
+            if (null != roleId) {
+                i = roleService.delectRole(roleId);
+                if (i < 0) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+                }
+            } else {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+            }
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色ID為：" + roleId + " 的狀態"));
+        return ResponseObj.createSuccessResponse();
+    }
 }
 

@@ -24,7 +24,7 @@ public class LyUser {
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "id", name = "id", example = "1")
+    @ApiModelProperty(value = "id", name = "id", example = "123")
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
@@ -44,7 +44,7 @@ public class LyUser {
     /**
      * 性别（1-男、2-女）
      */
-    @ApiModelProperty(value = "性别（1-男、2-女）", name = "sex")
+    @ApiModelProperty(value = "性别（1-男、2-女）", name = "sex", example = "123")
     private Integer sex;
 
     /**
@@ -75,19 +75,19 @@ public class LyUser {
     /**
      * 消费总金额
      */
-    @ApiModelProperty(value = "消费总金额", name = "sumAmount")
+    @ApiModelProperty(value = "消费总金额", name = "sumAmount", example = "123")
     private Integer sumAmount;
 
     /**
      * 总订单数量
      */
-    @ApiModelProperty(value = "总订单数量", name = "sumOrder")
+    @ApiModelProperty(value = "总订单数量", name = "sumOrder", example = "123")
     private Integer sumOrder;
 
     /**
      * 总退货次数
      */
-    @ApiModelProperty(value = "总评价次数", name = "sumEvaluation")
+    @ApiModelProperty(value = "总评价次数", name = "sumEvaluation", example = "123")
     private Integer sumReturn;
 
     /**

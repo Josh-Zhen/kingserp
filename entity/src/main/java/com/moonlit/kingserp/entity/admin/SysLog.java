@@ -24,12 +24,12 @@ public class SysLog implements Serializable {
 
     @Id
     @GeneratedValue(generator = "JDBC")
-    @ApiModelProperty(value = "id", name = "id", example = "1")
+    @ApiModelProperty(value = "id", name = "id", example = "123")
     private Long id;
     /**
      * 操作者ID
      */
-    @ApiModelProperty(value = "uId", name = "操作者ID", example = "1")
+    @ApiModelProperty(value = "uId", name = "操作者ID", example = "123")
     private Integer uId;
     /**
      * 请求方法

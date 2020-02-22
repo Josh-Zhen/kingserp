@@ -68,4 +68,17 @@ public class SysRoleServiceImpl implements SysRoleService {
     public int updateRole(SysRole sysRole) {
         return roleMapper.updateByPrimaryKeySelective(sysRole);
     }
+
+    /**
+     * 刪除角色
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public int delectRole(Integer roleId) {
+        SysRole sysRole = new SysRole();
+        sysRole.setRoleId(roleId);
+        return roleMapper.delete(sysRole);
+    }
 }

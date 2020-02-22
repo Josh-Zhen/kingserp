@@ -24,19 +24,19 @@ public class SysRoleMenu implements Serializable {
     /**
      * id
      */
-    @ApiModelProperty(value = "id", name = "id", example = "1")
+    @ApiModelProperty(value = "id", name = "id", example = "123")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     /**
      * 角色ID
      */
-    @ApiModelProperty(value = "角色ID", name = "roleId", example = "1")
+    @ApiModelProperty(value = "角色ID", name = "roleId", example = "123")
     private Integer roleId;
     /**
      * 菜单ID
      */
-    @ApiModelProperty(value = "菜单ID", name = "menuId", example = "1")
+    @ApiModelProperty(value = "菜单ID", name = "menuId", example = "123")
     private Integer menuId;
 
 

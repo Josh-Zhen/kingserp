@@ -32,7 +32,7 @@ public class LogServiceImpl implements LogService {
     public void addLog(String method, String data) {
         try {
             SysLog sysLog = new SysLog();
-            sysLog.setUId(ShiroUtils.getUserInfo().getId());
+            sysLog.setUId(ShiroUtils.getUserInfo().getSysUserId());
             sysLog.setCreateDate(new Date());
             sysLog.setMethod(method);
             sysLog.setData(data);

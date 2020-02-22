@@ -49,7 +49,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         SysUser sysUser = (SysUser) principals.getPrimaryPrincipal();
         //根据用户id查询角色
-        SysRole sysRoles = sysRoleService.getSysRoleByUserId(sysUser.getId());
+        SysRole sysRoles = sysRoleService.getSysRoleByUserId(sysUser.getSysUserId());
         authorizationInfo.addRole(sysRoles.getRoleName());
         log.info("角色打印{}", sysRoles.getRoleName());
         //根據角色id查詢權限
