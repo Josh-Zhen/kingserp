@@ -28,7 +28,7 @@ public class SysUser implements Serializable {
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "id", name = "id")
+    @ApiModelProperty(value = "id", name = "id", example = "1")
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
@@ -60,13 +60,13 @@ public class SysUser implements Serializable {
     /**
      * 状态  0：禁用   1：正常
      */
-    @ApiModelProperty(value = "状态  0：禁用   1：正常", name = "status")
+    @ApiModelProperty(value = "状态  0：禁用   1：正常", name = "status", example = "1")
     private Integer status;
 
     /**
      * 创建者ID
      */
-    @ApiModelProperty(value = "创建者ID", name = "createUserId")
+    @ApiModelProperty(value = "创建者ID", name = "createUserId", example = "1")
     private Integer createUserId;
 
     /**
@@ -79,7 +79,7 @@ public class SysUser implements Serializable {
     /**
      * 是否管理员（1.是0.否）
      */
-    @ApiModelProperty(value = "是否管理员（1.是0.否）", name = "userIsSuper")
+    @ApiModelProperty(value = "是否管理员（1.是0.否）", name = "userIsSuper", example = "1")
     private Integer userIsSuper;
 
     /**
@@ -111,13 +111,13 @@ public class SysUser implements Serializable {
     @Transient
     private String roleName;
     @Transient
-    @ApiModelProperty(value = "角色ID", name = "roleId")
+    @ApiModelProperty(value = "角色ID", name = "roleId", example = "1")
     private Integer roleId;
 
     /**
      * 角色状态,
      */
-    @ApiModelProperty(value = "角色状态", name = "state")
+    @ApiModelProperty(value = "角色状态", name = "state", example = "1")
     @Transient
     private Integer state;
 }

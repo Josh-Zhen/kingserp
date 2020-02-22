@@ -4,8 +4,8 @@ import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.mapper.SysLogMapper;
 import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.entity.admin.SysLog;
-import com.moonlit.kingserp.entity.admin.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +16,7 @@ import java.util.Date;
  * @CreateDate: 2020-02-21 23:36
  * @Version 1.0
  */
+@Service
 public class LogServiceImpl implements LogService {
 
     @Autowired

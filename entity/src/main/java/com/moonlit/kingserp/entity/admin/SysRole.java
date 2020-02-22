@@ -24,7 +24,7 @@ public class SysRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "角色id", name = "roleId")
+    @ApiModelProperty(value = "角色id", name = "roleId", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer roleId;
@@ -41,7 +41,7 @@ public class SysRole implements Serializable {
     /**
      * 创建者ID
      */
-    @ApiModelProperty(value = "创建者ID", name = "createUserId")
+    @ApiModelProperty(value = "创建者ID", name = "createUserId", example = "1")
     private Integer createUserId;
     /**
      * 创建时间
@@ -53,10 +53,10 @@ public class SysRole implements Serializable {
     /**
      * 是否启用（0否1是）
      */
-    @ApiModelProperty(value = "是否启用（0否1是）", name = "state")
+    @ApiModelProperty(value = "是否启用（0否1是）", name = "state", example = "1")
     private Integer state;
 
-    @ApiModelProperty(value = "用户数量", name = "userCount")
+    @ApiModelProperty(value = "用户数量", name = "userCount", example = "1")
     @Transient
     private Integer userCount;
 
