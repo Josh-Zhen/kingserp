@@ -15,6 +15,16 @@
     <packaging>pom</packaging> <!-- 主pom文件 -->
     <description>ERP project</description>
 
+    <modules>
+        <module>common</module>
+        <module>gateway</module>
+        <module>turbine</module>
+        <module>admin</module>
+        <module>login</module>
+        <module>entity</module>
+        <module>eureka</module>
+    </modules>
+
     <!-- 編碼、java版本、SpringCloud版本 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
