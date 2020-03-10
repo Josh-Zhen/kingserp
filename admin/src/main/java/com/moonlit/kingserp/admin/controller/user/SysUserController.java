@@ -41,9 +41,9 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
     @Autowired
-    LogService logService;
+    private LogService logService;
     @Autowired
-    ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
      * 后台用户登录

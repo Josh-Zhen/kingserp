@@ -35,9 +35,9 @@ public class SysRoleController {
     @Autowired
     private SysUserService userService;
     @Autowired
-    LogService logService;
+    private LogService logService;
     @Autowired
-    ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
      * 添加角色

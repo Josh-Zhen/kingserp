@@ -22,4 +22,5 @@ public interface SysMenuMapper extends MyMapper<SysMenu> {
      */
     @Select("SELECT m.* FROM sys_role r INNER JOIN sys_role_menu rm ON ( rm.role_id = r.role_id ) INNER JOIN sys_menu m ON ( rm.menu_id = m.menu_id ) WHERE r.role_id = #{roleId}")
     List<SysMenu> getSysMenuByRolesId(Integer roleId);
+
 }

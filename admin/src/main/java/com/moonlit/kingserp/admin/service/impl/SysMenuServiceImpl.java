@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单管理 服务实现类
@@ -36,5 +38,18 @@ public class SysMenuServiceImpl implements SysMenuService {
             e.printStackTrace();
         }
         return menus;
+    }
+
+    /**
+     * 查询当前用户的权限
+     *
+     * @param userName
+     * @return
+     */
+    @Override
+    public Map<String, Object> selectMenu(String userName) {
+        Map<String, Object> map = new HashMap<>();
+
+        return map;
     }
 }
