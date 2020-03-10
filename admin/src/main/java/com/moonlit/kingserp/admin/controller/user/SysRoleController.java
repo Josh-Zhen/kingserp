@@ -2,7 +2,8 @@ package com.moonlit.kingserp.admin.controller.user;
 
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
-import com.moonlit.kingserp.admin.common.annotation.SupperAdminFilter;
+import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
+import com.moonlit.kingserp.admin.common.utils.Utils;
 import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.admin.service.SysRoleService;
 import com.moonlit.kingserp.admin.service.SysUserService;
@@ -56,7 +57,7 @@ public class SysRoleController {
             }
         }
         // 校驗是否是超級管理員
-        if (SupperAdminFilter.CheckSupperAdmin()) {
+        if (Utils.checkUserIsSuper()) {
             sysRole.setCreateUserId(userService.getInfo().getSysUserId());
             int i = roleService.insert(sysRole);
             if (i < 0) {
@@ -79,7 +80,7 @@ public class SysRoleController {
     @PutMapping("/updateRole")
     @ApiOperation("修改角色信息")
     public ResponseObj updateRole(@RequestBody SysRole sysRole) {
-        if (SupperAdminFilter.CheckSupperAdmin()) {
+        if (Utils.checkUserIsSuper()) {
             if (sysRole.getRoleId() != null) {
                 int i = roleService.updateRole(sysRole);
                 if (i < 0) {
@@ -110,8 +111,7 @@ public class SysRoleController {
             @ApiImplicitParam(name = "state", value = "狀態", paramType = "query", dataType = "Integer")
     })
     public ResponseObj updateRoleState(@RequestParam Integer roleId, @RequestParam Integer state) {
-        if (SupperAdminFilter.CheckSupperAdmin()) {
-
+        if (Utils.checkUserIsSuper()) {
             if (null != roleId) {
                 int i;
                 SysRole role = new SysRole();
@@ -141,9 +141,12 @@ public class SysRoleController {
     @NeedAuth
     @DeleteMapping("/delectRole")
     @ApiOperation("刪除角色")
-    @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
+            @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
+    })
     public ResponseObj delectRole(@RequestParam Integer roleId) {
-        if (SupperAdminFilter.CheckSupperAdmin()) {
+        if (Utils.checkUserIsSuper()) {
             int i;
             if (null != roleId) {
                 i = roleService.delectRole(roleId);
@@ -156,7 +159,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色ID為：" + roleId + " 的狀態"));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "管理者Id：" + ShiroUtils.getUserInfo().getSysUserId() + " 刪除一個管理員，Id為：" + roleId));
         return ResponseObj.createSuccessResponse();
     }
 
