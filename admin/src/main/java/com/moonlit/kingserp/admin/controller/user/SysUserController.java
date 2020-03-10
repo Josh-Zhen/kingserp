@@ -35,8 +35,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@Api(value = "后台成员管理相关操作", tags = {"后台成员管理相关操作"})
 @RequestMapping("/sysUser")
+@Api(value = "后台成员管理相关操作", tags = {"后台成员管理相关操作"})
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;

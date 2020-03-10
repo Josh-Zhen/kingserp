@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@Api(value = "菜单管理", tags = {"菜单管理"})
 @RequestMapping("/sysMenu")
+@Api(value = "菜单管理", tags = {"菜单管理"})
 public class SysMenuController {
 
 }
