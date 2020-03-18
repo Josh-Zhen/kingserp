@@ -21,15 +21,15 @@ public interface SysUserMapper extends MyMapper<SysUser> {
      * @return
      */
     @Select({"<script>",
-            "select * from `sys_user` WHERE ",
+            "select * from `sys_user`",
             "<if test='keywords != null and keywords != &quot;&quot;'>",
-            "CONCAT(id,user_name,mobile) LIKE '%' #{keywords} '%'",
+            "WHERE CONCAT(id,user_name,mobile) LIKE '%' #{keywords} '%'",
             "</if>",
             "ORDER BY create_time DESC",
             "</script>"})
     ArrayList<SysUser> selectUserByUserKeywords(String keywords);
 
-    /**s
+    /**
      * 獲取當前用戶
      *
      * @param userName
