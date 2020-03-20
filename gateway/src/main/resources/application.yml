@@ -18,16 +18,6 @@ spring:
       discovery:
         locator:
           lowerCaseServiceId: true
-      globalcors:
-        # 跨域設置
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - PUT
-              - POST
-              - DELETE
       routes:
         - id: Admin-Server
           uri: lb://Admin-Server
@@ -42,6 +32,6 @@ spring:
           filters:
             - StripPrefix=1
 
-logging:
-  level:
-    org.springframework.cloud.gateway: debug
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: debug
