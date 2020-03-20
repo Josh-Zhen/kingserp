@@ -58,7 +58,7 @@ public class SysRoleController {
         }
         // 校驗是否是超級管理員
         if (Utils.checkUserIsSuper()) {
-            sysRole.setCreateUserId(userService.getInfo().getSysUserId());
+            sysRole.setCreateUserId(userService.getInfo().getId());
             int i = roleService.insert(sysRole);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
@@ -159,7 +159,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "管理者Id：" + ShiroUtils.getUserInfo().getSysUserId() + " 刪除一個管理員，Id為：" + roleId));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "管理者Id：" + ShiroUtils.getUserInfo().getId() + " 刪除一個管理員，Id為：" + roleId));
         return ResponseObj.createSuccessResponse();
     }
 

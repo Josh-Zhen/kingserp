@@ -15,7 +15,6 @@ import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -79,7 +78,7 @@ public class SysUserServiceImpl implements SysUserService {
 
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setRoleId(sysUser.getRoleId());
-            sysUserRole.setUserId(sysUser.getSysUserId());
+            sysUserRole.setUserId(sysUser.getId());
             i = sysUserRoleMapper.insertSelective(sysUserRole);
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +96,6 @@ public class SysUserServiceImpl implements SysUserService {
         int i = 0;
         try {
             i = sysUserMapper.updateByPrimaryKeySelective(sysUser);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,7 +112,7 @@ public class SysUserServiceImpl implements SysUserService {
     public int delSysUserById(Integer sysUserId) {
         int i = 0;
         SysUser sysUser = new SysUser();
-        sysUser.setSysUserId(sysUserId);
+        sysUser.setId(sysUserId);
         try {
             i = sysUserMapper.delete(sysUser);
         } catch (Exception e) {

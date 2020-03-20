@@ -28,10 +28,10 @@ public class SysUser implements Serializable {
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "sysUserId", name = "sysUserId", example = "123")
+    @ApiModelProperty(value = "id", name = "id", example = "123")
     @Id
     @GeneratedValue(generator = "JDBC")
-    private Integer sysUserId;
+    private Integer id;
 
     /**
      * 账号

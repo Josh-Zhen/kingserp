@@ -46,13 +46,13 @@ public class SysUserController {
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
-     * 后台用户登录
+     * 管理者登录
      *
      * @param sysUser
      * @return
      */
     @PostMapping("/login")
-    @ApiOperation(value = "后台用户登录")
+    @ApiOperation(value = "管理者登录")
     public ResponseObj login(@RequestBody SysUser sysUser) {
         System.out.println("-----loginName----" + sysUser.getUserName());
         System.out.println("-----password----" + sysUser.getPassword());
@@ -70,10 +70,8 @@ public class SysUserController {
 
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
-            SysUser syUser = new SysUser();
-            syUser.setSysUserId(user.getSysUserId());
-            syUser.setLastTime(new Date());
-            sysUserService.updateSysUser(syUser);
+            user.setLastTime(new Date());
+            sysUserService.updateSysUser(user);
 
             map.put("sysUserInfo", user);
             map.put("token", sessionId);
@@ -117,7 +115,7 @@ public class SysUserController {
             if (sysUserInfo != null) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
             }
-            sysUser.setCreateUserId(adminUser.getSysUserId());
+            sysUser.setCreateUserId(adminUser.getId());
             int i = sysUserService.addSysUser(sysUser);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
@@ -140,7 +138,7 @@ public class SysUserController {
     @ApiOperation(value = "修改成員信息")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
-        if (null != sysUser.getSysUserId()) {
+        if (null != sysUser.getId()) {
             int i = sysUserService.updateSysUser(sysUser);
             if (i < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
@@ -148,14 +146,14 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUser", "修改成員信息，Id為：" + sysUser.getSysUserId()));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUser", "修改成員信息，Id為：" + sysUser.getId()));
         return ResponseObj.createSuccessResponse();
     }
 
     /**
      * 刪除成員
      *
-     * @param sysUserId
+     * @param id
      * @return
      */
     @NeedAuth
@@ -163,12 +161,12 @@ public class SysUserController {
     @ApiOperation(value = "刪除成員")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
-            @ApiImplicitParam(name = "sysUserId", value = "管理員Id", paramType = "query", dataType = "Integer")
+            @ApiImplicitParam(name = "id", value = "管理員Id", paramType = "query", dataType = "Integer")
     })
-    public ResponseObj delSysUser(@RequestParam Integer sysUserId) {
+    public ResponseObj delSysUser(@RequestParam Integer id) {
         if (Utils.checkUserIsSuper()) {
-            if (null != sysUserId) {
-                int i = sysUserService.delSysUserById(sysUserId);
+            if (null != id) {
+                int i = sysUserService.delSysUserById(id);
                 if (i < 0) {
                     return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
                 }
@@ -178,7 +176,7 @@ public class SysUserController {
         } else {
             ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除一個管理員，Id為：" + sysUserId));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除一個管理員，Id為：" + id));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -194,13 +192,13 @@ public class SysUserController {
     public ResponseObj selectSysUsers(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                       @RequestParam(required = false) String keywords) {
-        PageInfo<SysUser> SysUsers = null;
+        PageInfo<SysUser> sysUsers = null;
         try {
-            SysUsers = sysUserService.selectSysUsers(currentPage, pageSize, keywords);
+            sysUsers = sysUserService.selectSysUsers(currentPage, pageSize, keywords);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseObj.createSuccessResponse(SysUsers);
+        return ResponseObj.createSuccessResponse(sysUsers);
     }
 
     /**
@@ -220,7 +218,7 @@ public class SysUserController {
             if (null != sysUserId) {
                 SysUser sysUser = new SysUser();
                 type = Math.abs(type - 1);
-                sysUser.setSysUserId(sysUserId);
+                sysUser.setId(sysUserId);
                 sysUser.setStatus(type);
                 i = sysUserService.updateSysUser(sysUser);
             }

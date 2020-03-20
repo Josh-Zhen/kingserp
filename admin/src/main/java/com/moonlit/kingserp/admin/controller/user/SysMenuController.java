@@ -37,6 +37,10 @@ public class SysMenuController {
     @Autowired
     private SysMenuService menuService;
 
+    /**
+     * 查询当前用户的权限
+     * @return
+     */
     @NeedAuth
     @GetMapping("/selectMenu")
     @ApiOperation(value = "查询当前用户的权限")
@@ -54,7 +58,6 @@ public class SysMenuController {
         }
         return ResponseObj.createSuccessResponse(map);
     }
-
 
     /**
      * 根據角色Id查詢菜單目錄
