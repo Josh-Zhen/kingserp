@@ -66,7 +66,7 @@ public class LyUserController {
      * @param user
      * @return
      */
-    @PostMapping("/updateUser")
+    @PutMapping("/updateUser")
     @ApiOperation(value = "修改用户信息")
     public ResponseObj updateUser(@RequestBody LyUser user) {
         if (null != user.getId()) {
@@ -86,7 +86,7 @@ public class LyUserController {
      * @param userId
      * @return
      */
-    @GetMapping("/deleteUser")
+    @DeleteMapping("/deleteUser")
     @ApiOperation(value = "删除用户")
     public ResponseObj deleteUser(@RequestParam Integer userId) {
         if (null != userId) {

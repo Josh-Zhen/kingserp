@@ -54,8 +54,10 @@ public class SysUserController {
     @PostMapping("/login")
     @ApiOperation(value = "管理者登录")
     public ResponseObj login(@RequestBody SysUser sysUser) {
-        System.out.println("-----loginName----" + sysUser.getUserName());
-        System.out.println("-----password----" + sysUser.getPassword());
+        System.out.println("--↓--loginName--↓--");
+        System.out.println(sysUser.getUserName());
+        System.out.println("--↓--password--↓--");
+        System.out.println(sysUser.getPassword());
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserName(), sysUser.getPassword());
         String sessionId;
@@ -66,12 +68,15 @@ public class SysUserController {
             //设置永不过期
             SecurityUtils.getSubject().getSession().setTimeout(-1000);
             sessionId = subject.getSession().getId().toString();
-            System.out.println("------sessionId----" + sessionId);
-
+            System.out.println("--↓--sessionId--↓--");
+            System.out.println(sessionId);
+            System.out.println("---------------------");
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
-            user.setLastTime(new Date());
-            sysUserService.updateSysUser(user);
+            SysUser syUser = new SysUser();
+            syUser.setId(user.getId());
+            syUser.setLastTime(new Date());
+//            sysUserService.updateSysUser(syUser);
 
             map.put("sysUserInfo", user);
             map.put("token", sessionId);

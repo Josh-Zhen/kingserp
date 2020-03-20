@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @Description:
+ * @Description: swagger2相關依賴
  * @Author: Joshua
  * @CreateTime: 2019.11.25
  **/
@@ -55,7 +55,7 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
         Set<String> dealed = new HashSet<>();
         routeHosts.forEach(instance -> {
             // 拼接url，样式为/serviceId/v2/api-info，当网关调用这个接口时，会自动通过负载均衡寻找对应的主机
-            String url = "/" + instance + SWAGGER2URL;
+            String url = "/" + setInstance(instance) + SWAGGER2URL;
             if (!dealed.contains(url)) {
                 dealed.add(url);
                 SwaggerResource swaggerResource = new SwaggerResource();
@@ -65,5 +65,10 @@ public class MySwaggerResourceProvider implements SwaggerResourcesProvider {
             }
         });
         return resources;
+    }
+
+    public String setInstance(String instance){
+        String[] split = instance.toLowerCase().split("-");
+        return split[0];
     }
 }

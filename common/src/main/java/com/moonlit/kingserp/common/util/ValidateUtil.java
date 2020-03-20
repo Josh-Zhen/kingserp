@@ -69,20 +69,14 @@ public class ValidateUtil {
      * @param object
      */
     public static boolean isNull(Object object) {
-        if ("" == object || object == null) {
-            return true;
-        }
-        return false;
+        return "" == object || object == null;
     }
 
     /**
      * 校验参数是否为空
      */
     public static boolean isNotBlank(String str) {
-        if (str == null || str.trim().length() == 0) {
-            return false;
-        }
-        return true;
+        return str != null && str.trim().length() != 0;
     }
 
 
@@ -93,10 +87,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean isLargerThan(int src, int target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return src > target;
     }
 
     /**
@@ -106,10 +97,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean isLargerThan(long src, long target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return src > target;
     }
 
     /**
@@ -119,10 +107,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean largerThan(float src, float target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return (src > target);
     }
 
     /**
@@ -132,10 +117,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean largerThan(double src, double target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return (src > target);
     }
 
     /**
@@ -145,10 +127,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean notLitterThan(int src, int target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return src > target;
     }
 
     /**
@@ -158,10 +137,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean notLitterThan(long src, long target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return src > target;
     }
 
     /**
@@ -171,10 +147,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean notLitterThan(float src, float target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return (src > target);
     }
 
     /**
@@ -184,10 +157,7 @@ public class ValidateUtil {
      * @param target
      */
     public static boolean notLitterThan(double src, double target) {
-        if (src <= target) {
-            return false;
-        }
-        return true;
+        return !(src <= target);
     }
 
     /**

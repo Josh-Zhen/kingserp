@@ -6,15 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 /**
+ * 处理返回值中的null值
+ *
  * @author cosmo
  * @Title: JacksonConfig
  * @ProjectName
  * @Description:
  * @date
- */
-
-/**
- * 处理返回值中的null值
  */
 @Configuration
 public class JacksonConfig {
