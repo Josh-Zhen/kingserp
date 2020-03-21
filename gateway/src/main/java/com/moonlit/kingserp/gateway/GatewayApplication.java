@@ -19,5 +19,4 @@ public class GatewayApplication {
         SpringApplication.run(GatewayApplication.class, args);
         log.info("服务网关 GatewayApplication 启动成功");
     }
-
 }

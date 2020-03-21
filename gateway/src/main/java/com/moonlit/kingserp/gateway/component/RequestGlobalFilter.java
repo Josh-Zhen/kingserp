@@ -45,7 +45,6 @@ public class RequestGlobalFilter implements GlobalFilter, Ordered {
                 if (getStatusCode().equals(HttpStatus.OK) && body instanceof Flux) {
                     Flux<? extends DataBuffer> fluxBody = Flux.first(body);
                     return super.writeWith(fluxBody.map(dataBuffer -> {
-                        System.out.println(dataBuffer.readableByteCount());
 
                         byte[] content = new byte[dataBuffer.readableByteCount()];
                         dataBuffer.read(content);
