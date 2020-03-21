@@ -109,6 +109,7 @@ public class SysUser implements Serializable {
     private String comment;
 
     @Transient
+    @ApiModelProperty(value = "角色名稱", name = "roleName")
     private String roleName;
     @Transient
     @ApiModelProperty(value = "角色ID", name = "roleId", example = "123")

@@ -76,7 +76,7 @@ public class SysUserController {
             SysUser syUser = new SysUser();
             syUser.setId(user.getId());
             syUser.setLastTime(new Date());
-//            sysUserService.updateSysUser(syUser);
+            sysUserService.updateSysUser(syUser);
 
             map.put("sysUserInfo", user);
             map.put("token", sessionId);
@@ -215,7 +215,7 @@ public class SysUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
             @ApiImplicitParam(name = "sysUserId", value = "管理員Id", paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "type", value = "狀態", paramType = "query", dataType = "Integer")
+            @ApiImplicitParam(name = "type", value = "當前狀態", paramType = "query", dataType = "Integer")
     })
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
         if (Utils.checkUserIsSuper()) {
