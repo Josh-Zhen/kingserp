@@ -15,6 +15,13 @@ spring:
     name: Gateway-Server
   cloud:
     gateway:
+#      跨域配置
+#      globalcors:
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedMethods: "*"
+#            allowedHeaders: "*"
       discovery:
         locator:
           lowerCaseServiceId: true
@@ -25,12 +32,14 @@ spring:
             - Path=/admin/**
           filters:
             - StripPrefix=1
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - id: Login-Server
           uri: lb://Login-Server
           predicates:
             - Path=/login/**
           filters:
             - StripPrefix=1
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 
 #logging:
 #  level:

@@ -17,7 +17,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Description: 全局过滤器
@@ -52,14 +52,14 @@ public class RequestGlobalFilter implements GlobalFilter, Ordered {
                         //释放掉内存
                         DataBufferUtils.release(dataBuffer);
                         //responseData就是下游系统返回的内容,可以查看修改
-                        String responseData = new String(content, Charset.forName("UTF-8"));
+                        String responseData = new String(content, StandardCharsets.UTF_8);
 
                         log.debug("响应内容:{}", responseData);
                         log.debug("this is response encrypt");
                         System.out.println(responseData);
 
                         byte[] newContent = responseData.getBytes();
-                        byte[] uppedContent = new String(newContent, Charset.forName("UTF-8")).getBytes();
+                        byte[] uppedContent = new String(newContent, StandardCharsets.UTF_8).getBytes();
                         return bufferFactory.wrap(uppedContent);
                     }));
                 } else {
