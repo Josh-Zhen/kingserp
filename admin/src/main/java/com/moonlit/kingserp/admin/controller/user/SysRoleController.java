@@ -48,6 +48,7 @@ public class SysRoleController {
     @NeedAuth
     @PostMapping("/addRole")
     @ApiOperation(value = "添加角色")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj addRole(@RequestBody SysRole sysRole) {
         if (sysRole.getRoleName() != null) {
             // 校驗角色是否存在
@@ -79,6 +80,7 @@ public class SysRoleController {
     @NeedAuth
     @PutMapping("/updateRole")
     @ApiOperation("修改角色信息")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateRole(@RequestBody SysRole sysRole) {
         if (Utils.checkUserIsSuper()) {
             if (sysRole.getRoleId() != null) {
@@ -108,7 +110,8 @@ public class SysRoleController {
     @ApiOperation("修改角色狀態")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "state", value = "狀態", paramType = "query", dataType = "Integer")
+            @ApiImplicitParam(name = "state", value = "當前狀態", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj updateRoleState(@RequestParam Integer roleId, @RequestParam Integer state) {
         if (Utils.checkUserIsSuper()) {
@@ -143,7 +146,8 @@ public class SysRoleController {
     @ApiOperation("刪除角色")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
-            @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
+            @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delectRole(@RequestParam Integer roleId) {
         if (Utils.checkUserIsSuper()) {

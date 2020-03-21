@@ -15,7 +15,7 @@ spring:
     name: Gateway-Server
   cloud:
     gateway:
-#      跨域配置
+      # 跨域配置
 #      globalcors:
 #        corsConfigurations:
 #          '[/**]':
