@@ -121,8 +121,7 @@ public class SysUserController {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
             }
             sysUser.setCreateUserId(adminUser.getId());
-            int i = sysUserService.addSysUser(sysUser);
-            if (i < 0) {
+            if (sysUserService.addSysUser(sysUser) < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
             }
         } else {
@@ -144,8 +143,7 @@ public class SysUserController {
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
         if (null != sysUser.getId()) {
-            int i = sysUserService.updateSysUser(sysUser);
-            if (i < 0) {
+            if (sysUserService.updateSysUser(sysUser) < 0) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }
         } else {
@@ -171,8 +169,7 @@ public class SysUserController {
     public ResponseObj delSysUser(@RequestParam Integer id) {
         if (Utils.checkUserIsSuper()) {
             if (null != id) {
-                int i = sysUserService.delSysUserById(id);
-                if (i < 0) {
+                if (sysUserService.delSysUserById(id) < 0) {
                     return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
                 }
             } else {
@@ -219,16 +216,16 @@ public class SysUserController {
     })
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
         if (Utils.checkUserIsSuper()) {
-            int i = 0;
             if (null != sysUserId) {
                 SysUser sysUser = new SysUser();
                 type = Math.abs(type - 1);
                 sysUser.setId(sysUserId);
                 sysUser.setStatus(type);
-                i = sysUserService.updateSysUser(sysUser);
-            }
-            if (i < 0) {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+                if (sysUserService.updateSysUser(sysUser) < 0) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
+                }
+            } else {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
             }
         } else {
             ResponseObj.createErrResponse(ErrerMsg.ERRER10008);

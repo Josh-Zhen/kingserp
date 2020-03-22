@@ -6,7 +6,6 @@ import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.common.utils.Utils;
 import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.admin.service.SysRoleService;
-import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.SysRole;
