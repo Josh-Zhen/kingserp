@@ -165,8 +165,8 @@ public class SysUserController {
     @DeleteMapping("/delSysUser")
     @ApiOperation(value = "刪除成員")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
-            @ApiImplicitParam(name = "id", value = "管理員Id", paramType = "query", dataType = "Integer")
+            @ApiImplicitParam(name = "id", value = "管理員Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delSysUser(@RequestParam Integer id) {
         if (Utils.checkUserIsSuper()) {
@@ -213,9 +213,9 @@ public class SysUserController {
     @PutMapping("/updateSysUserStatus")
     @ApiOperation(value = "启用/禁用 管理者")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
             @ApiImplicitParam(name = "sysUserId", value = "管理員Id", paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "type", value = "當前狀態", paramType = "query", dataType = "Integer")
+            @ApiImplicitParam(name = "type", value = "當前狀態", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
         if (Utils.checkUserIsSuper()) {

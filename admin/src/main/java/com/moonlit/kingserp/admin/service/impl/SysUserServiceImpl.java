@@ -2,6 +2,7 @@ package com.moonlit.kingserp.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.mapper.SysUserMapper;
 import com.moonlit.kingserp.admin.mapper.SysUserRoleMapper;
 import com.moonlit.kingserp.admin.service.SysUserService;
@@ -10,7 +11,6 @@ import com.moonlit.kingserp.common.util.CommonUtil;
 import com.moonlit.kingserp.common.util.MD5Util;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import com.moonlit.kingserp.entity.admin.SysUserRole;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser getInfo() {
         //从session获取用户信息
-        Session session = SecurityUtils.getSubject().getSession();
+        Session session = ShiroUtils.getSession();
         SysUser userInfo = (SysUser) session.getAttribute("tokens");
         if (userInfo == null) {
             throw new EpException("token失效，请重新登录", 401);

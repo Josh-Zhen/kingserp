@@ -1,5 +1,6 @@
 package com.moonlit.kingserp.admin.common.shiro;
 
+import com.moonlit.kingserp.common.exception.EpException;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -39,7 +40,11 @@ public class ShiroUtils {
      * @return
      */
     public static SysUser getUserInfo() {
-        return (SysUser) SecurityUtils.getSubject().getPrincipal();
+        SysUser userInfo = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        if (userInfo == null) {
+            throw new EpException("token失效，请重新登录", 401);
+        }
+        return userInfo;
     }
 
     /**

@@ -3,8 +3,6 @@ package com.moonlit.kingserp.admin.service;
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.entity.admin.SysUser;
 
-import java.util.ArrayList;
-
 /**
  * 系统用户 服务类
  *

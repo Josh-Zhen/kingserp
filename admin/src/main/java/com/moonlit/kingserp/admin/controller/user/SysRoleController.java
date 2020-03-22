@@ -33,8 +33,6 @@ public class SysRoleController {
     @Autowired
     private SysRoleService roleService;
     @Autowired
-    private SysUserService userService;
-    @Autowired
     private LogService logService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -56,16 +54,17 @@ public class SysRoleController {
             if (sysRole1 != null) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10015);
             }
-        }
-        // 校驗是否是超級管理員
-        if (Utils.checkUserIsSuper()) {
-            sysRole.setCreateUserId(userService.getInfo().getId());
-            int i = roleService.insert(sysRole);
-            if (i < 0) {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+            // 校驗是否是超級管理員
+            if (Utils.checkUserIsSuper()) {
+                sysRole.setCreateUserId(ShiroUtils.getUserInfo().getId());
+                if (roleService.insert(sysRole) < 0) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+                }
+            } else {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
             }
         } else {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("addRole", "添加一個名為：" + sysRole.getRoleName() + " 的角色"));
         return ResponseObj.createSuccessResponse();
@@ -83,9 +82,17 @@ public class SysRoleController {
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateRole(@RequestBody SysRole sysRole) {
         if (Utils.checkUserIsSuper()) {
+            if (sysRole.getRoleName() != null) {
+                // 校驗角色是否存在
+                if (roleService.selectName(sysRole.getRoleName()) != null) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER10015);
+                }
+            } else {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+            }
+
             if (sysRole.getRoleId() != null) {
-                int i = roleService.updateRole(sysRole);
-                if (i < 0) {
+                if (roleService.updateRole(sysRole) < 0) {
                     return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
                 }
             } else {
@@ -116,13 +123,11 @@ public class SysRoleController {
     public ResponseObj updateRoleState(@RequestParam Integer roleId, @RequestParam Integer state) {
         if (Utils.checkUserIsSuper()) {
             if (null != roleId) {
-                int i;
                 SysRole role = new SysRole();
                 state = Math.abs(state - 1);
                 role.setRoleId(roleId);
                 role.setState(state);
-                i = roleService.updateRole(role);
-                if (i < 0) {
+                if (roleService.updateRole(role) < 0) {
                     return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
                 }
             } else {
@@ -145,16 +150,13 @@ public class SysRoleController {
     @DeleteMapping("/delectRole")
     @ApiOperation("刪除角色")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delectRole(@RequestParam Integer roleId) {
         if (Utils.checkUserIsSuper()) {
-            int i;
             if (null != roleId) {
-                i = roleService.delectRole(roleId);
-                if (i < 0) {
+                if (roleService.delectRole(roleId) < 0) {
                     return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
                 }
             } else {
