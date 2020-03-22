@@ -40,7 +40,7 @@ public class SysUserServiceImpl implements SysUserService {
     public SysUser getInfo() {
         //从session获取用户信息
         Session session = ShiroUtils.getSession();
-        SysUser userInfo = (SysUser) session.getAttribute("tokens");
+        SysUser userInfo = (SysUser) session.getAttribute("tokenInfo");
         if (userInfo == null) {
             throw new EpException("token失效，请重新登录", 401);
         }

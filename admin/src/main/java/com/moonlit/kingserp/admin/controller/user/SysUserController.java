@@ -54,10 +54,8 @@ public class SysUserController {
     @PostMapping("/login")
     @ApiOperation(value = "管理者登录")
     public ResponseObj login(@RequestBody SysUser sysUser) {
-        System.out.println("--↓--loginName--↓--");
-        System.out.println(sysUser.getUserName());
-        System.out.println("--↓--password--↓--");
-        System.out.println(sysUser.getPassword());
+        System.out.println("--↓--loginName--↓--" + "\n" + sysUser.getUserName());
+        System.out.println("--↓--password--↓--" + "\n" + sysUser.getPassword());
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getUserName(), sysUser.getPassword());
         String sessionId;
@@ -68,9 +66,8 @@ public class SysUserController {
             //设置永不过期
             SecurityUtils.getSubject().getSession().setTimeout(-1000);
             sessionId = subject.getSession().getId().toString();
-            System.out.println("--↓--sessionId--↓--");
-            System.out.println(sessionId);
-            System.out.println("---------------------");
+            System.out.println("--↓--sessionId--↓--" + "\n" + sessionId + "\n---------------------");
+            System.out.println();
             SysUser user = sysUserService.getUserInfo(sysUser.getUserName());
             //设置最后登录时间
             SysUser syUser = new SysUser();
@@ -98,7 +95,7 @@ public class SysUserController {
     public ResponseObj userLogout() {
         ShiroUtils.logout();
         ShiroUtils.deleteCache();
-        return ResponseObj.createSuccessResponse("用戶已登出");
+        return ResponseObj.createSuccessResponse();
     }
 
     /**
