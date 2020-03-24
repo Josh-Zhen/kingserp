@@ -46,7 +46,7 @@ public class SysMenuController {
     @ApiOperation(value = "查询当前用户的权限")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "string", paramType = "header")
     public ResponseObj selectMenu() {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(32);
         try {
             SysUser sysUser = ShiroUtils.getUserInfo();
             if (sysUser == null) {
