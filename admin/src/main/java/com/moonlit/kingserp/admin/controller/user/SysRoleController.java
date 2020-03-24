@@ -105,7 +105,7 @@ public class SysRoleController {
     }
 
     /**
-     * 修改角色狀態（0.禁用 1.存活）
+     * 启用/禁用 角色（0.禁用 1.存活）
      *
      * @param roleId
      * @param state
@@ -113,7 +113,7 @@ public class SysRoleController {
      */
     @NeedAuth
     @PutMapping("/updateRoleState")
-    @ApiOperation("修改角色狀態")
+    @ApiOperation("启用/禁用 角色")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "state", value = "當前狀態", paramType = "query", dataType = "Integer"),
