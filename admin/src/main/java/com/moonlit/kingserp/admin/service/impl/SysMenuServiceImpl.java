@@ -1,8 +1,11 @@
 package com.moonlit.kingserp.admin.service.impl;
 
 import com.moonlit.kingserp.admin.mapper.SysMenuMapper;
+import com.moonlit.kingserp.admin.mapper.SysRoleMapper;
 import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.entity.admin.SysMenu;
+import com.moonlit.kingserp.entity.admin.SysRole;
+import com.moonlit.kingserp.entity.admin.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Autowired
     private SysMenuMapper menuMapper;
+    @Autowired
+    private SysRoleMapper roleMapper;
 
     /**
      * 根據角色id查詢權限
@@ -43,13 +48,19 @@ public class SysMenuServiceImpl implements SysMenuService {
     /**
      * 查询当前用户的权限
      *
-     * @param userName
+     * @param sysUser
      * @return
      */
     @Override
-    public Map<String, Object> selectMenu(String userName) {
-        Map<String, Object> map = new HashMap<>();
-
+    public Map<String, Object> selectMenu(SysUser sysUser) {
+        Map<String, Object> map = new HashMap<>(32);
+        map.put("sysUserInfo", sysUser);
+        SysRole sysRole = roleMapper.getSysRole(sysUser.getId());
+        if (sysRole == null) {
+            map.put("sysMenu", menuMapper.getSysMenuByRolesId(null));
+        } else {
+            map.put("sysMenu", menuMapper.getSysMenuByRolesId(sysRole.getRoleId()));
+        }
         return map;
     }
 }

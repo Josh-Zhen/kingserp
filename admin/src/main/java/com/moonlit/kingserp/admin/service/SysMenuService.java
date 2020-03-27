@@ -1,6 +1,7 @@
 package com.moonlit.kingserp.admin.service;
 
 import com.moonlit.kingserp.entity.admin.SysMenu;
+import com.moonlit.kingserp.entity.admin.SysUser;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,8 @@ public interface SysMenuService {
     /**
      * 查询当前用户的权限
      *
-     * @param userName
+     * @param sysUser
      * @return
      */
-    Map<String, Object> selectMenu(String userName);
+    Map<String, Object> selectMenu(SysUser sysUser);
 }

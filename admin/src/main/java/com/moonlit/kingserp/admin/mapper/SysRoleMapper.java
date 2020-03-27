@@ -32,4 +32,12 @@ public interface SysRoleMapper extends MyMapper<SysRole> {
      */
     @Select("SELECT *, ( SELECT COUNT(*) FROM `sys_user_role` WHERE role_id = r.role_id ) AS userCount FROM `sys_role` r ORDER BY role_id")
     List<SysRole> selectRoles();
+
+    /**
+     * 查詢角色信息
+     * @param id
+     * @return
+     */
+    @Select("SELECT r.* FROM sys_user u INNER JOIN sys_user_role ur ON ( u.id = ur.user_id ) INNER JOIN sys_role r ON ( ur.role_id = r.role_id ) WHERE u.id = #{id}")
+    SysRole getSysRole(Integer id);
 }

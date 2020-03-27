@@ -15,7 +15,7 @@ import java.util.List;
 public interface SysMenuMapper extends MyMapper<SysMenu> {
 
     /**
-     * 根據角色id查詢權限
+     * 根據角色id查詢對應菜單
      *
      * @param roleId
      * @return

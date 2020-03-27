@@ -1,8 +1,8 @@
 package com.moonlit.kingserp.admin.controller.user;
 
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
-import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.service.SysMenuService;
+import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.SysMenu;
@@ -36,10 +36,13 @@ public class SysMenuController {
 
     @Autowired
     private SysMenuService menuService;
+    @Autowired
+    SysUserService sysUserService;
 
     /**
      * 查询当前用户的权限
-     * @return
+     * map：User + Menus
+     * @return map
      */
     @NeedAuth
     @GetMapping("/selectMenu")
@@ -48,11 +51,11 @@ public class SysMenuController {
     public ResponseObj selectMenu() {
         Map<String, Object> map = new HashMap<>(32);
         try {
-            SysUser sysUser = ShiroUtils.getUserInfo();
+            SysUser sysUser = sysUserService.getInfo();
             if (sysUser == null) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10017);
             }
-            map = menuService.selectMenu(sysUser.getUserName());
+            map = menuService.selectMenu(sysUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
