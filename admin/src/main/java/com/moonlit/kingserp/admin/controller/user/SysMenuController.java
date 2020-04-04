@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class SysMenuController {
 
     /**
      * 根據角色Id查詢菜單目錄
-     *
+     * 設置菜單權限時先調用該接口
      * @param roleId
      * @return
      */
@@ -77,7 +78,12 @@ public class SysMenuController {
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
     })
     public ResponseObj selectMenuByRoleId(@RequestParam Integer roleId) {
-        List<SysMenu> sysMenuList = menuService.getCheckedRoleMenus(roleId);
+        List<SysMenu> sysMenuList;
+        if (null != roleId) {
+            sysMenuList = menuService.getCheckedRoleMenus(roleId);
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+        }
         return ResponseObj.createSuccessResponse(sysMenuList);
     }
 
