@@ -70,4 +70,7 @@ public class SysMenu implements Serializable {
     @ApiModelProperty(value = "状态（0.不可用1.可用）", name = "status", example = "1")
     private Integer status;
 
+    @Transient
+    @ApiModelProperty(value = "當前角色是否具有目錄權限（0.否 1.是）", name = "checked", example = "0")
+    private String checked;
 }

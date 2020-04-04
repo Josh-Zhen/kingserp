@@ -29,4 +29,11 @@ public interface SysMenuService {
      * @return
      */
     Map<String, Object> selectMenu(SysUser sysUser);
+
+    /**
+     * 查詢所有目錄，根據角色id查詢目錄啓用情況（0.否 1.是）
+     * @param roleId
+     * @return
+     */
+    List<SysMenu> getCheckedRoleMenus(Integer roleId);
 }

@@ -63,4 +63,21 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         return map;
     }
+
+    /**
+     * 查詢所有目錄，根據角色id查詢目錄啓用情況（0.否 1.是）
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<SysMenu> getCheckedRoleMenus(Integer roleId) {
+        List<SysMenu> roleMenus = null;
+        try {
+            roleMenus = menuMapper.getCheckedRoleMenus(roleId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return roleMenus;
+    }
 }

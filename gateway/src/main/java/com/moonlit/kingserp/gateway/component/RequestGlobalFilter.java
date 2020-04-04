@@ -1,23 +1,17 @@
 package com.moonlit.kingserp.gateway.component;
 
 import lombok.extern.slf4j.Slf4j;
-import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.NettyWriteResponseFilter;
 import org.springframework.core.Ordered;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferFactory;
-import org.springframework.core.io.buffer.DataBufferUtils;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 /**
  * @Description: 全局过滤器
@@ -34,43 +28,28 @@ public class RequestGlobalFilter implements GlobalFilter, Ordered {
         //顯示請求
         ServerHttpRequest request = exchange.getRequest();
         String uri = request.getURI().toString();
-        System.out.println("----------------------------------------------------------------------");
-        System.out.println(" Request URL: " + uri);
-        System.out.println("----------------------------------------------------------------------");
+        String r = "----------------------------------------------------------------------";
+        System.out.println(r + "\r" + "Request URL: " + uri + "\r" + r);
 
-        return chain.filter(exchange.mutate().response(new ServerHttpResponseDecorator(exchange.getResponse()) {
-            @Override
-            public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
-                DataBufferFactory bufferFactory = exchange.getResponse().bufferFactory();
-                if (getStatusCode().equals(HttpStatus.OK) && body instanceof Flux) {
-                    Flux<? extends DataBuffer> fluxBody = Flux.first(body);
-                    return super.writeWith(fluxBody.map(dataBuffer -> {
-
-                        byte[] content = new byte[dataBuffer.readableByteCount()];
-                        dataBuffer.read(content);
-                        //释放掉内存
-                        DataBufferUtils.release(dataBuffer);
-                        //responseData就是下游系统返回的内容,可以查看修改
-                        String responseData = new String(content, StandardCharsets.UTF_8);
-
-                        log.debug("响应内容:{}", responseData);
-                        log.debug("this is response encrypt");
-                        System.out.println(responseData);
-
-                        byte[] newContent = responseData.getBytes();
-                        byte[] uppedContent = new String(newContent, StandardCharsets.UTF_8).getBytes();
-                        return bufferFactory.wrap(uppedContent);
-                    }));
-                } else {
-                    log.error("响应code异常:{}", getStatusCode());
-                }
-                return super.writeWith(body);
-            }
-        }).build());
+        return chain.filter(exchange).then(Mono.defer(() -> {
+            exchange.getResponse().getHeaders().entrySet().stream()
+                    .filter(kv -> (kv.getValue() != null && kv.getValue().size() > 1))
+                    .filter(kv -> (kv.getKey().equals(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN)
+                            || kv.getKey().equals(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS)))
+                    .forEach(kv ->
+                    {
+                        kv.setValue(new ArrayList<String>() {{
+                            add(kv.getValue().get(0));
+                        }});
+                    });
+            return chain.filter(exchange);
+        }));
     }
 
     @Override
     public int getOrder() {
-        return NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER - 1;
+        // 指定此过滤器位于NettyWriteResponseFilter之后
+        // 即待处理完响应体后接着处理响应头
+        return NettyWriteResponseFilter.WRITE_RESPONSE_FILTER_ORDER + 1;
     }
 }

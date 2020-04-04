@@ -42,6 +42,7 @@ public class SysMenuController {
     /**
      * 查询当前用户的权限
      * map：User + Menus
+     *
      * @return map
      */
     @NeedAuth
@@ -76,7 +77,7 @@ public class SysMenuController {
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
     })
     public ResponseObj selectMenuByRoleId(@RequestParam Integer roleId) {
-        List<SysMenu> sysMenuList = menuService.getSysMenuByRolesId(roleId);
+        List<SysMenu> sysMenuList = menuService.getCheckedRoleMenus(roleId);
         return ResponseObj.createSuccessResponse(sysMenuList);
     }
 

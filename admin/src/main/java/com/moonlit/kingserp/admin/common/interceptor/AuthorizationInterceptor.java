@@ -27,7 +27,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     public static final String LOGIN_TOKEN_KEY = "token";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
 
         //支持跨域请求
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");

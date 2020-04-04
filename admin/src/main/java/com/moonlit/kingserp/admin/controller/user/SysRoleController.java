@@ -5,6 +5,7 @@ import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.common.utils.Utils;
 import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.admin.service.SysRoleService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 public class SysRoleController {
     @Autowired
     private SysRoleService roleService;
+    @Autowired
+    private SysMenuService menuService;
     @Autowired
     private LogService logService;
     @Autowired
@@ -184,6 +187,23 @@ public class SysRoleController {
             e.printStackTrace();
         }
         return ResponseObj.createSuccessResponse(sysUserPageInfo);
+    }
+
+    /**
+     * 設置角色對應權限目錄
+     *
+     * @return
+     */
+    @ApiOperation("設置角色對應權限目錄")
+    @PostMapping("/setRoleMenu")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
+    })
+    public ResponseObj setRoleMenu(@RequestParam Integer roleId) {
+
+
+        return ResponseObj.createSuccessResponse();
     }
 }
 
