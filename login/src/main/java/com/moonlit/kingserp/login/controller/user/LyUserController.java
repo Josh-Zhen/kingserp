@@ -30,8 +30,6 @@ public class LyUserController {
     @Autowired
     private LyUserService userService;
 
-    /************************************************** admin 調用 ******************************************/
-
     /**
      * 新增一個客戶
      *

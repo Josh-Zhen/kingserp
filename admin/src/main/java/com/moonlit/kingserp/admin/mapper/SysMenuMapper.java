@@ -2,6 +2,7 @@ package com.moonlit.kingserp.admin.mapper;
 
 import com.moonlit.kingserp.common.tkmapper.MyMapper;
 import com.moonlit.kingserp.entity.admin.SysMenu;
+import com.moonlit.kingserp.entity.admin.SysMenuModel;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -31,5 +32,5 @@ public interface SysMenuMapper extends MyMapper<SysMenu> {
      * @return
      */
     @Select("SELECT m.*, (CASE WHEN EXISTS ( SELECT 1 FROM sys_role_menu rm WHERE rm.menu_id = m.menu_id AND rm.role_id = #{roleId} AND m.STATUS = 1) THEN '1' ELSE '0' END ) AS checked FROM sys_menu m WHERE m.type != 3 ORDER BY m.parent_id,m.order_num")
-    List<SysMenu> getCheckedRoleMenus(Integer roleId);
+    SysMenuModel getCheckedRoleMenus(Integer roleId);
 }

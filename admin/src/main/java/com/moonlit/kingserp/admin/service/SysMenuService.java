@@ -1,7 +1,9 @@
 package com.moonlit.kingserp.admin.service;
 
 import com.moonlit.kingserp.entity.admin.SysMenu;
+import com.moonlit.kingserp.entity.admin.SysMenuModel;
 import com.moonlit.kingserp.entity.admin.SysUser;
+import com.moonlit.kingserp.entity.admin.dto.RoleMenu;
 
 import java.util.List;
 import java.util.Map;
@@ -32,8 +34,17 @@ public interface SysMenuService {
 
     /**
      * 查詢所有目錄，根據角色id查詢目錄啓用情況（0.否 1.是）
+     *
      * @param roleId
      * @return
      */
-    List<SysMenu> getCheckedRoleMenus(Integer roleId);
+    SysMenuModel getCheckedRoleMenus(Integer roleId);
+
+    /**
+     * 添加角色和权限的关系
+     *
+     * @param roleMenu
+     * @return
+     */
+    int addRoleMenu(RoleMenu roleMenu);
 }

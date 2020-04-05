@@ -45,7 +45,7 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("權限校驗。。。。。");
+        System.out.println("-----權限校驗-----");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         SysUser sysUser = (SysUser) principals.getPrimaryPrincipal();
         //根据用户id查询角色

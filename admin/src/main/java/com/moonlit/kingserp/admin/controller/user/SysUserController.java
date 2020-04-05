@@ -8,6 +8,8 @@ import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
+import com.moonlit.kingserp.common.util.CommonUtil;
+import com.moonlit.kingserp.common.util.MD5Util;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -118,7 +120,7 @@ public class SysUserController {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
             }
             sysUser.setCreateUserId(adminUser.getId());
-            if (sysUserService.addSysUser(sysUser) < 0) {
+            if (0 > sysUserService.addSysUser(sysUser)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
             }
         } else {
@@ -140,7 +142,13 @@ public class SysUserController {
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
         if (null != sysUser.getId()) {
-            if (sysUserService.updateSysUser(sysUser) < 0) {
+            // 修改密碼
+            if (null != sysUser.getPassword()) {
+                String userSalt = CommonUtil.getVerificationCode(6);
+                sysUser.setPassword(MD5Util.getMd5insalf(sysUser.getPassword(), userSalt));
+                sysUser.setUserSalt(userSalt);
+            }
+            if (0 > sysUserService.updateSysUser(sysUser)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }
         } else {
@@ -164,16 +172,15 @@ public class SysUserController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delSysUser(@RequestParam Integer id) {
-        if (Utils.checkUserIsSuper()) {
-            if (null != id) {
-                if (sysUserService.delSysUserById(id) < 0) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
-                }
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
+        if (!Utils.checkUserIsSuper()) {
+            ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        if (null != id) {
+            if (0 > sysUserService.delSysUserById(id)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
             }
         } else {
-            ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除一個管理員，Id為：" + id));
         return ResponseObj.createSuccessResponse();
@@ -212,20 +219,19 @@ public class SysUserController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
-        if (Utils.checkUserIsSuper()) {
-            if (null != sysUserId) {
-                SysUser sysUser = new SysUser();
-                type = Math.abs(type - 1);
-                sysUser.setId(sysUserId);
-                sysUser.setStatus(type);
-                if (sysUserService.updateSysUser(sysUser) < 0) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
-                }
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
+        if (!Utils.checkUserIsSuper()) {
+            ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        if (null != sysUserId) {
+            SysUser sysUser = new SysUser();
+            type = Math.abs(type - 1);
+            sysUser.setId(sysUserId);
+            sysUser.setStatus(type);
+            if (0 > sysUserService.updateSysUser(sysUser)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10014);
             }
         } else {
-            ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUserStatus", "修改管理者Id為：" + sysUserId + " 的狀態"));
         return ResponseObj.createSuccessResponse();

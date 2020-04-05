@@ -71,8 +71,8 @@ public class SysUserServiceImpl implements SysUserService {
         try {
             String userSalt = CommonUtil.getVerificationCode(6);
             sysUser.setPassword(MD5Util.getMd5insalf(sysUser.getPassword(), userSalt));
-            sysUser.setCreateTime(new Date());
             sysUser.setUserSalt(userSalt);
+            sysUser.setCreateTime(new Date());
             i = sysUserMapper.insertSelective(sysUser);
 
             SysUserRole sysUserRole = new SysUserRole();

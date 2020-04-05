@@ -1,26 +1,24 @@
 package com.moonlit.kingserp.admin.controller.user;
 
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
+import com.moonlit.kingserp.admin.common.utils.Utils;
 import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.SysMenu;
+import com.moonlit.kingserp.entity.admin.SysMenuModel;
 import com.moonlit.kingserp.entity.admin.SysUser;
+import com.moonlit.kingserp.entity.admin.dto.RoleMenu;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,7 +77,7 @@ public class SysMenuController {
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
     })
     public ResponseObj selectMenuByRoleId(@RequestParam Integer roleId) {
-        List<SysMenu> sysMenuList;
+        SysMenuModel sysMenuList;
         if (null != roleId) {
             sysMenuList = menuService.getCheckedRoleMenus(roleId);
         } else {
@@ -88,5 +86,29 @@ public class SysMenuController {
         return ResponseObj.createSuccessResponse(sysMenuList);
     }
 
-}
+    /**
+     * 添加角色和目錄权限的关系
+     *
+     * @return
+     */
+    @ApiOperation("添加角色和目錄权限的关系")
+    @PostMapping("/setRoleMenus")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
+    public ResponseObj setRoleMenus(@RequestBody RoleMenu roleMenu) {
+        if (!Utils.checkUserIsSuper()) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        try {
+            if (null == roleMenu.getRoleId()) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+            }
+            if (0 > menuService.addRoleMenu(roleMenu)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseObj.createSuccessResponse();
+    }
 
+}

@@ -2,12 +2,14 @@ package com.moonlit.kingserp.admin.service.impl;
 
 import com.moonlit.kingserp.admin.mapper.SysMenuMapper;
 import com.moonlit.kingserp.admin.mapper.SysRoleMapper;
+import com.moonlit.kingserp.admin.mapper.SysRoleMenuMapper;
 import com.moonlit.kingserp.admin.service.SysMenuService;
-import com.moonlit.kingserp.entity.admin.SysMenu;
-import com.moonlit.kingserp.entity.admin.SysRole;
-import com.moonlit.kingserp.entity.admin.SysUser;
+import com.moonlit.kingserp.entity.admin.*;
+import com.moonlit.kingserp.entity.admin.dto.RoleMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +29,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysMenuMapper menuMapper;
     @Autowired
     private SysRoleMapper roleMapper;
+    @Autowired
+    private SysRoleMenuMapper roleMenuMapper;
 
     /**
      * 根據角色id查詢權限
@@ -71,13 +75,61 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
-    public List<SysMenu> getCheckedRoleMenus(Integer roleId) {
-        List<SysMenu> roleMenus = null;
+    public SysMenuModel getCheckedRoleMenus(Integer roleId) {
+        SysMenuModel roleMenus = null;
         try {
             roleMenus = menuMapper.getCheckedRoleMenus(roleId);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return roleMenus;
+    }
+
+    /**
+     * 添加角色和权限的关系
+     *
+     * @param roleMenu
+     * @return
+     */
+    @Override
+    public int addRoleMenu(RoleMenu roleMenu) {
+        int i = 0;
+        //刪除
+        removeByRoleId(roleMenu.getRoleId());
+        //添加
+        if (!StringUtils.isEmpty(roleMenu.getMenuIdList())) {
+            String[] resourcesArr = roleMenu.getMenuIdList().split(",");
+            if (resourcesArr.length == 0) {
+                return 0;
+            }
+            List<SysRoleMenu> roleResources = new ArrayList<>();
+            for (String menu : resourcesArr) {
+                if (StringUtils.isEmpty(menu)) {
+                    continue;
+                }
+                SysRoleMenu r = new SysRoleMenu();
+                r.setRoleId(roleMenu.getRoleId());
+                r.setMenuId(Integer.parseInt(menu));
+                roleResources.add(r);
+            }
+            if (roleResources.size() == 0) {
+                return 0;
+            }
+            roleMenuMapper.insertList(roleResources);
+        }
+        return i;
+    }
+
+    /**
+     * 批量刪除
+     *
+     * @param roleId
+     */
+    public void removeByRoleId(Integer roleId) {
+        //删除
+        Example example = new Example(SysRoleMenu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleId", roleId);
+        roleMenuMapper.deleteByExample(example);
     }
 }

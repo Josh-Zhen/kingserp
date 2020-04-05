@@ -5,7 +5,6 @@ import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.common.utils.Utils;
 import com.moonlit.kingserp.admin.service.LogService;
-import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.admin.service.SysRoleService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -33,8 +32,6 @@ public class SysRoleController {
     @Autowired
     private SysRoleService roleService;
     @Autowired
-    private SysMenuService menuService;
-    @Autowired
     private LogService logService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -57,13 +54,12 @@ public class SysRoleController {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10015);
             }
             // 校驗是否是超級管理員
-            if (Utils.checkUserIsSuper()) {
-                sysRole.setCreateUserId(ShiroUtils.getUserInfo().getId());
-                if (roleService.insert(sysRole) < 0) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
-                }
-            } else {
+            if (!Utils.checkUserIsSuper()) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            }
+            sysRole.setCreateUserId(ShiroUtils.getUserInfo().getId());
+            if (0 > roleService.insert(sysRole)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
             }
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
@@ -83,25 +79,24 @@ public class SysRoleController {
     @ApiOperation("修改角色信息")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateRole(@RequestBody SysRole sysRole) {
-        if (Utils.checkUserIsSuper()) {
-            if (sysRole.getRoleName() != null) {
-                // 校驗角色是否存在
-                if (roleService.selectName(sysRole.getRoleName()) != null) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER10015);
-                }
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
-            }
-
-            if (sysRole.getRoleId() != null) {
-                if (roleService.updateRole(sysRole) < 0) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
-                }
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+        if (!Utils.checkUserIsSuper()) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        if (sysRole.getRoleName() != null) {
+            // 校驗角色是否存在
+            if (roleService.selectName(sysRole.getRoleName()) != null) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10015);
             }
         } else {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
+        }
+
+        if (sysRole.getRoleId() != null) {
+            if (0 > roleService.updateRole(sysRole)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
+            }
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("updateRole", "修改角色ID為：" + sysRole.getRoleId() + " 的角色信息"));
         return ResponseObj.createSuccessResponse();
@@ -123,20 +118,19 @@ public class SysRoleController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj updateRoleState(@RequestParam Integer roleId, @RequestParam Integer state) {
-        if (Utils.checkUserIsSuper()) {
-            if (null != roleId) {
-                SysRole role = new SysRole();
-                state = Math.abs(state - 1);
-                role.setRoleId(roleId);
-                role.setState(state);
-                if (roleService.updateRole(role) < 0) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
-                }
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+        if (!Utils.checkUserIsSuper()) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        if (null != roleId) {
+            SysRole role = new SysRole();
+            state = Math.abs(state - 1);
+            role.setRoleId(roleId);
+            role.setState(state);
+            if (0 > roleService.updateRole(role)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }
         } else {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色ID為：" + roleId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
@@ -156,16 +150,15 @@ public class SysRoleController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delectRole(@RequestParam Integer roleId) {
-        if (Utils.checkUserIsSuper()) {
-            if (null != roleId) {
-                if (roleService.delectRole(roleId) < 0) {
-                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
-                }
-            } else {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
+        if (!Utils.checkUserIsSuper()) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+        }
+        if (null != roleId) {
+            if (0 > roleService.delectRole(roleId)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
             }
         } else {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "管理者Id：" + ShiroUtils.getUserInfo().getId() + " 刪除一個管理員，Id為：" + roleId));
         return ResponseObj.createSuccessResponse();
@@ -189,21 +182,5 @@ public class SysRoleController {
         return ResponseObj.createSuccessResponse(sysUserPageInfo);
     }
 
-    /**
-     * 設置角色對應權限目錄
-     *
-     * @return
-     */
-    @ApiOperation("設置角色對應權限目錄")
-    @PostMapping("/setRoleMenu")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
-    })
-    public ResponseObj setRoleMenu(@RequestParam Integer roleId) {
-
-
-        return ResponseObj.createSuccessResponse();
-    }
 }
 
