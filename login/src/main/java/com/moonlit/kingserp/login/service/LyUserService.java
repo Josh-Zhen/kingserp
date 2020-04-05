@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public interface LyUserService {
 
     /**
-     * 根據關鍵字查詢用戶
+     * 根據關鍵字查詢客戶
      *
      * @param keywords
      * @return
@@ -21,7 +21,7 @@ public interface LyUserService {
     ArrayList<LyUser> getUserByUserKeywords(String keywords);
 
     /**
-     * 根據客戶賬號查詢用戶是否已經存在
+     * 根據客戶賬號查詢客戶是否已經存在
      *
      * @param userName
      * @return
@@ -29,7 +29,7 @@ public interface LyUserService {
     LyUser checkUser(String userName);
 
     /**
-     * 新增客戶
+     * 添加客戶
      *
      * @param user
      * @return
@@ -37,7 +37,7 @@ public interface LyUserService {
     int insetUser(LyUser user);
 
     /**
-     * 更新用户信息
+     * 更新客戶信息
      *
      * @param user
      * @return
@@ -45,7 +45,7 @@ public interface LyUserService {
     int updateUser(LyUser user);
 
     /**
-     * 删除用户
+     * 删除客戶
      *
      * @param userId
      * @return

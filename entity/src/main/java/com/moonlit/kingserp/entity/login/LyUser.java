@@ -94,6 +94,12 @@ public class LyUser {
      * 用户状态（0-存活、1-禁用）
      */
     @ApiModelProperty(value = "用户状态（0-存活、1-禁用）", name = "type")
-    private int type;
+    private Integer type;
+
+    /**
+     * 应收款项
+     */
+    @ApiModelProperty(value = "应收款项", name = "amountReceivable", example = "123")
+    private Integer amountReceivable;
 
 }

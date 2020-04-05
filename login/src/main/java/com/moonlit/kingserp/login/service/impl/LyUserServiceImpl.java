@@ -21,7 +21,7 @@ public class LyUserServiceImpl implements LyUserService {
     LyUserMapper lyUserMapper;
 
     /**
-     * 根據關鍵字查詢用戶
+     * 根據關鍵字查詢客戶
      *
      * @param keywords
      * @return
@@ -38,7 +38,7 @@ public class LyUserServiceImpl implements LyUserService {
     }
 
     /**
-     * 根據客戶賬號查詢用戶是否已經存在
+     * 根據客戶賬號查詢客戶是否已經存在
      *
      * @param userName
      * @return
@@ -51,7 +51,7 @@ public class LyUserServiceImpl implements LyUserService {
     }
 
     /**
-     * 新增客戶
+     * 添加客戶
      *
      * @param user
      */
@@ -67,7 +67,7 @@ public class LyUserServiceImpl implements LyUserService {
     }
 
     /**
-     * 更新用户信息
+     * 更新客戶信息
      *
      * @param user
      */
@@ -83,7 +83,7 @@ public class LyUserServiceImpl implements LyUserService {
     }
 
     /**
-     * 删除用户
+     * 删除客戶
      *
      * @param userId
      */

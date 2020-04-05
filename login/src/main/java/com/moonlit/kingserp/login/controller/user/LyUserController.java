@@ -23,7 +23,7 @@ import java.util.Date;
  */
 @Slf4j
 @RestController
-@Api(value = "用户信息", tags = {"用户信息"})
+@Api(value = "客戶信息", tags = {"客戶信息"})
 @RequestMapping("/user")
 public class LyUserController {
 
@@ -37,7 +37,7 @@ public class LyUserController {
      * @return
      */
     @PostMapping("/insetUser")
-    @ApiOperation(value = "新增一個客戶")
+    @ApiOperation(value = "添加客戶")
     public ResponseObj insetUser(@RequestBody LyUser user) {
         if (user.getUserName() != null && !user.getUserName().isEmpty()) {
             // 判斷該用戶是否存在
@@ -65,7 +65,7 @@ public class LyUserController {
      * @return
      */
     @PutMapping("/updateUser")
-    @ApiOperation(value = "修改用户信息")
+    @ApiOperation(value = "修改客戶信息")
     public ResponseObj updateUser(@RequestBody LyUser user) {
         if (null != user.getId()) {
             int i = userService.updateUser(user);
@@ -85,7 +85,7 @@ public class LyUserController {
      * @return
      */
     @DeleteMapping("/deleteUser")
-    @ApiOperation(value = "删除用户")
+    @ApiOperation(value = "删除客戶")
     public ResponseObj deleteUser(@RequestParam Integer userId) {
         if (null != userId) {
             int i = userService.deleteUser(userId);
@@ -100,14 +100,15 @@ public class LyUserController {
 
     /**
      * 根據關鍵字查詢用戶
+     * 匹配id、客户账号、昵称、手机号码、賬號拼音簡寫
      *
      * @param
      * @return user
      */
     @GetMapping("/getUsers")
-    @ApiOperation(value = "根據關鍵字查詢用戶")
+    @ApiOperation(value = "根據關鍵字查詢客戶")
     @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
-    public ResponseObj getUsers(@RequestBody(required = false) String keywords) {
+    public ResponseObj getUsers(@RequestParam(required = false) String keywords) {
         PageInfo<LyUser> pageInfo = null;
         try {
             pageInfo = new PageInfo(userService.getUserByUserKeywords(keywords));

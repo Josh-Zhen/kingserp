@@ -28,8 +28,7 @@ public class RequestGlobalFilter implements GlobalFilter, Ordered {
         //顯示請求
         ServerHttpRequest request = exchange.getRequest();
         String uri = request.getURI().toString();
-        String r = "----------------------------------------------------------------------";
-        System.out.println(r + "\r" + "Request URL: " + uri + "\r" + r);
+        System.out.println("Request URL: " + uri);
 
         return chain.filter(exchange).then(Mono.defer(() -> {
             exchange.getResponse().getHeaders().entrySet().stream()
