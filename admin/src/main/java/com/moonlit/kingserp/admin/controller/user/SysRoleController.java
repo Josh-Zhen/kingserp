@@ -98,7 +98,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRole", "修改角色ID為：" + sysRole.getRoleId() + " 的角色信息"));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRole", "修改角色Id為：" + sysRole.getRoleId() + " 的角色信息"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -132,7 +132,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色ID為：" + roleId + " 的狀態"));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色Id為：" + roleId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -160,7 +160,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "管理者Id：" + ShiroUtils.getUserInfo().getId() + " 刪除一個管理員，Id為：" + roleId));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "刪除角色Id為：" + roleId + " 的角色"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -169,8 +169,10 @@ public class SysRoleController {
      *
      * @return
      */
+    @NeedAuth
     @GetMapping("/selectRoles")
     @ApiOperation("查詢角色")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj selectRoles(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         PageInfo<SysRole> sysUserPageInfo = null;

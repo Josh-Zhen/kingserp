@@ -1,5 +1,7 @@
 package com.moonlit.kingserp.admin.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.mapper.SysLogMapper;
 import com.moonlit.kingserp.admin.service.LogService;
@@ -7,7 +9,6 @@ import com.moonlit.kingserp.entity.admin.SysLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -42,14 +43,20 @@ public class LogServiceImpl implements LogService {
         }
     }
 
-
     /**
      * 查詢日志
      *
      * @return
      */
     @Override
-    public ArrayList<SysLog> selectLog() {
-        return null;
+    public PageInfo<SysLog> selectLog(Integer currentPage, Integer pageSize, String keywords) {
+        PageInfo pageInfo = null;
+        try {
+            PageHelper.startPage(currentPage, pageSize);
+            pageInfo = new PageInfo(sysLogMapper.selectLogsByKeywords(keywords));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pageInfo;
     }
 }

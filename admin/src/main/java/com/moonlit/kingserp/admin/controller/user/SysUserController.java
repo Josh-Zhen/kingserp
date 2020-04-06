@@ -126,7 +126,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("addSysUser", "添加账号，賬戶名：" + sysUser.getUserName()));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("addSysUser", "添加賬戶名：" + sysUser.getUserName() + "的账号"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -154,7 +154,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUser", "修改成員信息，Id為：" + sysUser.getId()));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUser", "修改Id為：" + sysUser.getId() + "的成員信息"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -182,7 +182,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除一個管理員，Id為：" + id));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除Id為：" + id + "的成員"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -192,9 +192,13 @@ public class SysUserController {
      * @param keywords
      * @return
      */
+    @NeedAuth
     @GetMapping("/selectSysUsers")
     @ApiOperation(value = "根據關鍵字查詢管理者")
-    @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
+    })
     public ResponseObj selectSysUsers(@RequestParam(value = "currentPage", defaultValue = "1") Integer currentPage,
                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                       @RequestParam(required = false) String keywords) {
@@ -233,7 +237,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUserStatus", "修改管理者Id為：" + sysUserId + " 的狀態"));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUserStatus", "修改成員Id為：" + sysUserId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
     }
 

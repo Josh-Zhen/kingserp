@@ -2,6 +2,9 @@ package com.moonlit.kingserp.admin.mapper;
 
 import com.moonlit.kingserp.common.tkmapper.MyMapper;
 import com.moonlit.kingserp.entity.admin.SysLog;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @Description: 系统日志 Mapper 接口
@@ -11,4 +14,18 @@ import com.moonlit.kingserp.entity.admin.SysLog;
  */
 public interface SysLogMapper extends MyMapper<SysLog> {
 
+    /**
+     * 關鍵字查詢日志
+     *
+     * @param keywords
+     * @return
+     */
+    @Select({"<script>",
+            "SELECT sl.*, su.user_name AS userName FROM sys_log sl LEFT JOIN sys_user su ON su.id = sl.u_id",
+            "<if test='keywords != null and keywords != &quot;&quot;'>",
+            "WHERE CONCAT( sl.id, sl.u_id, sl.method ) LIKE '%' #{keywords} '%'",
+            "</if>",
+            "ORDER BY sl.create_date DESC",
+            "</script>"})
+    List<SysLog> selectLogsByKeywords(String keywords);
 }

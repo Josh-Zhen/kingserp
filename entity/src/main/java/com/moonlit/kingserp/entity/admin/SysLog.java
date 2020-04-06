@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -47,4 +48,8 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty(value = "data", name = "日志记录")
     private String data;
+
+    @Transient
+    @ApiModelProperty(value = "userName", name = "成員名")
+    private String userName;
 }

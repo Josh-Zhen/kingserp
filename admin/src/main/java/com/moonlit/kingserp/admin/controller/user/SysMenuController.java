@@ -2,11 +2,11 @@ package com.moonlit.kingserp.admin.controller.user;
 
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.utils.Utils;
+import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
-import com.moonlit.kingserp.entity.admin.SysMenu;
 import com.moonlit.kingserp.entity.admin.SysMenuModel;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import com.moonlit.kingserp.entity.admin.dto.RoleMenu;
@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -37,6 +38,10 @@ public class SysMenuController {
     private SysMenuService menuService;
     @Autowired
     SysUserService sysUserService;
+    @Autowired
+    private LogService logService;
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
      * 查询当前用户的权限
@@ -91,6 +96,7 @@ public class SysMenuController {
      *
      * @return
      */
+    @NeedAuth
     @ApiOperation("添加角色和目錄权限的关系")
     @PostMapping("/setRoleMenus")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
@@ -108,6 +114,7 @@ public class SysMenuController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        threadPoolTaskExecutor.execute(() -> logService.addLog("setRoleMenus", "修改角色Id為：" + roleMenu.getRoleId() + " 的權限信息"));
         return ResponseObj.createSuccessResponse();
     }
 

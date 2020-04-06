@@ -55,4 +55,15 @@ public interface LoginServer {
     @GetMapping("user/getUsers")
     @ApiOperation(value = "根據關鍵字查詢客戶")
     ResponseObj getUsers(@RequestParam(required = false) String keywords);
+
+    /**
+     * 啓用/禁用 客戶
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    @PutMapping("user/updateUserType")
+    @ApiOperation("啓用/禁用 客戶")
+    ResponseObj updateUserType(@RequestParam Integer id, @RequestParam Integer type);
 }

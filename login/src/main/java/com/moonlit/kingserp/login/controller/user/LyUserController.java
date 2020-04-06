@@ -8,6 +8,7 @@ import com.moonlit.kingserp.entity.login.LyUser;
 import com.moonlit.kingserp.login.service.LyUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,7 @@ public class LyUserController {
             user.setRegistrationTime(new Date());
             String nameShorthand = ChineseToEnUtil.getPinYinHeadChar(user.getNickName());
             user.setNameShorthand(nameShorthand);
-            int i = userService.insetUser(user);
-            if (i < 0) {
+            if (0 > userService.insetUser(user)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
             }
         } else {
@@ -68,8 +68,7 @@ public class LyUserController {
     @ApiOperation(value = "修改客戶信息")
     public ResponseObj updateUser(@RequestBody LyUser user) {
         if (null != user.getId()) {
-            int i = userService.updateUser(user);
-            if (i < 0) {
+            if (0 > userService.updateUser(user)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }
         } else {
@@ -88,8 +87,7 @@ public class LyUserController {
     @ApiOperation(value = "删除客戶")
     public ResponseObj deleteUser(@RequestParam Integer userId) {
         if (null != userId) {
-            int i = userService.deleteUser(userId);
-            if (i < 0) {
+            if (0 > userService.deleteUser(userId)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
             }
         } else {
@@ -106,7 +104,7 @@ public class LyUserController {
      * @return user
      */
     @GetMapping("/getUsers")
-    @ApiOperation(value = "根據關鍵字查詢客戶")
+    @ApiOperation("根據關鍵字查詢客戶")
     @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String")
     public ResponseObj getUsers(@RequestParam(required = false) String keywords) {
         PageInfo<LyUser> pageInfo = null;
@@ -116,6 +114,34 @@ public class LyUserController {
             e.printStackTrace();
         }
         return ResponseObj.createSuccessResponse(pageInfo);
+    }
+
+    /**
+     * 啓用/禁用 客戶
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    @PutMapping("/updateUserType")
+    @ApiOperation("啓用/禁用 客戶")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "客戶id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "當前狀態", paramType = "query", dataType = "Integer")
+    })
+    public ResponseObj updateUserType(@RequestParam Integer id, @RequestParam Integer type) {
+        if (null != id) {
+            LyUser user = new LyUser();
+            type = Math.abs(type - 1);
+            user.setId(id);
+            user.setType(type);
+            if (0 > userService.updateUser(user)) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
+            }
+        } else {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
+        }
+        return ResponseObj.createSuccessResponse();
     }
 
 }

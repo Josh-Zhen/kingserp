@@ -1,8 +1,7 @@
 package com.moonlit.kingserp.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.entity.admin.SysLog;
-
-import java.util.ArrayList;
 
 /**
  * @Description: 日志記錄
@@ -25,6 +24,6 @@ public interface LogService {
      *
      * @return
      */
-    ArrayList<SysLog> selectLog();
+    PageInfo<SysLog> selectLog(Integer currentPage, Integer pageSize, String keywords);
 
 }
