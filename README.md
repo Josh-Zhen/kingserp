@@ -12,7 +12,7 @@
 |Eureka |2.2.1.RELEASE  |
 |Gateway |2.2.1.RELEASE  |
 |Hystrix |2.2.1.RELEASE  |
-|Turbine |2.2.1RELEASE  |
+|Turbine |2.2.1.RELEASE  |
 - 數據庫：Mysql、Redis
 
 #### 一、模块包括：
