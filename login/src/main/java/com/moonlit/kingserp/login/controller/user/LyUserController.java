@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.common.util.ChineseToEnUtil;
+import com.moonlit.kingserp.common.util.ValidateUtil;
 import com.moonlit.kingserp.entity.login.LyUser;
 import com.moonlit.kingserp.login.service.LyUserService;
 import io.swagger.annotations.Api;
@@ -41,6 +42,10 @@ public class LyUserController {
     @ApiOperation(value = "添加客戶")
     public ResponseObj insetUser(@RequestBody LyUser user) {
         if (user.getUserName() != null && !user.getUserName().isEmpty()) {
+            // 校驗客户账号（客户账号只能是數字）
+            if (ValidateUtil.isLetter(user.getUserName())) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10018);
+            }
             // 判斷該用戶是否存在
             LyUser lyUser = userService.checkUser(user.getUserName());
             if (null != lyUser) {
@@ -68,6 +73,10 @@ public class LyUserController {
     @ApiOperation(value = "修改客戶信息")
     public ResponseObj updateUser(@RequestBody LyUser user) {
         if (null != user.getId()) {
+            // 校驗客户账号（客户账号只能是數字）
+            if (ValidateUtil.isLetter(user.getUserName())) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER10018);
+            }
             if (0 > userService.updateUser(user)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }

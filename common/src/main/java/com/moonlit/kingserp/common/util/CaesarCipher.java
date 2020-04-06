@@ -1,7 +1,7 @@
 package com.moonlit.kingserp.common.util;
 
 /**
- * @Description:凱撒加密
+ * @Description: 凱撒加密
  * @Author: Joshua
  * @CreateDate: 2020-02-08 22:40
  * @Version 1.0

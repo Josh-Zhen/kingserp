@@ -119,8 +119,7 @@ public class DateUtil {
                 return null;
             }
             DateFormat sdf = DateUtil.getDateFormat(yyyy_MM_dd_HH_mm_ss_EN);
-            Date d = sdf.parse(dateTimeStr);
-            return d;
+            return sdf.parse(dateTimeStr);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -138,8 +137,7 @@ public class DateUtil {
                 return null;
             }
             DateFormat sdf = DateUtil.getDateFormat(yyyy_MM_dd_EN);
-            Date d = sdf.parse(dateTimeStr);
-            return d;
+            return sdf.parse(dateTimeStr);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -346,11 +344,7 @@ public class DateUtil {
      */
     public static boolean isTimeBefor(Date nows, Date date) {
         long hous = nows.getTime() - date.getTime();
-        if (hous > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return hous > 0;
     }
 
     /**
@@ -429,11 +423,7 @@ public class DateUtil {
     public static boolean theDateIsToday(String date) {
         String theDate = DateUtil.stringToDateString(date, DateUtil.yyyy_MM_dd_HH_mm_ss_S_EN, DateUtil.yyyyMMdd_EN);
         String today = getDateStringOfDay(0, DateUtil.yyyyMMdd_EN);
-        if (theDate.equals(today)) {
-            return true;
-        } else {
-            return false;
-        }
+        return theDate.equals(today);
     }
 
     /**
@@ -865,27 +855,6 @@ public class DateUtil {
         return df.format(calendar.getTime());
     }
 
-//	public static List<Date> getThisWeekDates(){
-//		List<Date> list = new ArrayList<Date>();
-//        Calendar c = Calendar.getInstance();
-//        // 今天是一周中的第几天
-//        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK );
-// 
-//        if (c.getFirstDayOfWeek() == Calendar.SUNDAY) {
-//            c.add(Calendar.DAY_OF_MONTH, 1);
-//        }
-//        // 计算一周开始的日期
-//        c.add(Calendar.DAY_OF_MONTH, -dayOfWeek);
-//         
-//        for (int i=1;i<=7;i++) {
-//            c.add(Calendar.DAY_OF_MONTH, 1);
-//            if(DateUtils.isSameDay(c.getTime(), new Date())) 
-//            	break;
-//            list.add(c.getTime());
-//        }
-//        return list;
-//	}
-
     /**
      * 10位时间戳转时间
      *
@@ -1226,10 +1195,7 @@ public class DateUtil {
     }
 
     public static boolean isInTime(int time, int begin, int end) {
-        if (time >= begin && time < end) {
-            return true;
-        }
-        return false;
+        return time >= begin && time < end;
     }
 
     public static int getMinutest(String begin, String format) {
@@ -1245,7 +1211,6 @@ public class DateUtil {
         long ts = date.getTime();
         System.out.println(ts);
         return ts;
-
     }
 
     /**
@@ -1297,11 +1262,7 @@ public class DateUtil {
         Calendar end = Calendar.getInstance();
         end.setTime(endTime);
 
-        if (date.after(begin) && date.before(end)) {
-            return true;
-        } else {
-            return false;
-        }
+        return date.after(begin) && date.before(end);
     }
 
     public static boolean timeSection(String now, String start, String end) {
@@ -1325,8 +1286,6 @@ public class DateUtil {
             e.printStackTrace();
         }
         return runFlag;
-
-
     }
 
     public static Date getMonthStart() {

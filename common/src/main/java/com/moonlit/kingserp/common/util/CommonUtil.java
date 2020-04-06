@@ -21,8 +21,7 @@ public class CommonUtil {
     public static String getRandomString(int length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; ++i) {
             // [0,62)
             int number = random.nextInt(62);
@@ -38,11 +37,11 @@ public class CommonUtil {
      */
     public static String getVerificationCode(int n) {
         final Random random = new Random();
-        String verificationCode = "";
+        StringBuilder verificationCode = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            verificationCode += random.nextInt(10);
+            verificationCode.append(random.nextInt(10));
         }
-        return verificationCode;
+        return verificationCode.toString();
     }
 
     public static void main(String[] args) {
@@ -69,7 +68,7 @@ public class CommonUtil {
      */
     public static String getRandomString2(int length) {
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; ++i) {
             int number = random.nextInt(3);
             long ResponseObj = 0;
@@ -77,15 +76,16 @@ public class CommonUtil {
             switch (number) {
                 case 0:
                     ResponseObj = Math.round(Math.random() * 25 + 65);
-                    sb.append(String.valueOf((char) ResponseObj));
+                    sb.append((char) ResponseObj);
                     break;
                 case 1:
                     ResponseObj = Math.round(Math.random() * 25 + 97);
-                    sb.append(String.valueOf((char) ResponseObj));
+                    sb.append((char) ResponseObj);
                     break;
                 case 2:
-                    sb.append(String.valueOf(new Random().nextInt(10)));
+                    sb.append(new Random().nextInt(10));
                     break;
+                default:
             }
         }
         return sb.toString();
@@ -123,7 +123,7 @@ public class CommonUtil {
      * @param obj
      * @return
      */
-    public static Long ObjToLong(Object obj) {
+    public static Long objToLong(Object obj) {
         if (null == obj) {
             return null;
         }
@@ -144,7 +144,7 @@ public class CommonUtil {
      *
      * @return
      */
-    public static final String getContentPrefix() {
+    public static String getContentPrefix() {
         return "<style>img {height: auto;width: auto\\9;width:100%;}</style>";
     }
 
@@ -159,7 +159,7 @@ public class CommonUtil {
         if (0 == fValue) {
             return "0";
         } else {
-            Float number = (float) fValue / tValue;
+            float number = (float) fValue / tValue;
             int ret = new Float(number * 100).intValue();
             if (0 == ret) {
                 ret = 1;
@@ -190,10 +190,7 @@ public class CommonUtil {
      */
     public static boolean isContains(String filterName, String name) {
         String[] names = filterName.split(",");
-        if (ArrayUtils.contains(names, name)) {
-            return true;
-        }
-        return false;
+        return ArrayUtils.contains(names, name);
     }
 
     /**
@@ -213,12 +210,14 @@ public class CommonUtil {
 
     /**
      * 获取字符串包含值集合
+     *
+     * @param obj
+     * @return
      */
     public static List<Integer> getIdsList(Object obj) {
-        List<Integer> ids = new ArrayList<Integer>();
+        List<Integer> ids = new ArrayList<>();
         if (null != obj) {
-            String[] imgArray = obj.toString().split(",");
-            List<String> strings = Arrays.asList(imgArray);
+            String[] strings = obj.toString().split(",");
             for (String str : strings) {
                 if (str != null && !"".equals(str)) {
                     ids.add(Integer.parseInt(str));
@@ -235,7 +234,7 @@ public class CommonUtil {
      * @return
      */
     public static List<String> getImgList(Object obj) {
-        List<String> images = new ArrayList<String>();
+        List<String> images = new ArrayList<>();
         if (null != obj) {
             String[] imgArray = obj.toString().split(",");
             images = Arrays.asList(imgArray);
@@ -273,6 +272,8 @@ public class CommonUtil {
 
     /**
      * 生成订单的编号order_sn
+     *
+     * @return
      */
     public static String generateOrderNumber() {
         Calendar cal = Calendar.getInstance();
