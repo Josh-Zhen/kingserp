@@ -10,6 +10,12 @@ spring:
     name: local
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+    generate-ddl: false
 
 mybatis:
   mapper-locations: classpath*:/mapping/**/*.xml,/mapping.auth/*.xml
@@ -40,9 +46,3 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
-
-ribbon:
-  ReadTimeout: 600000
-  ConnectTimeout: 600000
-  MaxAutoRetries: 0
-  MaxAutoRetriesNextServer: 0

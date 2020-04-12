@@ -4,10 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -16,8 +13,10 @@ import java.io.Serializable;
  * @author Joshua
  * @since 2020-02-08
  */
-@ApiModel(value = "sysMenu", description = "菜单管理")
 @Data
+@Entity
+@Table(name = "sys_menu")
+@ApiModel(value = "sysMenu", description = "菜单管理")
 public class SysMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,9 +24,9 @@ public class SysMenu implements Serializable {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id", name = "menuId", example = "123")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "菜单id", name = "menuId", example = "1")
     private Integer menuId;
     /**
      * 父菜单ID，一级菜单为0

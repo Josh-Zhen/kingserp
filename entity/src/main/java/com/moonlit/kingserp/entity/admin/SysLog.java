@@ -5,9 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,19 +16,21 @@ import java.util.Date;
  * @since 2020-02-21
  */
 @Data
+@Entity
+@Table(name = "sys_log")
 @ApiModel(value = "sysLog", description = "系统日志")
 public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(generator = "JDBC")
-    @ApiModelProperty(value = "id", name = "id", example = "123")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "id", name = "id", example = "1")
     private Long id;
     /**
      * 操作者ID
      */
-    @ApiModelProperty(value = "uId", name = "操作者ID", example = "123")
+    @ApiModelProperty(value = "uId", name = "操作者ID", example = "1")
     private Integer uId;
     /**
      * 请求方法

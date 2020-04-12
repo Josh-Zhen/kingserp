@@ -9,9 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 /**
  * 系统用户
@@ -20,6 +18,8 @@ import javax.persistence.Transient;
  * @since 2020-02-08
  */
 @Data
+@Entity
+@Table(name = "sys_user")
 @ApiModel(value = "SysUser", description = "系统用户")
 public class SysUser implements Serializable {
 
@@ -28,9 +28,9 @@ public class SysUser implements Serializable {
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "id", name = "id", example = "123")
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "id", name = "id", example = "123")
     private Integer id;
 
     /**
@@ -66,7 +66,7 @@ public class SysUser implements Serializable {
     /**
      * 创建者ID
      */
-    @ApiModelProperty(value = "创建者ID", name = "createUserId", example = "123")
+    @ApiModelProperty(value = "创建者ID", name = "createUserId", example = "1")
     private Integer createUserId;
 
     /**
@@ -112,7 +112,7 @@ public class SysUser implements Serializable {
     @ApiModelProperty(value = "角色名稱", name = "roleName")
     private String roleName;
     @Transient
-    @ApiModelProperty(value = "角色ID", name = "roleId", example = "123")
+    @ApiModelProperty(value = "角色ID", name = "roleId", example = "1")
     private Integer roleId;
 
     /**

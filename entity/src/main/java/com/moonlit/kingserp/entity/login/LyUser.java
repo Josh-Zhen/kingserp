@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
@@ -24,9 +25,9 @@ public class LyUser {
     /**
      * 用户id
      */
-    @ApiModelProperty(value = "id", name = "id", example = "123")
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "JDBC")
+    @ApiModelProperty(value = "id", name = "id", example = "1")
     private Integer id;
 
     /**
@@ -75,19 +76,19 @@ public class LyUser {
     /**
      * 消费总金额
      */
-    @ApiModelProperty(value = "消费总金额", name = "sumAmount", example = "123")
+    @ApiModelProperty(value = "消费总金额", name = "sumAmount", example = "1")
     private Integer sumAmount;
 
     /**
      * 总订单数量
      */
-    @ApiModelProperty(value = "总订单数量", name = "sumOrder", example = "123")
+    @ApiModelProperty(value = "总订单数量", name = "sumOrder", example = "1")
     private Integer sumOrder;
 
     /**
      * 总退货次数
      */
-    @ApiModelProperty(value = "总评价次数", name = "sumEvaluation", example = "123")
+    @ApiModelProperty(value = "总退货次数", name = "sumEvaluation", example = "1")
     private Integer sumReturn;
 
     /**
@@ -99,7 +100,7 @@ public class LyUser {
     /**
      * 应收款项
      */
-    @ApiModelProperty(value = "应收款项", name = "amountReceivable", example = "123")
+    @ApiModelProperty(value = "应收款项", name = "amountReceivable", example = "1")
     private Integer amountReceivable;
 
 }
