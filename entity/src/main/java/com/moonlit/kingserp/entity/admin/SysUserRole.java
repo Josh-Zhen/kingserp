@@ -3,9 +3,7 @@ package com.moonlit.kingserp.entity.admin;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -14,8 +12,10 @@ import java.io.Serializable;
  * @author Joshua
  * @since 2020-02-08
  */
-@ApiModel(value = "sysUserRole", description = "用户与角色对应关系")
 @Data
+@Entity
+@Table(name = "sys_user_role")
+@ApiModel(value = "sysUserRole", description = "用户与角色对应关系")
 public class SysUserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
