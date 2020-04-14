@@ -5,13 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.mapper.SysUserMapper;
 import com.moonlit.kingserp.admin.mapper.SysUserRoleMapper;
+import com.moonlit.kingserp.admin.repository.SysUserRepository;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.exception.EpException;
 import com.moonlit.kingserp.common.util.CommonUtil;
 import com.moonlit.kingserp.common.util.MD5Util;
 import com.moonlit.kingserp.entity.admin.SysUser;
 import com.moonlit.kingserp.entity.admin.SysUserRole;
-import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +30,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper sysUserMapper;
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    private SysUserRepository userRepository;
 
     /**
      * 当前登录用户的权限等信息

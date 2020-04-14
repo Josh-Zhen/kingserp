@@ -10,11 +10,12 @@ spring:
     name: local
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
+#    schema: ../Kings_erp.sql
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     generate-ddl: false
 
 mybatis:

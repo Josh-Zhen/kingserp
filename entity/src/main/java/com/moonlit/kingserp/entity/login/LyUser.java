@@ -26,7 +26,7 @@ public class LyUser {
      * 用户id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "id", name = "id", example = "1")
     private Integer id;
 
