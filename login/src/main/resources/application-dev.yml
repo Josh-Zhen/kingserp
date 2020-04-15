@@ -23,14 +23,13 @@ spring:
       idleTimeout: 600000
       connectionTimeout: 30000
       maxLifetime: 1800000
-
   redis:
     database: 0
     host: 127.0.0.1
     password: qwe123
     port: 6379
     timeout: 7000
-    jedis:
+    lettuce:
       pool:
         max-idle: 500
         min-idle: 50

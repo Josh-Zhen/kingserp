@@ -13,7 +13,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Joshua
+ * @Description: Redis工具類
+ * @Author: Joshua
  */
 @Component
 public final class RedisUtil {
@@ -110,7 +111,6 @@ public final class RedisUtil {
      *
      * @param key 可以传一个值 或多个
      */
-    @SuppressWarnings("unchecked")
     public void del(String... key) {
         if (key != null && key.length > 0) {
             if (key.length == 1) {
@@ -434,8 +434,7 @@ public final class RedisUtil {
      */
     public long setRemove(String key, Object... values) {
         try {
-            Long count = redisTemplate.opsForSet().remove(key, values);
-            return count;
+            return redisTemplate.opsForSet().remove(key, values);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -611,14 +610,13 @@ public final class RedisUtil {
      * @return
      */
     public boolean setScheduler(final String key, Object value) {
-        boolean responseObj = false;
         try {
-            responseObj = redisTemplate.opsForValue().setIfAbsent(key, value);
-            return responseObj;
+            redisTemplate.opsForValue().setIfAbsent(key, value);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return responseObj;
+        return false;
 
     }
 }
