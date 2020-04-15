@@ -8,8 +8,7 @@ eureka:
     serviceUrl:
       defaultZone: http://127.0.0.1:8801/eureka/
   instance:
-    status-page-url: http://localhost:8805/login/swagger-ui.html#/
-#    status-page-url: http://localhost:${server.port}/swagger-ui.html
+    status-page-url: http://localhost:${server.port}/swagger-ui.html
 
 spring:
   datasource:

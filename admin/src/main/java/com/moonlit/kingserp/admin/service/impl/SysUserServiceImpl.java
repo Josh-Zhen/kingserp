@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.mapper.SysUserMapper;
 import com.moonlit.kingserp.admin.mapper.SysUserRoleMapper;
-import com.moonlit.kingserp.admin.repository.SysUserRepository;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.exception.EpException;
 import com.moonlit.kingserp.common.util.CommonUtil;
@@ -30,8 +29,6 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper sysUserMapper;
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
-    @Autowired
-    private SysUserRepository userRepository;
 
     /**
      * 当前登录用户的权限等信息

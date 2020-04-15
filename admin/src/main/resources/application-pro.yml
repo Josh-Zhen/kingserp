@@ -9,8 +9,7 @@ eureka:
       defaultZone: http://peer1:8801/eureka/
       status-page-url: http://localhost:8811/swagger-ui.html
   instance:
-    status-page-url: http://localhost:8805/admin/swagger-ui.html#/
-#    status-page-url: http://localhost:${server.port}/swagger-ui.html
+    status-page-url: http://localhost:${server.port}/swagger-ui.html
 
 spring:
   datasource:
