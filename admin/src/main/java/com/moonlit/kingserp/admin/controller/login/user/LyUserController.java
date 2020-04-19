@@ -1,4 +1,4 @@
-package com.moonlit.kingserp.admin.controller.login;
+package com.moonlit.kingserp.admin.controller.login.user;
 
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.feign.LoginServer;

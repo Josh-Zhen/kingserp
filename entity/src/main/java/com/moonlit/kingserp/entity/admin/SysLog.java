@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "sys_log")
-@ApiModel(value = "sysLog", description = "系统日志")
+@ApiModel(value = "SysLog", description = "系统日志")
 public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 1L;

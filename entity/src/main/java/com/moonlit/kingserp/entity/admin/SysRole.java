@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "sys_role")
-@ApiModel(value = "sysRole", description = "角色")
+@ApiModel(value = "SysRole", description = "角色")
 public class SysRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
