@@ -54,7 +54,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/login")
-    @ApiOperation(value = "管理者登录")
+    @ApiOperation("管理者登录")
     public ResponseObj login(@RequestBody SysUser sysUser) {
         System.out.println("--↓--loginName--↓--" + "\n" + sysUser.getUserName());
         System.out.println("--↓--password--↓--" + "\n" + sysUser.getPassword());
@@ -93,7 +93,7 @@ public class SysUserController {
      * 用户登出.並清除緩存
      */
     @GetMapping("/logout")
-    @ApiOperation(value = "用户登出")
+    @ApiOperation("用户登出")
     public ResponseObj userLogout() {
         ShiroUtils.logout();
         ShiroUtils.deleteCache();
@@ -108,7 +108,7 @@ public class SysUserController {
      */
     @NeedAuth
     @PostMapping("/addSysUser")
-    @ApiOperation(value = "添加账号")
+    @ApiOperation("添加账号")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj addSysUser(@RequestBody SysUser sysUser) {
         // 獲取當前操作管理者
@@ -138,7 +138,7 @@ public class SysUserController {
      */
     @NeedAuth
     @PutMapping("/updateSysUser")
-    @ApiOperation(value = "修改成員信息")
+    @ApiOperation("修改成員信息")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateSysUser(@RequestBody SysUser sysUser) {
         if (null != sysUser.getId()) {
@@ -166,7 +166,7 @@ public class SysUserController {
      */
     @NeedAuth
     @DeleteMapping("/delSysUser")
-    @ApiOperation(value = "刪除成員")
+    @ApiOperation("刪除成員")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "管理員Id", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
@@ -194,7 +194,7 @@ public class SysUserController {
      */
     @NeedAuth
     @GetMapping("/selectSysUsers")
-    @ApiOperation(value = "根據關鍵字查詢管理者")
+    @ApiOperation("根據關鍵字查詢管理者")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keywords", value = "關鍵字", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
@@ -216,7 +216,7 @@ public class SysUserController {
      */
     @NeedAuth
     @PutMapping("/updateSysUserStatus")
-    @ApiOperation(value = "启用/禁用 管理者")
+    @ApiOperation("启用/禁用 管理者")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "sysUserId", value = "管理員Id", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "type", value = "當前狀態", paramType = "query", dataType = "Integer"),
@@ -239,6 +239,19 @@ public class SysUserController {
         }
         threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUserStatus", "修改成員Id為：" + sysUserId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
+    }
+
+    /**
+     * 獲取當前用戶
+     *
+     * @return
+     */
+    @NeedAuth
+    @GetMapping("/getUserInfo")
+    @ApiOperation("獲取當前用戶")
+    public ResponseObj getUserInfo() {
+        SysUser userInfo = ShiroUtils.getUserInfo();
+        return ResponseObj.createSuccessResponse(userInfo);
     }
 
 }
