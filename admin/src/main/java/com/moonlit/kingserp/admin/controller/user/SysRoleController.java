@@ -44,7 +44,7 @@ public class SysRoleController {
      */
     @NeedAuth
     @PostMapping("/addRole")
-    @ApiOperation(value = "添加角色")
+    @ApiOperation("添加角色")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj addRole(@RequestBody SysRole sysRole) {
         if (sysRole.getRoleName() != null) {

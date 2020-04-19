@@ -51,7 +51,7 @@ public class SysMenuController {
      */
     @NeedAuth
     @GetMapping("/selectMenu")
-    @ApiOperation(value = "查询当前用户的权限")
+    @ApiOperation("查询当前用户的权限")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "string", paramType = "header")
     public ResponseObj selectMenu() {
         Map<String, Object> map = new HashMap<>(32);
@@ -76,7 +76,7 @@ public class SysMenuController {
      */
     @NeedAuth
     @GetMapping("/selectMenuByRoleId")
-    @ApiOperation(value = "查詢菜單目錄")
+    @ApiOperation("查詢菜單目錄")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "query", dataType = "Integer")
@@ -97,8 +97,8 @@ public class SysMenuController {
      * @return
      */
     @NeedAuth
-    @ApiOperation("添加角色和目錄权限的关系")
     @PostMapping("/setRoleMenus")
+    @ApiOperation("添加角色和目錄权限的关系")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj setRoleMenus(@RequestBody RoleMenu roleMenu) {
         if (!Utils.checkUserIsSuper()) {
