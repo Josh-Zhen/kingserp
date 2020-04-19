@@ -39,7 +39,7 @@ public class LyUserController {
      * @return
      */
     @PostMapping("/insetUser")
-    @ApiOperation(value = "添加客戶")
+    @ApiOperation("添加客戶")
     public ResponseObj insetUser(@RequestBody LyUser user) {
         if (user.getUserName() != null && !user.getUserName().isEmpty()) {
             // 校驗客户账号（客户账号只能是數字）
@@ -70,7 +70,7 @@ public class LyUserController {
      * @return
      */
     @PutMapping("/updateUser")
-    @ApiOperation(value = "修改客戶信息")
+    @ApiOperation("修改客戶信息")
     public ResponseObj updateUser(@RequestBody LyUser user) {
         if (null != user.getId()) {
             // 校驗客户账号（客户账号只能是數字）
@@ -93,7 +93,7 @@ public class LyUserController {
      * @return
      */
     @DeleteMapping("/deleteUser")
-    @ApiOperation(value = "删除客戶")
+    @ApiOperation("删除客戶")
     public ResponseObj deleteUser(@RequestParam Integer userId) {
         if (null != userId) {
             if (0 > userService.deleteUser(userId)) {
