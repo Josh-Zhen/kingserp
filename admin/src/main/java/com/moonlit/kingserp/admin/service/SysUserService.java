@@ -24,7 +24,7 @@ public interface SysUserService {
      * @param sysUser
      * @return SysUser
      */
-    SysUser exitSysUser(SysUser sysUser);
+    SysUser checkSysUser(SysUser sysUser);
 
     /**
      * 添加一個成員

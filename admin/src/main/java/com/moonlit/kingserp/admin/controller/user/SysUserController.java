@@ -115,8 +115,7 @@ public class SysUserController {
         SysUser adminUser = ShiroUtils.getUserInfo();
         if (adminUser.getUserIsSuper() == 1) {
             //判断用户名是否注册
-            SysUser sysUserInfo = sysUserService.exitSysUser(sysUser);
-            if (sysUserInfo != null) {
+            if (null != sysUserService.checkSysUser(sysUser)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
             }
             sysUser.setCreateUserId(adminUser.getId());

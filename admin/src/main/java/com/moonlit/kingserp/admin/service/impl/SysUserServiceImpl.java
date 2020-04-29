@@ -52,7 +52,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return SysUser
      */
     @Override
-    public SysUser exitSysUser(SysUser sysUser) {
+    public SysUser checkSysUser(SysUser sysUser) {
         SysUser user = new SysUser();
         user.setUserName(sysUser.getUserName());
         return sysUserMapper.selectOne(user);

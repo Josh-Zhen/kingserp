@@ -1,5 +1,6 @@
 package com.moonlit.kingserp.login.service.impl;
 
+import com.moonlit.kingserp.common.util.ChineseToEnUtil;
 import com.moonlit.kingserp.entity.login.LyUser;
 import com.moonlit.kingserp.login.mapper.LyUserMapper;
 import com.moonlit.kingserp.login.service.LyUserService;
@@ -75,6 +76,7 @@ public class LyUserServiceImpl implements LyUserService {
     public int updateUser(LyUser user) {
         int i = 0;
         try {
+            user.setNameShorthand(ChineseToEnUtil.getPinYinHeadChar(user.getNickName()));
             i = lyUserMapper.updateByPrimaryKeySelective(user);
         } catch (Exception e) {
             e.printStackTrace();

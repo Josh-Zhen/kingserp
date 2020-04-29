@@ -55,7 +55,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             token = request.getParameter(LOGIN_TOKEN_KEY);
         }
 
-        //tok为空
+        //token为空
         if (StringUtils.isBlank(token)) {
             throw new EpException("请先登录", 401);
         }

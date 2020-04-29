@@ -23,30 +23,29 @@ public class ChineseToEnUtil {
      * @return
      */
     public static String getPingYin(String src) {
-        char[] t1 = null;
+        char[] t1;
         t1 = src.toCharArray();
-        String[] t2 = new String[t1.length];
+        String[] t2;
         HanyuPinyinOutputFormat t3 = new HanyuPinyinOutputFormat();
         t3.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         t3.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         t3.setVCharType(HanyuPinyinVCharType.WITH_V);
-        String t4 = "";
-        int t0 = t1.length;
+        StringBuilder t4 = new StringBuilder();
         try {
-            for (int i = 0; i < t0; i++) {
+            for (char c : t1) {
                 // 判断是否为汉字字符
-                if (Character.toString(t1[i]).matches("[\\u4E00-\\u9FA5]+")) {
-                    t2 = PinyinHelper.toHanyuPinyinStringArray(t1[i], t3);
-                    t4 += t2[0];
+                if (Character.toString(c).matches("[\\u4E00-\\u9FA5]+")) {
+                    t2 = PinyinHelper.toHanyuPinyinStringArray(c, t3);
+                    t4.append(t2[0]);
                 } else {
-                    t4 += Character.toString(t1[i]);
+                    t4.append(c);
                 }
             }
-            return t4;
+            return t4.toString();
         } catch (BadHanyuPinyinOutputFormatCombination e1) {
             e1.printStackTrace();
         }
-        return t4;
+        return t4.toString();
     }
 
     /**
@@ -56,19 +55,18 @@ public class ChineseToEnUtil {
      * @return
      */
     public static String getPinYinHeadChar(String str) {
-
-        String convert = "";
+        StringBuilder convert = new StringBuilder();
         for (int j = 0; j < str.length(); j++) {
             char word = str.charAt(j);
             String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
             if (pinyinArray != null) {
-                convert += pinyinArray[0].charAt(0);
+                convert.append(pinyinArray[0].charAt(0));
             } else {
-                convert += word;
+                convert.append(word);
             }
         }
-        convert=convert.toUpperCase();
-        return convert;
+        convert = new StringBuilder(convert.toString().toUpperCase());
+        return convert.toString();
     }
 
     /**
@@ -78,16 +76,15 @@ public class ChineseToEnUtil {
      * @return
      */
     public static String getCnASCII(String cnStr) {
-        StringBuffer strBuf = new StringBuffer();
+        StringBuilder strBuf = new StringBuilder();
         byte[] bGBK = cnStr.getBytes();
-        for (int i = 0; i < bGBK.length; i++) {
-            strBuf.append(Integer.toHexString(bGBK[i] & 0xff));
+        for (byte b : bGBK) {
+            strBuf.append(Integer.toHexString(b & 0xff));
         }
         return strBuf.toString();
     }
 
     public static void main(String[] args) {
-
         String cnStr = "李嘉誠";
         System.out.println(getPingYin(cnStr));
         System.out.println(getPinYinHeadChar(cnStr));
