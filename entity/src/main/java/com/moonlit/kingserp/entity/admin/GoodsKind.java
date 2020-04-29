@@ -27,7 +27,7 @@ public class GoodsKind implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "id", name = "id", example = "1")
-    private Long id;
+    private Integer id;
 
     /**
      * 種類名称
@@ -55,4 +55,9 @@ public class GoodsKind implements Serializable {
     @ApiModelProperty(value = "status", name = "狀態(0-啓用，1禁止)", example = "0")
     private Integer status;
 
+    /**
+     * 助記碼
+     */
+    @ApiModelProperty(value = "nameShorthand", name = "助記碼")
+    private String nameShorthand;
 }

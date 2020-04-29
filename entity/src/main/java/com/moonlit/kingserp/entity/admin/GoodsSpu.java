@@ -27,7 +27,7 @@ public class GoodsSpu implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "id", name = "id", example = "1")
-    private Long id;
+    private Integer id;
 
     /**
      * 商品名稱
