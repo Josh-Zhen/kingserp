@@ -3,7 +3,6 @@ package com.moonlit.kingserp.admin.controller.goods;
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.service.GoodsKindService;
-import com.moonlit.kingserp.admin.service.GoodsSpuService;
 import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
