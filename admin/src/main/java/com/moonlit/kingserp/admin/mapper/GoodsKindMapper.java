@@ -18,14 +18,14 @@ public interface GoodsKindMapper extends MyMapper<GoodsKind> {
      * 根據關鍵字查詢商品種類
      *
      * @param keywords
-     * @return
+     * @return ArrayList<GoodsKind>
      */
     @Select({"<script>",
-            "select * from `goods_kind`",
+            "SELECT gk.*, COUNT( gs.id ) AS goodsSpuSum FROM `goods_kind` gk LEFT JOIN `goods_spu` gs ON gs.kind_id = gk.id",
             "<if test='keywords != null and keywords != &quot;&quot;'>",
-            "WHERE CONCAT(id,name,name_shorthand) LIKE '%' #{keywords} '%'",
+            "WHERE CONCAT(gk.id, gk.name, gk.name_shorthand) LIKE '%' #{keywords} '%'",
             "</if>",
-            "ORDER BY create_time DESC",
+            "ORDER BY gk.parent_id, gk.sep",
             "</script>"})
     ArrayList<GoodsKind> selectGoodsKindByKeywords(String keywords);
 }

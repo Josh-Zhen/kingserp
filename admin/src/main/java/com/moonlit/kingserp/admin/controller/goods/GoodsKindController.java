@@ -3,6 +3,7 @@ package com.moonlit.kingserp.admin.controller.goods;
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.service.GoodsKindService;
+import com.moonlit.kingserp.admin.service.GoodsSpuService;
 import com.moonlit.kingserp.admin.service.LogService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -30,6 +31,8 @@ public class GoodsKindController {
 
     @Autowired
     private GoodsKindService goodsKindService;
+    @Autowired
+    private GoodsSpuService goodsSpuService;
     @Autowired
     private LogService logService;
     @Autowired
@@ -111,7 +114,7 @@ public class GoodsKindController {
      * @return
      */
     @NeedAuth
-    @DeleteMapping("/deldectGoodsKind")
+    @PutMapping("/deldectGoodsKind")
     @ApiOperation("修改商品種類狀態")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
@@ -156,6 +159,31 @@ public class GoodsKindController {
             e.printStackTrace();
         }
         return ResponseObj.createSuccessResponse(goodsKinds);
+    }
+
+    /**
+     * 根據Id查詢商品種類
+     *
+     * @return
+     */
+    @NeedAuth
+    @GetMapping("/getGoodsKindById")
+    @ApiOperation("根據Id查詢商品種類")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "GoodsKindId", value = "商品種類Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
+    })
+    public ResponseObj getGoodsKindById(@RequestParam Integer goodsKindId) {
+        GoodsKind goodsKind = null;
+        try {
+            if (null == goodsKindId) {
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20505);
+            }
+            goodsKind = goodsKindService.getGoodsKindById(goodsKindId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseObj.createSuccessResponse(goodsKind);
     }
 
 }

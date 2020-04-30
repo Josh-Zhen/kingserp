@@ -34,7 +34,8 @@ public enum ErrerMsg {
     ERRER20501(20501, "更新失败"),
     ERRER20502(20502, "删除失败"),
     ERRER20503(20503, "修改失败"),
-    ERRER20504(20504, "添加失败");
+    ERRER20504(20504, "添加失败"),
+    ERRER20505(20504, "該項不存在");
 
     private int code;
     private String message;

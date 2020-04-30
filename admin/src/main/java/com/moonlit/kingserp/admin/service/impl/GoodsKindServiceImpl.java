@@ -113,4 +113,15 @@ public class GoodsKindServiceImpl implements GoodsKindService {
         }
         return pageInfo;
     }
+
+    /**
+     * 根據Id查詢商品種類
+     *
+     * @param goodsKindId
+     * @return GoodsKind
+     */
+    @Override
+    public GoodsKind getGoodsKindById(Integer goodsKindId) {
+        return goodsKindMapper.selectByPrimaryKey(goodsKindId);
+    }
 }

@@ -60,4 +60,23 @@ public class GoodsKind implements Serializable {
      */
     @ApiModelProperty(value = "nameShorthand", name = "助記碼")
     private String nameShorthand;
+
+    /**
+     * 序列
+     */
+    @ApiModelProperty(value = "sep", name = "序列")
+    private Integer sep;
+
+    /**
+     * 上級Id(頂層為0)
+     */
+    @ApiModelProperty(value = "parentId", name = "上級Id(頂層為0)")
+    private Integer parentId;
+
+    /**
+     * 該種類下有多少商品
+     */
+    @Transient
+    @ApiModelProperty(value = "GoodsSpuSum", name = "相關", example = "0")
+    private Integer goodsSpuSum;
 }

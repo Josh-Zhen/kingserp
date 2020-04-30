@@ -52,4 +52,12 @@ public interface GoodsKindService {
      * @return
      */
     PageInfo<GoodsKind> selectGoodsKind(Integer currentPage, Integer pageSize, String keywords);
+
+    /**
+     * 根據Id查詢商品種類
+     *
+     * @param goodsKindId
+     * @return
+     */
+    GoodsKind getGoodsKindById(Integer goodsKindId);
 }
