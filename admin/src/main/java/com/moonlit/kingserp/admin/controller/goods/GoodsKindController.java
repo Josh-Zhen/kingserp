@@ -32,8 +32,6 @@ public class GoodsKindController {
     @Autowired
     private GoodsKindService goodsKindService;
     @Autowired
-    private GoodsSpuService goodsSpuService;
-    @Autowired
     private LogService logService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -49,14 +47,10 @@ public class GoodsKindController {
     @ApiOperation("添加商品種類")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj addGoodsKind(@RequestBody GoodsKind goodsKind) {
-        //檢查商品種類是否存在
-        if (null != goodsKindService.checkaGoodsKind(goodsKind.getName())) {
-            return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
-        }
         if (0 > goodsKindService.addGoodsKind(goodsKind)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("addGoodsKind", "添加一個名：" + goodsKind.getName() + "的商品種類"));
+        threadPoolTaskExecutor.execute(() -> logService.addLog("addGoodsKind", "添加一個名：'" + goodsKind.getName() + "' 的商品種類"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -85,19 +79,16 @@ public class GoodsKindController {
     }
 
     /**
-     * 修改商品種類
+     * 修改商品種類信息
      *
      * @return
      */
     @NeedAuth
     @PutMapping("/updateGoodsKind")
-    @ApiOperation("修改商品種類")
+    @ApiOperation("修改商品種類信息")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateGoodsKind(@RequestBody GoodsKind goodsKind) {
         if (null != goodsKind.getId()) {
-            if (null != goodsKindService.checkaGoodsKind(goodsKind.getName())) {
-                return ResponseObj.createErrResponse(ErrerMsg.ERRER10013);
-            }
             if (0 > goodsKindService.update(goodsKind)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
             }
@@ -114,7 +105,7 @@ public class GoodsKindController {
      * @return
      */
     @NeedAuth
-    @PutMapping("/deldectGoodsKind")
+    @PutMapping("/updateGoodsKindStatus")
     @ApiOperation("修改商品種類狀態")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header"),
@@ -170,7 +161,7 @@ public class GoodsKindController {
     @GetMapping("/getGoodsKindById")
     @ApiOperation("根據Id查詢商品種類")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "GoodsKindId", value = "商品種類Id", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "goodsKindId", value = "商品種類Id", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj getGoodsKindById(@RequestParam Integer goodsKindId) {

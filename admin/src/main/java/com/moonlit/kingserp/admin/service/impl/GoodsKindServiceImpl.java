@@ -24,19 +24,6 @@ public class GoodsKindServiceImpl implements GoodsKindService {
     private GoodsKindMapper goodsKindMapper;
 
     /**
-     * 檢查商品種類是否存在
-     *
-     * @param name
-     * @return
-     */
-    @Override
-    public GoodsKind checkaGoodsKind(String name) {
-        GoodsKind goodsKind = new GoodsKind();
-        goodsKind.setName(name);
-        return goodsKindMapper.selectOne(goodsKind);
-    }
-
-    /**
      * 添加商品種類
      *
      * @param goodsKind
@@ -85,7 +72,9 @@ public class GoodsKindServiceImpl implements GoodsKindService {
     public int update(GoodsKind goodsKind) {
         int i = 0;
         try {
-            goodsKind.setNameShorthand(ChineseToEnUtil.getPinYinHeadChar(goodsKind.getName()));
+            if (null != goodsKind.getName()) {
+                goodsKind.setNameShorthand(ChineseToEnUtil.getPinYinHeadChar(goodsKind.getName()));
+            }
             goodsKind.setUpdateTime(new Date());
             i = goodsKindMapper.updateByPrimaryKeySelective(goodsKind);
         } catch (Exception e) {
@@ -122,6 +111,6 @@ public class GoodsKindServiceImpl implements GoodsKindService {
      */
     @Override
     public GoodsKind getGoodsKindById(Integer goodsKindId) {
-        return goodsKindMapper.selectByPrimaryKey(goodsKindId);
+        return goodsKindMapper.getGoodsKindById(goodsKindId);
     }
 }

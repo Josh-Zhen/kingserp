@@ -12,14 +12,6 @@ import com.moonlit.kingserp.entity.admin.GoodsKind;
 public interface GoodsKindService {
 
     /**
-     * 檢查商品種類是否存在
-     *
-     * @param name
-     * @return GoodsKind
-     */
-    GoodsKind checkaGoodsKind(String name);
-
-    /**
      * 添加商品種類
      *
      * @param goodsKind

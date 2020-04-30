@@ -76,7 +76,9 @@ public class LyUserServiceImpl implements LyUserService {
     public int updateUser(LyUser user) {
         int i = 0;
         try {
-            user.setNameShorthand(ChineseToEnUtil.getPinYinHeadChar(user.getNickName()));
+            if (null != user.getNickName()) {
+                user.setNameShorthand(ChineseToEnUtil.getPinYinHeadChar(user.getNickName()));
+            }
             i = lyUserMapper.updateByPrimaryKeySelective(user);
         } catch (Exception e) {
             e.printStackTrace();
