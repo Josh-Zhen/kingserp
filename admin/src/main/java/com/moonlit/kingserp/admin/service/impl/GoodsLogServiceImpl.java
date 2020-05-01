@@ -47,6 +47,9 @@ public class GoodsLogServiceImpl implements GoodsLogService {
     /**
      * 查詢日志
      *
+     * @param currentPage
+     * @param pageSize
+     * @param keywords
      * @return
      */
     @Override

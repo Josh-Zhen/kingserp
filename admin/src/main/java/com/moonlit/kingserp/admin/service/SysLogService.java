@@ -22,6 +22,9 @@ public interface SysLogService {
     /**
      * 查詢日志
      *
+     * @param currentPage
+     * @param pageSize
+     * @param keywords
      * @return
      */
     PageInfo<SysLog> selectLog(Integer currentPage, Integer pageSize, String keywords);

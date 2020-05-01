@@ -22,6 +22,9 @@ public interface GoodsLogService {
     /**
      * 查詢日志
      *
+     * @param currentPage
+     * @param pageSize
+     * @param keywords
      * @return
      */
     PageInfo<GoodsLog> selectLog(Integer currentPage, Integer pageSize, String keywords);
