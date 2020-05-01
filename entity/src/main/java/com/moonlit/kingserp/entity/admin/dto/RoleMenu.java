@@ -14,6 +14,8 @@ import java.io.Serializable;
 @Data
 public class RoleMenu implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @ApiModelProperty(value = "roleId", name = "roleId", example = "1")
     private Integer roleId;
     @ApiModelProperty(value = "menuIdList", name = "menuIdList")

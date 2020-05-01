@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @Description: 商品日志記錄表
+ * @Description: 商品日志記錄
  * @Author: Joshua
  * @CreateDate: 2020-05-01 15:31
  * @Version 1.0
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/goodsLog")
-@Api(value = "商品日志記錄表", tags = {"商品日志記錄表"})
+@Api(value = "商品日志記錄", tags = {"商品日志記錄"})
 public class GoodsLogController {
 
     @Autowired

@@ -11,7 +11,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * 商品Spu表
+ * 商品Spu
  *
  * @author Joshua
  * @since 2020-04-19
@@ -19,7 +19,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "goods_spu")
-@ApiModel(value = "GoodsSpu", description = "商品Spu表")
+@ApiModel(value = "GoodsSpu", description = "商品Spu")
 public class GoodsSpu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,45 +32,45 @@ public class GoodsSpu implements Serializable {
     /**
      * 商品名稱
      */
-    @ApiModelProperty(value = "goodsName", name = "商品名稱")
+    @ApiModelProperty(value = "商品名稱", name = "goodsName")
     private String goodsName;
 
     /**
      * 種類id
      */
-    @ApiModelProperty(value = "kindId", name = "種類id", example = "1")
+    @ApiModelProperty(value = "種類id", name = "kindId", example = "1")
     private Integer kindId;
 
     /**
      * 总库存
      */
-    @ApiModelProperty(value = "num", name = "总库存", example = "10")
+    @ApiModelProperty(value = "总库存", name = "num", example = "10")
     private Integer num;
 
     /**
      * 狀態(0-啓用，1禁止)
      */
-    @ApiModelProperty(value = "status", name = "狀態(0-啓用，1禁止)", example = "0")
+    @ApiModelProperty(value = "狀態(0-啓用，1禁止)", name = "status", example = "0")
     private Integer status;
 
     /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "createTime", name = "创建时间")
+    @ApiModelProperty(value = "创建时间", name = "createTime")
     private Date createTime;
 
     /**
      * 修改时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "updateTime", name = "修改时间")
+    @ApiModelProperty(value = "修改时间", name = "updateTime")
     private Date updateTime;
 
     /**
      * 助記碼
      */
-    @ApiModelProperty(value = "nameShorthand", name = "助記碼")
+    @ApiModelProperty(value = "助記碼", name = "nameShorthand")
     private String nameShorthand;
 
 }
