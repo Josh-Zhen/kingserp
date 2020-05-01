@@ -9,7 +9,9 @@ import com.moonlit.kingserp.entity.admin.GoodsKind;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 商品種類表 服务实现类
@@ -112,5 +114,21 @@ public class GoodsKindServiceImpl implements GoodsKindService {
     @Override
     public GoodsKind getGoodsKindById(Integer goodsKindId) {
         return goodsKindMapper.getGoodsKindById(goodsKindId);
+    }
+
+    /**
+     * 查詢商品種類
+     *
+     * @return
+     */
+    @Override
+    public ArrayList<GoodsKind> selectGoodsKinds() {
+        ArrayList<GoodsKind> goodsKinds = new ArrayList<>();
+        try {
+            goodsKinds = goodsKindMapper.selectAlls();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return goodsKinds;
     }
 }

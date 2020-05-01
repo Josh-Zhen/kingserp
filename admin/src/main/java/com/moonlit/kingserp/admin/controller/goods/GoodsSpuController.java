@@ -3,16 +3,15 @@ package com.moonlit.kingserp.admin.controller.goods;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.service.GoodsSkuService;
 import com.moonlit.kingserp.admin.service.GoodsSpuService;
+import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
+import com.moonlit.kingserp.entity.admin.dto.Goods;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 商品Spu
@@ -37,10 +36,26 @@ public class GoodsSpuController {
      * @return
      */
     @NeedAuth
-    @GetMapping("/addGoods")
+    @PostMapping("/addGoods")
     @ApiOperation("添加商品")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
-    public ResponseObj addGoods() {
+    public ResponseObj addGoods(@RequestBody Goods goods) {
+        if (null != goods.getGoodsSpu()) {
+//            if (0 < goodsSpuService.addGoodsSpu(goods.getGoodsSpu())) {
+//                if (0 < goods.getGoodsSkus().size()) {
+//                    if (0 > goodsSkuService.addGoodsSkus(goods.getGoodsSkus())) {
+//                        return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+//                    }
+//                }
+//            } else {
+//                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+//            }
+            if ( 0 > goodsSpuService.addGoods(goods)){
+                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+            }
+
+
+        }
 
         return ResponseObj.createSuccessResponse();
     }

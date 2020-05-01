@@ -8,7 +8,7 @@ import lombok.Data;
 
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description:
@@ -27,5 +27,5 @@ public class Goods implements Serializable {
     private GoodsSpu goodsSpu;
 
     @ApiModelProperty(value = "商品Skus", name = "goodsSkus")
-    private ArrayList<GoodsSku> goodsSkus;
+    private List<GoodsSku> goodsSkus;
 }

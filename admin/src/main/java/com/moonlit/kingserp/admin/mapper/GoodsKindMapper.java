@@ -37,4 +37,12 @@ public interface GoodsKindMapper extends MyMapper<GoodsKind> {
      */
     @Select("SELECT gk.*, COUNT( gs.id ) AS goodsSpuSum FROM `goods_kind` gk LEFT JOIN `goods_spu` gs ON gs.kind_id = gk.id WHERE gk.id = #{goodsKindId}")
     GoodsKind getGoodsKindById(Integer goodsKindId);
+
+    /**
+     * 查詢所有
+     *
+     * @return
+     */
+    @Select("SELECT id, NAME, parent_id, sep FROM `goods_kind` WHERE STATUS = 0 ORDER BY parent_id ASC, sep ASC")
+    ArrayList<GoodsKind> selectAlls();
 }

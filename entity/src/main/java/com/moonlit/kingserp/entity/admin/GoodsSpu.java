@@ -30,6 +30,12 @@ public class GoodsSpu implements Serializable {
     private Integer id;
 
     /**
+     * 編碼
+     */
+    @ApiModelProperty(value = "編碼", name = "code")
+    private String code;
+
+    /**
      * 商品名稱
      */
     @ApiModelProperty(value = "商品名稱", name = "goodsName")

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 /**
  * 商品種類
  *
@@ -145,6 +147,25 @@ public class GoodsKindController {
         PageInfo<GoodsKind> goodsKinds = null;
         try {
             goodsKinds = goodsKindService.selectGoodsKind(currentPage, pageSize, keywords);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseObj.createSuccessResponse(goodsKinds);
+    }
+
+    /**
+     * 查詢商品種類(添加商品時調用)
+     *
+     * @return
+     */
+    @NeedAuth
+    @GetMapping("/selectGoodsKind")
+    @ApiOperation("查詢商品種類(添加商品時調用)")
+    @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
+    public ResponseObj selectGoodsKinds() {
+        ArrayList<GoodsKind> goodsKinds = null;
+        try {
+            goodsKinds = goodsKindService.selectGoodsKinds();
         } catch (Exception e) {
             e.printStackTrace();
         }

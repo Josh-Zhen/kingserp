@@ -3,6 +3,8 @@ package com.moonlit.kingserp.admin.service;
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.entity.admin.GoodsKind;
 
+import java.util.ArrayList;
+
 /**
  * 商品種類表 服务类
  *
@@ -52,4 +54,11 @@ public interface GoodsKindService {
      * @return
      */
     GoodsKind getGoodsKindById(Integer goodsKindId);
+
+    /**
+     * 查詢商品種類
+     *
+     * @return
+     */
+    ArrayList<GoodsKind> selectGoodsKinds();
 }
