@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.common.utils.Utils;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.SysLogService;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -43,7 +43,7 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
     @Autowired
-    private LogService logService;
+    private SysLogService sysLogService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -125,7 +125,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("addSysUser", "添加賬戶名：" + sysUser.getUserName() + "的账号"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("addSysUser", "添加賬戶名：" + sysUser.getUserName() + "的账号"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -153,7 +153,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUser", "修改Id為：" + sysUser.getId() + "的成員信息"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("updateSysUser", "修改Id為：" + sysUser.getId() + "的成員信息"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -181,7 +181,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("delSysUser", "刪除Id為：" + id + "的成員"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("delSysUser", "刪除Id為：" + id + "的成員"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -236,7 +236,7 @@ public class SysUserController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10002);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateSysUserStatus", "修改成員Id為：" + sysUserId + " 的狀態"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("updateSysUserStatus", "修改成員Id為：" + sysUserId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
     }
 

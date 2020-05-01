@@ -9,7 +9,7 @@ import com.moonlit.kingserp.entity.admin.SysLog;
  * @CreateDate: 2020-02-21 23:28
  * @Version 1.0
  */
-public interface LogService {
+public interface SysLogService {
 
     /**
      * 添加日志

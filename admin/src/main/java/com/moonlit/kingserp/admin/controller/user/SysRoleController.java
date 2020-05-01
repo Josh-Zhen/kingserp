@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
 import com.moonlit.kingserp.admin.common.utils.Utils;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.SysLogService;
 import com.moonlit.kingserp.admin.service.SysRoleService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -32,7 +32,7 @@ public class SysRoleController {
     @Autowired
     private SysRoleService roleService;
     @Autowired
-    private LogService logService;
+    private SysLogService sysLogService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -64,7 +64,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("addRole", "添加一個名為：" + sysRole.getRoleName() + " 的角色"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("addRole", "添加一個名為：" + sysRole.getRoleName() + " 的角色"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -98,7 +98,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRole", "修改角色Id為：" + sysRole.getRoleId() + " 的角色信息"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("updateRole", "修改角色Id為：" + sysRole.getRoleId() + " 的角色信息"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -132,7 +132,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateRoleState", "修改角色Id為：" + roleId + " 的狀態"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("updateRoleState", "修改角色Id為：" + roleId + " 的狀態"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -160,7 +160,7 @@ public class SysRoleController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10016);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("delectRole", "刪除角色Id為：" + roleId + " 的角色"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("delectRole", "刪除角色Id為：" + roleId + " 的角色"));
         return ResponseObj.createSuccessResponse();
     }
 

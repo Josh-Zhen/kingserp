@@ -3,8 +3,9 @@ package com.moonlit.kingserp.admin.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.shiro.ShiroUtils;
-import com.moonlit.kingserp.admin.mapper.SysLogMapper;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.mapper.GoodsLogMapper;
+import com.moonlit.kingserp.admin.service.GoodsLogService;
+import com.moonlit.kingserp.entity.admin.GoodsLog;
 import com.moonlit.kingserp.entity.admin.SysLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,10 @@ import java.util.Date;
  * @Version 1.0
  */
 @Service
-public class LogServiceImpl implements LogService {
+public class GoodsLogServiceImpl implements GoodsLogService {
 
     @Autowired
-    SysLogMapper sysLogMapper;
+    GoodsLogMapper goodsLogMapper;
 
     /**
      * 添加日志
@@ -32,12 +33,12 @@ public class LogServiceImpl implements LogService {
     @Override
     public void addLog(String method, String data) {
         try {
-            SysLog sysLog = new SysLog();
-            sysLog.setUId(ShiroUtils.getUserInfo().getId());
-            sysLog.setCreateDate(new Date());
-            sysLog.setMethod(method);
-            sysLog.setData(data);
-            sysLogMapper.insert(sysLog);
+            GoodsLog goodsLog = new GoodsLog();
+            goodsLog.setUId(ShiroUtils.getUserInfo().getId());
+            goodsLog.setCreateDate(new Date());
+            goodsLog.setMethod(method);
+            goodsLog.setData(data);
+            goodsLogMapper.insert(goodsLog);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,11 +50,11 @@ public class LogServiceImpl implements LogService {
      * @return
      */
     @Override
-    public PageInfo<SysLog> selectLog(Integer currentPage, Integer pageSize, String keywords) {
+    public PageInfo<GoodsLog> selectLog(Integer currentPage, Integer pageSize, String keywords) {
         PageInfo pageInfo = null;
         try {
             PageHelper.startPage(currentPage, pageSize);
-            pageInfo = new PageInfo(sysLogMapper.selectLogsByKeywords(keywords));
+            pageInfo = new PageInfo(goodsLogMapper.selectLogsByKeywords(keywords));
         } catch (Exception e) {
             e.printStackTrace();
         }

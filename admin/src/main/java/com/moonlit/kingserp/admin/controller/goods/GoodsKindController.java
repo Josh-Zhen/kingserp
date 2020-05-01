@@ -3,7 +3,7 @@ package com.moonlit.kingserp.admin.controller.goods;
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.service.GoodsKindService;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.GoodsLogService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.GoodsKind;
@@ -31,7 +31,7 @@ public class GoodsKindController {
     @Autowired
     private GoodsKindService goodsKindService;
     @Autowired
-    private LogService logService;
+    private GoodsLogService goodsLogService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -49,7 +49,7 @@ public class GoodsKindController {
         if (0 > goodsKindService.addGoodsKind(goodsKind)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("addGoodsKind", "添加一個名：'" + goodsKind.getName() + "' 的商品種類"));
+        threadPoolTaskExecutor.execute(() -> goodsLogService.addLog("addGoodsKind", "添加一個名：'" + goodsKind.getName() + "' 的商品種類"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -73,7 +73,7 @@ public class GoodsKindController {
         if (0 > goodsKindService.delectByGoodsKindId(goodsKindId)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20502);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("deldectGoodsKind", "刪除Id為：" + goodsKindId + "的商品種類"));
+        threadPoolTaskExecutor.execute(() -> goodsLogService.addLog("deldectGoodsKind", "刪除Id為：" + goodsKindId + "的商品種類"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -94,7 +94,7 @@ public class GoodsKindController {
         } else {
             ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateGoodsKind", "修改商品種類Id：" + goodsKind.getId() + "的商品種類信息"));
+        threadPoolTaskExecutor.execute(() -> goodsLogService.addLog("updateGoodsKind", "修改商品種類Id：" + goodsKind.getId() + "的商品種類信息"));
         return ResponseObj.createSuccessResponse();
     }
 
@@ -123,7 +123,7 @@ public class GoodsKindController {
         } else {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateGoodsKindStatus", "修改商品種類Id：" + goodsKindId + "的狀態"));
+        threadPoolTaskExecutor.execute(() -> goodsLogService.addLog("updateGoodsKindStatus", "修改商品種類Id：" + goodsKindId + "的狀態"));
         return ResponseObj.createSuccessResponse();
     }
 

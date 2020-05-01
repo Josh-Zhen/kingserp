@@ -2,7 +2,7 @@ package com.moonlit.kingserp.admin.controller.user;
 
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.common.utils.Utils;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.SysLogService;
 import com.moonlit.kingserp.admin.service.SysMenuService;
 import com.moonlit.kingserp.admin.service.SysUserService;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
@@ -39,7 +39,7 @@ public class SysMenuController {
     @Autowired
     SysUserService sysUserService;
     @Autowired
-    private LogService logService;
+    private SysLogService sysLogService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -114,7 +114,7 @@ public class SysMenuController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        threadPoolTaskExecutor.execute(() -> logService.addLog("setRoleMenus", "修改角色Id為：" + roleMenu.getRoleId() + " 的權限信息"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("setRoleMenus", "修改角色Id為：" + roleMenu.getRoleId() + " 的權限信息"));
         return ResponseObj.createSuccessResponse();
     }
 

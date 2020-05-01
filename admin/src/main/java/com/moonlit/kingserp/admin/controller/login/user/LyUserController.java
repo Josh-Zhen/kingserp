@@ -2,7 +2,7 @@ package com.moonlit.kingserp.admin.controller.login.user;
 
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
 import com.moonlit.kingserp.admin.feign.LoginServer;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.SysLogService;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.login.LyUser;
 import io.swagger.annotations.Api;
@@ -29,7 +29,7 @@ public class LyUserController {
     @Autowired
     LoginServer loginServer;
     @Autowired
-    private LogService logService;
+    private SysLogService sysLogService;
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
@@ -45,7 +45,7 @@ public class LyUserController {
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj insetUser(@RequestBody LyUser user) {
         ResponseObj responseObj = loginServer.insetUser(user);
-        threadPoolTaskExecutor.execute(() -> logService.addLog("insetUser", "添加客戶名：" + user.getUserName() + "的客戶"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("insetUser", "添加客戶名：" + user.getUserName() + "的客戶"));
         return responseObj;
     }
 
@@ -61,7 +61,7 @@ public class LyUserController {
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateUser(@RequestBody LyUser user) {
         ResponseObj responseObj = loginServer.updateUser(user);
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateUser", "修改客戶信息id：" + user.getId() + "的客戶"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("updateUser", "修改客戶信息id：" + user.getId() + "的客戶"));
         return responseObj;
     }
 
@@ -80,7 +80,7 @@ public class LyUserController {
     })
     public ResponseObj deleteUser(@RequestParam Integer userId) {
         ResponseObj responseObj = loginServer.deleteUser(userId);
-        threadPoolTaskExecutor.execute(() -> logService.addLog("deleteUser", "删除客戶id：" + userId + "的客戶"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("deleteUser", "删除客戶id：" + userId + "的客戶"));
         return responseObj;
     }
 
@@ -119,7 +119,7 @@ public class LyUserController {
     })
     public ResponseObj updateUserType(@RequestParam Integer id, @RequestParam Integer type) {
         ResponseObj responseObj = loginServer.updateUserType(id, type);
-        threadPoolTaskExecutor.execute(() -> logService.addLog("updateUserType", "修改客戶id：" + id + "的狀態"));
+        threadPoolTaskExecutor.execute(() -> sysLogService.addLog("updateUserType", "修改客戶id：" + id + "的狀態"));
         return responseObj;
     }
 }

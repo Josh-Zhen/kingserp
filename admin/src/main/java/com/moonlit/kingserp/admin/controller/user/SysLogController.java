@@ -2,7 +2,7 @@ package com.moonlit.kingserp.admin.controller.user;
 
 import com.github.pagehelper.PageInfo;
 import com.moonlit.kingserp.admin.common.annotation.NeedAuth;
-import com.moonlit.kingserp.admin.service.LogService;
+import com.moonlit.kingserp.admin.service.SysLogService;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.admin.SysLog;
 import io.swagger.annotations.Api;
@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysLog")
 @Api(value = "系統操作日志", tags = {"系統操作日志"})
-public class LogController {
+public class SysLogController {
     @Autowired
-    private LogService logService;
+    private SysLogService sysLogService;
 
     /**
      * 查詢操作日志
@@ -47,7 +47,7 @@ public class LogController {
                                   @RequestParam(required = false) String keywords) {
         PageInfo<SysLog> logs = new PageInfo<>();
         try {
-            logs = logService.selectLog(currentPage, pageSize, keywords);
+            logs = sysLogService.selectLog(currentPage, pageSize, keywords);
         } catch (Exception e) {
             e.printStackTrace();
         }
