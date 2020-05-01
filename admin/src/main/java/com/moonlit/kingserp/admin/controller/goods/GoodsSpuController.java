@@ -41,19 +41,9 @@ public class GoodsSpuController {
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj addGoods(@RequestBody Goods goods) {
         if (null != goods.getGoodsSpu()) {
-//            if (0 < goodsSpuService.addGoodsSpu(goods.getGoodsSpu())) {
-//                if (0 < goods.getGoodsSkus().size()) {
-//                    if (0 > goodsSkuService.addGoodsSkus(goods.getGoodsSkus())) {
-//                        return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
-//                    }
-//                }
-//            } else {
-//                return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
-//            }
-            if ( 0 > goodsSpuService.addGoods(goods)){
+            if (0 > goodsSpuService.addGoods(goods)) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
             }
-
 
         }
 

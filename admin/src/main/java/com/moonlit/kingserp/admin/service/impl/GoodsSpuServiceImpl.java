@@ -32,27 +32,6 @@ public class GoodsSpuServiceImpl implements GoodsSpuService {
     GoodsSkuMapper goodsSkuMapper;
 
     /**
-     * 添加商品Spu
-     *
-     * @param goodsSpu
-     * @return
-     */
-    @Override
-    public int addGoodsSpu(GoodsSpu goodsSpu) {
-        int i = 0;
-        try {
-            Date date = new Date();
-            goodsSpu.setCreateTime(date);
-            goodsSpu.setUpdateTime(date);
-            goodsSpu.setNameShorthand(ChineseToEnUtil.getPinYinHeadChar(goodsSpu.getGoodsName()));
-            i = goodsSpuMapper.insertSelective(goodsSpu);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return i;
-    }
-
-    /**
      * 添加商品
      *
      * @param goods
@@ -61,7 +40,7 @@ public class GoodsSpuServiceImpl implements GoodsSpuService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int addGoods(Goods goods) {
-        int i = 0;
+        int i;
         try {
             GoodsSpu goodsSpu = goods.getGoodsSpu();
             List<GoodsSku> goodsSkus = goods.getGoodsSkus();
