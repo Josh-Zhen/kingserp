@@ -24,7 +24,7 @@ public class CorsConfig {
         config.addAllowedMethod("*");
         // 放行哪些原始域
         config.addAllowedOrigin("*");
-        //放行哪些原始域(头部信息)
+        // 放行哪些原始域(头部信息)
         config.addAllowedHeader("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
