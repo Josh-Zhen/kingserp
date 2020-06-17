@@ -89,6 +89,7 @@ public class CreateController {
     public ResponseObj updataCreate(@RequestBody MemberAlCard card) {
 
         String sourceAppId = "dasd";
+        String phome = "1237281391723913";
 
         String str = "{\n \"titl\":[\"Google\", \"Runoob\", \"Taobao\" ],\n" +
                 "\"url\":[ \"Google.html\", \"Runoob.html\", \"Taobao.html\" ]\n }";
@@ -102,7 +103,7 @@ public class CreateController {
         customizeArrs.put("url", list2);
 
         try {
-            crateUtil.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, card.getTemplateId());
+            crateUtil.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
         } catch (AlipayApiException e) {
             return ResponseObj.createErrResponse("調用失敗");
         }
