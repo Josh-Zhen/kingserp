@@ -85,7 +85,7 @@ public class ChineseToEnUtil {
     }
 
     public static void main(String[] args) {
-        String cnStr = "李嘉誠";
+        String cnStr = "李嘉誠aa";
         System.out.println(getPingYin(cnStr));
         System.out.println(getPinYinHeadChar(cnStr));
         System.out.println(getCnASCII(cnStr));

@@ -44,7 +44,7 @@ public class MemberAlCard {
     /**
      * 主标题
      */
-    @ApiModelProperty(name = "主标题", value = "title")
+    @ApiModelProperty(name = "主标题 頂端顯示名稱（如：花唄聯名卡）", value = "title")
     private String title;
 
     /**
@@ -73,7 +73,6 @@ public class MemberAlCard {
 
     /**
      * 栏位信息 自定义 存入JSON
-     *
      */
     @ApiModelProperty(name = "栏位信息 自定义 存入JSON", value = "customizeArr")
     private String customizeArr;
@@ -104,9 +103,8 @@ public class MemberAlCard {
     private Date createTime;
 
     /**
-     * 錢包端顯示名稱（如：花唄聯名卡）
+     * 模板ID
      */
-    @Transient
-    @ApiModelProperty(value = "cardShowName", name = "錢包端顯示名稱（如：花唄聯名卡）")
-    private String cardShowName;
+    @ApiModelProperty(value = "templateId", name = "模板ID")
+    private String templateId;
 }
