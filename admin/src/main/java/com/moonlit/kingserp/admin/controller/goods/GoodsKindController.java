@@ -159,7 +159,7 @@ public class GoodsKindController {
      * @return
      */
     @NeedAuth
-    @GetMapping("/selectGoodsKind")
+    @GetMapping("/selectGoodsKinds")
     @ApiOperation("查詢商品種類(添加商品時調用)")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj selectGoodsKinds() {
