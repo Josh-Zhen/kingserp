@@ -40,6 +40,7 @@ public class CreateController {
     public ResponseObj addCeateModel(@RequestBody MemberAlCard card) {
 
         String sourceAppId = "dasd";
+        String phome = "1237281391723913";
 
         String str = "{\n \"titl\":[\"Google\", \"Runoob\", \"Taobao\" ],\n" +
                 "\"url\":[ \"Google.html\", \"Runoob.html\", \"Taobao.html\" ]\n }";
@@ -53,7 +54,7 @@ public class CreateController {
         customizeArrs.put("url", list2);
 
         try {
-            crateUtil.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId);
+            crateUtil.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
         } catch (AlipayApiException e) {
             return ResponseObj.createErrResponse("調用失敗");
         }
