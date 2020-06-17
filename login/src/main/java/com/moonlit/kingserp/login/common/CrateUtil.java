@@ -3,9 +3,11 @@ package com.moonlit.kingserp.login.common;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayMarketingCardActivateurlApplyRequest;
 import com.alipay.api.request.AlipayMarketingCardFormtemplateSetRequest;
 import com.alipay.api.request.AlipayMarketingCardTemplateCreateRequest;
 import com.alipay.api.request.AlipayMarketingCardTemplateModifyRequest;
+import com.alipay.api.response.AlipayMarketingCardActivateurlApplyResponse;
 import com.alipay.api.response.AlipayMarketingCardFormtemplateSetResponse;
 import com.alipay.api.response.AlipayMarketingCardTemplateCreateResponse;
 import com.alipay.api.response.AlipayMarketingCardTemplateModifyResponse;
@@ -91,13 +93,13 @@ public class CrateUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
+            return null;
         }
-        return response.getBody();
+        return response.getTemplateId();
     }
 
     /**
@@ -163,39 +165,67 @@ public class CrateUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
-            return response.getTemplateId();
         } else {
             System.out.println("调用失败");
+            return null;
         }
-        return null;
+        return response.getTemplateId();
     }
 
     /**
      * 會員卡開卡
      *
      * @param templateId
+     * @return
      * @throws AlipayApiException
      */
-    public String SetCard(String templateId) throws AlipayApiException {
+    public String setCard(String templateId) throws AlipayApiException {
         AlipayMarketingCardFormtemplateSetRequest request = new AlipayMarketingCardFormtemplateSetRequest();
         request.setBizContent("{"
                 + "\"template_id\":\"" + templateId + "\","
                 + "\"fields\":{"
-                + "\"required\":\"{\\\"common_fields\\\":[\\\"OPEN_FORM_FIELD_MOBILE\\\",\\\"OPEN_FORM_FIELD_GENDER\\\",\\\"OPEN_FORM_FIELD_NAME\\\",\\\"OPEN_FORM_FIELD_BIRTHDAY\\\"]}\","
-                + "\"optional\":\"{\\\"common_fields\\\":[\\\"OPEN_FORM_FIELD_GENDER\\\"]}\""
-                + "}"
-                + "}");
+                + "\"required\":\"{\\\"common_fields\\\":[\\\"OPEN_FORM_FIELD_MOBILE\\\",\\\"OPEN_FORM_FIELD_GENDER\\\",\\\"OPEN_FORM_FIELD_NAME\\\",\\\"OPEN_FORM_FIELD_BIRTHDAY\\\"]}\""
+                // 用戶可選字段，可自定
+//                + ",\"optional\":\"{\\\"common_fields\\\":[\\\"OPEN_FORM_FIELD_GENDER\\\"]}\""
+                + "}}");
         AlipayMarketingCardFormtemplateSetResponse response = alipayClient.execute(request);
         if (response.isSuccess()) {
             System.out.println("调用成功");
             System.out.println(response.getBody());
-            return response.getBody();
         } else {
             System.out.println("调用失败");
+            return null;
         }
-        return null;
+        return response.getBody();
+    }
+
+    /**
+     * 獲取投放鏈接    即掃描鏈接
+     *
+     * @param templateId 模板卡id
+     * @return
+     * @throws AlipayApiException
+     */
+    public String cardQrcode(String templateId) throws AlipayApiException {
+        AlipayMarketingCardActivateurlApplyRequest request = new AlipayMarketingCardActivateurlApplyRequest();
+        request.setBizContent("{"
+                + "\"template_id\":\"" + templateId + "\","
+                + "\"out_string\":\"201928393932\","
+                + "\"callback\":\"https://alipay.com/card/demo.htm\","
+                // 需要关注的生活号AppId。若需要在领卡页面展示“关注生活号”提示，需开通生活号并绑定会员卡。生活号快速接入详见：https://doc.open.alipay.com/docs/doc.htm?treeId=193&articleId=105933&docType=1
+//                + "\"follow_app_id\":\"20150000000000000\""
+                + "}");
+        AlipayMarketingCardActivateurlApplyResponse response = alipayClient.execute(request);
+        if (response.isSuccess()) {
+            System.out.println("调用成功");
+            // 返回投放鏈接
+            System.out.println(response.getApplyCardUrl());
+        } else {
+            System.out.println("调用失败");
+            return null;
+        }
+        return response.getApplyCardUrl();
     }
 }

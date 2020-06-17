@@ -8,6 +8,7 @@ import com.moonlit.kingserp.entity.login.MemberAlCard;
 import com.moonlit.kingserp.login.common.CrateUtil;
 import com.moonlit.kingserp.login.service.CreateSercvice;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,7 @@ public class CreateController {
      */
     @GetMapping("/SelectCreate")
     @ApiOperation("查詢會員卡模板")
+    @ApiImplicitParam(name = "merchantid", value = "主鍵id", paramType = "query", dataType = "Integer")
     public ResponseObj selectCreate(@RequestParam Integer merchantid) {
         MemberAlCard card = createSercvice.slecetCreate(merchantid);
         return ResponseObj.createSuccessResponse(card);
@@ -114,14 +116,41 @@ public class CreateController {
         return ResponseObj.createSuccessResponse();
     }
 
+    /**
+     * 會員卡開卡
+     *
+     * @param templateId
+     * @return
+     */
     @GetMapping("/setCrad")
     @ApiOperation("會員卡開卡")
+    @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
     public ResponseObj setCrad(@RequestParam String templateId) {
         try {
-            crateUtil.SetCard(templateId);
+            crateUtil.setCard(templateId);
         } catch (AlipayApiException e) {
             e.printStackTrace();
             return ResponseObj.createErrResponse("開卡失敗");
+        }
+        return ResponseObj.createSuccessResponse();
+    }
+
+
+    /**
+     * 獲取會員卡鏈接
+     *
+     * @param templateId
+     * @return
+     */
+    @GetMapping("/getCardQrcode")
+    @ApiOperation("獲取會員卡鏈接")
+    @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
+    public ResponseObj getCardQrcode(@RequestParam String templateId) {
+        try {
+            crateUtil.cardQrcode(templateId);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+            return ResponseObj.createErrResponse("獲取失敗");
         }
         return ResponseObj.createSuccessResponse();
     }
