@@ -3,20 +3,15 @@ package com.moonlit.kingserp.login.common;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.request.AlipayMarketingCardActivateurlApplyRequest;
-import com.alipay.api.request.AlipayMarketingCardFormtemplateSetRequest;
-import com.alipay.api.request.AlipayMarketingCardTemplateCreateRequest;
-import com.alipay.api.request.AlipayMarketingCardTemplateModifyRequest;
-import com.alipay.api.response.AlipayMarketingCardActivateurlApplyResponse;
-import com.alipay.api.response.AlipayMarketingCardFormtemplateSetResponse;
-import com.alipay.api.response.AlipayMarketingCardTemplateCreateResponse;
-import com.alipay.api.response.AlipayMarketingCardTemplateModifyResponse;
+import com.alipay.api.request.*;
+import com.alipay.api.response.*;
 import com.moonlit.kingserp.common.util.ChineseToEnUtil;
 import com.moonlit.kingserp.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -175,13 +170,12 @@ public class CrateUtil {
     }
 
     /**
-     * 會員卡開卡
+     * 會員卡開卡表單
      *
      * @param templateId
-     * @return
      * @throws AlipayApiException
      */
-    public String setCard(String templateId) throws AlipayApiException {
+    public void setCard(String templateId) throws AlipayApiException {
         AlipayMarketingCardFormtemplateSetRequest request = new AlipayMarketingCardFormtemplateSetRequest();
         request.setBizContent("{"
                 + "\"template_id\":\"" + templateId + "\","
@@ -193,19 +187,16 @@ public class CrateUtil {
         AlipayMarketingCardFormtemplateSetResponse response = alipayClient.execute(request);
         if (response.isSuccess()) {
             System.out.println("调用成功");
-            System.out.println(response.getBody());
         } else {
             System.out.println("调用失败");
-            return null;
         }
-        return response.getBody();
     }
 
     /**
      * 獲取投放鏈接    即掃描鏈接
      *
      * @param templateId 模板卡id
-     * @return
+     * @return 投放鏈接
      * @throws AlipayApiException
      */
     public String cardQrcode(String templateId) throws AlipayApiException {
@@ -213,7 +204,8 @@ public class CrateUtil {
         request.setBizContent("{"
                 + "\"template_id\":\"" + templateId + "\","
                 + "\"out_string\":\"201928393932\","
-                + "\"callback\":\"https://alipay.com/card/demo.htm\","
+                // 回調地址，不可帶參
+                + "\"callback\":\"https://wenjiang.natapp4.cc/ali/authorization\","
                 // 需要关注的生活号AppId。若需要在领卡页面展示“关注生活号”提示，需开通生活号并绑定会员卡。生活号快速接入详见：https://doc.open.alipay.com/docs/doc.htm?treeId=193&articleId=105933&docType=1
 //                + "\"follow_app_id\":\"20150000000000000\""
                 + "}");
@@ -227,5 +219,66 @@ public class CrateUtil {
             return null;
         }
         return response.getApplyCardUrl();
+    }
+
+    /**
+     * 獲取用戶提交的信息
+     *
+     * @param templateId  模板id
+     * @param requestId   回調Id
+     * @param accessToken 用戶token
+     */
+    public void getUserData(String templateId, String requestId, String accessToken) throws AlipayApiException {
+        AlipayMarketingCardActivateformQueryRequest request = new AlipayMarketingCardActivateformQueryRequest();
+        request.setBizContent("{" +
+                "\"biz_type\":\"MEMBER_CARD\"," +
+                "\"template_id\":\"" + templateId + "\"," +
+                "\"request_id\":\"" + requestId + "\"" +
+                "}");
+        AlipayMarketingCardActivateformQueryResponse response = alipayClient.execute(request, accessToken);
+        if (response.isSuccess()) {
+            System.out.println("调用成功");
+        } else {
+            System.out.println("调用失败");
+        }
+    }
+
+
+    /**
+     * 會員卡開卡
+     *
+     * @param appAuthToken 用戶token
+     * @param accessToken  填写表单后获取到auth_code后通过alipay.system.oauth.token接口换取到用户访问令牌accessToken
+     * @param templateId   模板id
+     * @param userUniId    支付寶賬號id
+     * @throws AlipayApiException
+     */
+    public void openCard(String appAuthToken, String accessToken, String templateId, String userUniId) throws AlipayApiException {
+
+        // 過期時間
+        String validDate = "2035-12-30-00:00:00";
+
+        AlipayMarketingCardOpenRequest request = new AlipayMarketingCardOpenRequest();
+        request.putOtherTextParam("app_auth_token", appAuthToken);
+        request.setBizContent("{"
+                + "\"out_serial_no\":\"" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + CommonUtil.getVerificationCode(5) + "\","
+                + "\"card_template_id\":\"" + templateId + "****\","
+                + "\"card_user_info\":{"
+                //支付宝账户 userid，为 2088 开头的 16 为数字
+                + "\"user_uni_id\":\"" + userUniId + "\","
+                + "\"user_uni_id_type\":\"UID\"},"
+                + "\"card_ext_info\":{"
+                + "\"open_date\":\"" + new Date() + "\",\"valid_date\":\"" + validDate + "\","
+                // 卡等級
+//               + "\"level\":\"VIP1\","
+                // 卡積分
+//               + "\"point\":\"88\","
+                // 卡餘額
+//               + "\"balance\":\"124.89\"},"
+                // 用戶會員信息
+//                + "\"member_ext_info\":{\"name\":\"萧沫\",\"gende\":\"FEMALE\",\"birth\":\"2016-06-27\",\"cell\":\"13000000000\"}"
+                + "}");
+        AlipayMarketingCardOpenResponse response = alipayClient.execute(request, accessToken);
+        System.out.println(response.getBody());
     }
 }

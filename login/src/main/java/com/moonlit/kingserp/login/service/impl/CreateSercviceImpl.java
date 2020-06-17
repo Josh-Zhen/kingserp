@@ -24,8 +24,10 @@ public class CreateSercviceImpl implements CreateSercvice {
      * @param card
      */
     @Override
-    public void addCreate(MemberAlCard card) {
-
+    public Integer addCreate(MemberAlCard card) {
+        Integer i = 0;
+        createMapper.insertSelective(card);
+        return i;
     }
 
     /**

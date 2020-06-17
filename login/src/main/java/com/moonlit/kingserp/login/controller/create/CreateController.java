@@ -39,6 +39,7 @@ public class CreateController {
     @PostMapping("/addCeateModel")
     @ApiOperation("添加商户会员卡模板")
     public ResponseObj addCeateModel(@RequestBody MemberAlCard card) {
+        String templateId = "";
 
         String sourceAppId = "dasd";
         String phome = "1237281391723913";
@@ -55,15 +56,15 @@ public class CreateController {
         customizeArrs.put("url", list2);
 
         try {
-            crateUtil.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
+            templateId = crateUtil.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
         } catch (AlipayApiException e) {
             return ResponseObj.createErrResponse("調用失敗");
         }
         card.setCreateTime(new Date());
-
-        createSercvice.addCreate(card);
-
-        return ResponseObj.createSuccessResponse();
+        if (0 > createSercvice.addCreate(card)) {
+            return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+        }
+        return ResponseObj.createSuccessResponse(templateId);
     }
 
 
@@ -89,6 +90,7 @@ public class CreateController {
     @PutMapping("/updataCreate")
     @ApiOperation("更新會員卡模板信息")
     public ResponseObj updataCreate(@RequestBody MemberAlCard card) {
+        String templateId = "";
 
         String sourceAppId = "dasd";
         String phome = "1237281391723913";
@@ -105,7 +107,7 @@ public class CreateController {
         customizeArrs.put("url", list2);
 
         try {
-            crateUtil.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
+            templateId = crateUtil.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
         } catch (AlipayApiException e) {
             return ResponseObj.createErrResponse("調用失敗");
         }
@@ -113,7 +115,7 @@ public class CreateController {
         if (0 > createSercvice.updata(card)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
         }
-        return ResponseObj.createSuccessResponse();
+        return ResponseObj.createSuccessResponse(templateId);
     }
 
     /**
@@ -135,7 +137,6 @@ public class CreateController {
         return ResponseObj.createSuccessResponse();
     }
 
-
     /**
      * 獲取會員卡鏈接
      *
@@ -146,12 +147,26 @@ public class CreateController {
     @ApiOperation("獲取會員卡鏈接")
     @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
     public ResponseObj getCardQrcode(@RequestParam String templateId) {
+        String cardQrcode;
         try {
-            crateUtil.cardQrcode(templateId);
+            cardQrcode = crateUtil.cardQrcode(templateId);
         } catch (AlipayApiException e) {
             e.printStackTrace();
             return ResponseObj.createErrResponse("獲取失敗");
         }
+        return ResponseObj.createSuccessResponse(cardQrcode);
+    }
+
+
+    /**
+     * 獲取用戶提交的會員信息
+     * 該接口僅提供測試
+     *
+     * @return
+     */
+    @GetMapping("/getQuery")
+    @ApiOperation("獲取用戶提交的會員信息，該接口僅提供測試")
+    public ResponseObj getQuery() {
         return ResponseObj.createSuccessResponse();
     }
 }

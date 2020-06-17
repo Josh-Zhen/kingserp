@@ -13,7 +13,7 @@ public interface CreateSercvice {
     /**
      * 新增加會員卡模板
      */
-    void addCreate(MemberAlCard card);
+    Integer addCreate(MemberAlCard card);
 
     /**
      * 查詢會員卡模板
