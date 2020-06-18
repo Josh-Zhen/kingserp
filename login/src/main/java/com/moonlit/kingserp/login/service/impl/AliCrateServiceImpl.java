@@ -3,10 +3,6 @@ package com.moonlit.kingserp.login.service.impl;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayObject;
-import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayMarketingCardOpenModel;
-import com.alipay.api.domain.CardUserInfo;
-import com.alipay.api.domain.MerchantCard;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.moonlit.kingserp.common.util.ChineseToEnUtil;
@@ -16,7 +12,6 @@ import com.moonlit.kingserp.login.service.ali.AliCrateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.callback.Callback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,15 +34,15 @@ public class AliCrateServiceImpl implements AliCrateService {
      * 會員卡模板創建
      *
      * @param title        錢包端顯示名稱（如：花唄聯名卡）
-     * @param logo         logo圖片地址
-     * @param backgroundId 背景圖片地址
+     * @param logoId       支付寶返回的logoId
+     * @param backgroundId 背景圖片id
      * @param customizeArr 自定義入口
      * @param phone        商家聯係方式
      * @param sourceAppId  商家token
      * @throws AlipayApiException
      */
     @Override
-    public String crateModel(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId) {
+    public String crateModel(String title, String logoId, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId) {
         // 初始化
         AlipayMarketingCardTemplateCreateRequest request = new AlipayMarketingCardTemplateCreateRequest();
         // 幫用戶創建模板需傳入該用戶token
@@ -66,7 +61,7 @@ public class AliCrateServiceImpl implements AliCrateService {
                 + "\"write_off_type\":\"qrcode\","
                 + "\"template_style_info\":{"
                 + "\"card_show_name\":\"" + title + "\","
-                + "\"logo_id\":\"" + logo + "\","
+                + "\"logo_id\":\"" + logoId + "\","
                 + "\"background_id\":\"" + backgroundId + "\","
                 + "\"bg_color\":\"rgb(55,112,179)\","
                 // 設置會員卡權益列表
@@ -76,10 +71,14 @@ public class AliCrateServiceImpl implements AliCrateService {
 //                + "\"start_date\":\"2016-07-18 15:17:23\",\"end_date\":\"2016-07-34 12:12:12\"}],"
                 // 自定義列表
                 + "\"column_info_list\":[{"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(0)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(0) + "\",\"value\":\"\"},"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(1)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(1) + "\",\"value\":\"\"},"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(2)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(2) + "\",\"value\":\"\"},"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(3)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(3) + "\",\"value\":\"\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(0)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(0) + "\","
+                + "\"more_info\":{\"title\":\"" + titles.get(0) + "\",\"url\":\"" + urls.get(0) + "\",\"params\":\"{}\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(1)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(1) + "\",},"
+                + "\"more_info\":{\"title\":\"" + titles.get(1) + "\",\"url\":\"" + urls.get(1) + "\",\"params\":\"{}\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(2)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(2) + "\",},"
+                + "\"more_info\":{\"title\":\"" + titles.get(2) + "\",\"url\":\"" + urls.get(2) + "\",\"params\":\"{}\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(3)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(3) + "\",},"
+                + "\"more_info\":{\"title\":\"" + titles.get(3) + "\",\"url\":\"" + urls.get(3) + "\",\"params\":\"{}\"},"
                 + "{\"code\":\"TELEPHONE\",\"\\\"operate_type\\\":\\\"staticinfo\\\",\"title\":\"联系商家\",\"value\":\"" + phone + "\"},"
                 + "],"
                 // 會員卡信息規則
@@ -98,6 +97,7 @@ public class AliCrateServiceImpl implements AliCrateService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
@@ -111,8 +111,8 @@ public class AliCrateServiceImpl implements AliCrateService {
      * 更新模板
      *
      * @param title        錢包端顯示名稱（如：花唄聯名卡）
-     * @param logo         logo圖片地址
-     * @param backgroundId 背景圖片地址
+     * @param logoId       支付寶返回的logoId
+     * @param backgroundId 背景圖片id
      * @param customizeArr 自定義入口
      * @param phone        商家聯係方式
      * @param sourceAppId  商家token
@@ -120,7 +120,7 @@ public class AliCrateServiceImpl implements AliCrateService {
      * @throws AlipayApiException
      */
     @Override
-    public String updataCrate(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId, String templateId) {
+    public String updataCrate(String title, String logoId, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId, String templateId) {
         // 初始化
         AlipayMarketingCardTemplateModifyRequest request = new AlipayMarketingCardTemplateModifyRequest();
         // 幫用戶創建模板需傳入該用戶token
@@ -139,7 +139,7 @@ public class AliCrateServiceImpl implements AliCrateService {
                 + "\"write_off_type\":\"qrcode\","
                 + "\"template_style_info\":{"
                 + "\"card_show_name\":\"" + title + "\","
-                + "\"logo_id\":\"" + logo + "\","
+                + "\"logo_id\":\"" + logoId + "\","
                 + "\"background_id\":\"" + backgroundId + "\","
                 + "\"bg_color\":\"rgb(55,112,179)\","
                 // 設置會員卡權益列表

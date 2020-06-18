@@ -17,27 +17,28 @@ public interface AliCrateService {
      * 會員卡模板創建
      *
      * @param title        錢包端顯示名稱（如：花唄聯名卡）
-     * @param logo         logo圖片地址
-     * @param backgroundId 背景圖片地址
+     * @param logoId       支付寶返回的logoId
+     * @param backgroundId 背景圖片id
      * @param customizeArr 自定義入口
      * @param phone        商家聯係方式
      * @param sourceAppId  商家token
      * @return
      */
-    String crateModel(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId);
+    String crateModel(String title, String logoId, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId);
 
     /**
      * 更新模板
      *
      * @param title        錢包端顯示名稱（如：花唄聯名卡）
-     * @param logo         logo圖片地址
-     * @param backgroundId 背景圖片地址
+     * @param logoId       支付寶返回的logoId
+     * @param backgroundId 背景圖片id
      * @param customizeArr 自定義入口
      * @param phone        商家聯係方式
      * @param sourceAppId  商家token
-     * @param templateId   模板卡id
+     * @param templateId
+     * @return
      */
-    String updataCrate(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId, String templateId);
+    String updataCrate(String title, String logoId, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId, String templateId);
 
     /**
      * 會員卡開卡表單
@@ -73,6 +74,5 @@ public interface AliCrateService {
      * @return
      */
     AlipayObject openCard(String appAuthToken, String accessToken, String templateId, String userUniId);
-
 
 }

@@ -2,6 +2,7 @@ package com.moonlit.kingserp.login.controller.create;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayObject;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
@@ -151,21 +152,14 @@ public class CreateController {
     @PostMapping("/openCard")
     @ApiOperation("用戶開卡")
     public ResponseObj openCard(@RequestBody ResultDto resultDto) throws AlipayApiException {
+        //商戶token
+        String appAuthToken = "";
+
         AlipaySystemOauthTokenResponse user = aliCommonService.getUser(resultDto.getAuthCode());
         aliCrateService.getUserData(resultDto.getTemplateId(), resultDto.getRequestId(), user.getRefreshToken());
 
+        AlipayObject alipayObject = aliCrateService.openCard(appAuthToken, user.getAccessToken(), resultDto.getTemplateId(), user.getUserId());
         return ResponseObj.createSuccessResponse();
     }
 
-    /**
-     * 獲取用戶提交的會員信息
-     * 該接口僅提供測試
-     *
-     * @return
-     */
-    @GetMapping("/getQuery")
-    @ApiOperation("獲取用戶提交的會員信息，該接口僅提供測試")
-    public ResponseObj getQuery() {
-        return ResponseObj.createSuccessResponse();
-    }
 }
