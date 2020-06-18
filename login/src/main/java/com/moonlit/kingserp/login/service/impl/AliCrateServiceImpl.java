@@ -16,6 +16,7 @@ import com.moonlit.kingserp.login.service.ali.AliCrateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.callback.Callback;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -148,10 +149,14 @@ public class AliCrateServiceImpl implements AliCrateService {
 //                + "\"start_date\":\"2016-07-18 15:17:23\",\"end_date\":\"2016-07-34 12:12:12\"}],"
                 // 自定義列表
                 + "\"column_info_list\":[{"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(0)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(0) + "\",\"value\":\"\"},"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(1)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(1) + "\",\"value\":\"\"},"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(2)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(2) + "\",\"value\":\"\"},"
-                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(3)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(3) + "\",\"value\":\"\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(0)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(0) + "\","
+                + "\"more_info\":{\"title\":\"" + titles.get(0) + "\",\"url\":\"" + urls.get(0) + "\",\"params\":\"{}\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(1)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(1) + "\",},"
+                + "\"more_info\":{\"title\":\"" + titles.get(1) + "\",\"url\":\"" + urls.get(1) + "\",\"params\":\"{}\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(2)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(2) + "\",},"
+                + "\"more_info\":{\"title\":\"" + titles.get(2) + "\",\"url\":\"" + urls.get(2) + "\",\"params\":\"{}\"},"
+                + "{\"code\":\"" + ChineseToEnUtil.getPingYin(titles.get(3)) + "\",\"\\\"operate_type\\\":\\\"openWeb\\\",\"title\":\"" + titles.get(3) + "\",},"
+                + "\"more_info\":{\"title\":\"" + titles.get(3) + "\",\"url\":\"" + urls.get(3) + "\",\"params\":\"{}\"},"
                 + "{\"code\":\"TELEPHONE\",\"\\\"operate_type\\\":\\\"staticinfo\\\",\"title\":\"联系商家\",\"value\":\"" + phone + "\"},"
                 + "],"
                 // 會員卡信息規則
@@ -170,6 +175,7 @@ public class AliCrateServiceImpl implements AliCrateService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
@@ -200,6 +206,7 @@ public class AliCrateServiceImpl implements AliCrateService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
@@ -219,8 +226,8 @@ public class AliCrateServiceImpl implements AliCrateService {
         AlipayMarketingCardActivateurlApplyRequest request = new AlipayMarketingCardActivateurlApplyRequest();
         request.setBizContent("{"
                 + "\"template_id\":\"" + templateId + "\","
-                + "\"out_string\":\"201928393932\","
-                // 回調地址，不可帶參
+                + "\"out_string\":\"" + templateId + "\","
+                // 回調地址，不可帶參   該參數會返回app_id、request_id、template_id、scope、auth_code
                 + "\"callback\":\"https://wenjiang.natapp4.cc/ali/authorization\""
                 // 需要关注的生活号AppId。若需要在领卡页面展示“关注生活号”提示，需开通生活号并绑定会员卡。生活号快速接入详见：https://doc.open.alipay.com/docs/doc.htm?treeId=193&articleId=105933&docType=1
 //                + ",\"follow_app_id\":\"20150000000000000\""
@@ -231,6 +238,7 @@ public class AliCrateServiceImpl implements AliCrateService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
             // 返回投放鏈接
@@ -263,6 +271,7 @@ public class AliCrateServiceImpl implements AliCrateService {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        assert response != null;
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
@@ -281,14 +290,14 @@ public class AliCrateServiceImpl implements AliCrateService {
      */
     @Override
     public AlipayObject openCard(String appAuthToken, String accessToken, String templateId, String userUniId) {
-        // 過期時間
+        // 過期時間 (需要用戶設置)
         String validDate = "2035-12-30-00:00:00";
 
         AlipayMarketingCardOpenRequest request = new AlipayMarketingCardOpenRequest();
         request.putOtherTextParam("app_auth_token", appAuthToken);
         request.setBizContent("{"
                 + "\"out_serial_no\":\"" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + CommonUtil.getVerificationCode(5) + "\","
-                + "\"card_template_id\":\"" + templateId + "****\","
+                + "\"card_template_id\":\"" + templateId + "\","
                 + "\"card_user_info\":{"
                 //支付宝账户 userid，为 2088 开头的 16 为数字
                 + "\"user_uni_id\":\"" + userUniId + "\","

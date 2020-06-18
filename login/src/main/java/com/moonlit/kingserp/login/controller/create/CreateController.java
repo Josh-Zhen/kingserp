@@ -1,10 +1,14 @@
 package com.moonlit.kingserp.login.controller.create;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.login.MemberAlCard;
-import com.moonlit.kingserp.login.service.impl.AliCrateServiceImpl;
+import com.moonlit.kingserp.entity.login.dto.ResultDto;
+import com.moonlit.kingserp.login.service.ali.AliCommonService;
+import com.moonlit.kingserp.login.service.ali.AliCrateService;
 import com.moonlit.kingserp.login.service.CreateSercvice;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,7 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.*;
 
@@ -28,7 +31,9 @@ import java.util.*;
 public class CreateController {
 
     @Autowired
-    private AliCrateServiceImpl aliCrateServiceImpl;
+    private AliCrateService aliCrateService;
+    @Autowired
+    private AliCommonService aliCommonService;
     @Autowired
     private CreateSercvice createSercvice;
 
@@ -54,7 +59,7 @@ public class CreateController {
         customizeArrs.put("titl", list);
         customizeArrs.put("url", list2);
 
-        templateId = aliCrateServiceImpl.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
+        templateId = aliCrateService.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
         card.setCreateTime(new Date());
         if (0 > createSercvice.addCreate(card)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
@@ -101,7 +106,7 @@ public class CreateController {
         customizeArrs.put("titl", list);
         customizeArrs.put("url", list2);
 
-        templateId = aliCrateServiceImpl.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
+        templateId = aliCrateService.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
 
         if (0 > createSercvice.updata(card)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
@@ -119,7 +124,7 @@ public class CreateController {
     @ApiOperation("會員卡開卡")
     @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
     public ResponseObj setCrad(@RequestParam String templateId) {
-        aliCrateServiceImpl.setCard(templateId);
+        aliCrateService.setCard(templateId);
         return ResponseObj.createSuccessResponse();
     }
 
@@ -132,12 +137,25 @@ public class CreateController {
     @GetMapping("/getCardQrcode")
     @ApiOperation("獲取會員卡鏈接")
     @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
-    public ResponseObj getCardQrcode(@RequestParam String templateId) {
+    public ResponseObj getCardQrcode(@RequestBody String templateId) {
         String cardQrcode;
-        cardQrcode = aliCrateServiceImpl.cardQrcode(templateId);
+        cardQrcode = aliCrateService.cardQrcode(templateId);
         return ResponseObj.createSuccessResponse(cardQrcode);
     }
 
+    /**
+     * 用戶開卡
+     *
+     * @return
+     */
+    @PostMapping("/openCard")
+    @ApiOperation("用戶開卡")
+    public ResponseObj openCard(@RequestBody ResultDto resultDto) throws AlipayApiException {
+        AlipaySystemOauthTokenResponse user = aliCommonService.getUser(resultDto.getAuthCode());
+        aliCrateService.getUserData(resultDto.getTemplateId(), resultDto.getRequestId(), user.getRefreshToken());
+
+        return ResponseObj.createSuccessResponse();
+    }
 
     /**
      * 獲取用戶提交的會員信息
