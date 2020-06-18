@@ -68,7 +68,6 @@ public class CreateController {
         return ResponseObj.createSuccessResponse(templateId);
     }
 
-
     /**
      * 查詢會員卡
      *
@@ -130,13 +129,13 @@ public class CreateController {
     }
 
     /**
-     * 獲取會員卡鏈接
+     * 獲取會員卡投放鏈接
      *
      * @param templateId
      * @return
      */
     @GetMapping("/getCardQrcode")
-    @ApiOperation("獲取會員卡鏈接")
+    @ApiOperation("獲取會員卡投放鏈接")
     @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
     public ResponseObj getCardQrcode(@RequestBody String templateId) {
         String cardQrcode;
