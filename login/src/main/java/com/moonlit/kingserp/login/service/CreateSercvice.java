@@ -12,6 +12,9 @@ public interface CreateSercvice {
 
     /**
      * 新增加會員卡模板
+     *
+     * @param card
+     * @return
      */
     Integer addCreate(MemberAlCard card);
 

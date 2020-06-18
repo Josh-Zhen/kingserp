@@ -1,11 +1,10 @@
 package com.moonlit.kingserp.login.controller.create;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.AlipayApiException;
 import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
 import com.moonlit.kingserp.entity.login.MemberAlCard;
-import com.moonlit.kingserp.login.common.CrateUtil;
+import com.moonlit.kingserp.login.service.impl.AliCrateServiceImpl;
 import com.moonlit.kingserp.login.service.CreateSercvice;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,7 +28,7 @@ import java.util.*;
 public class CreateController {
 
     @Autowired
-    private CrateUtil crateUtil;
+    private AliCrateServiceImpl aliCrateServiceImpl;
     @Autowired
     private CreateSercvice createSercvice;
 
@@ -39,7 +38,7 @@ public class CreateController {
     @PostMapping("/addCeateModel")
     @ApiOperation("添加商户会员卡模板")
     public ResponseObj addCeateModel(@RequestBody MemberAlCard card) {
-        String templateId = "";
+        String templateId;
 
         String sourceAppId = "dasd";
         String phome = "1237281391723913";
@@ -55,11 +54,7 @@ public class CreateController {
         customizeArrs.put("titl", list);
         customizeArrs.put("url", list2);
 
-        try {
-            templateId = crateUtil.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
-        } catch (AlipayApiException e) {
-            return ResponseObj.createErrResponse("調用失敗");
-        }
+        templateId = aliCrateServiceImpl.crateModel(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, phome, sourceAppId);
         card.setCreateTime(new Date());
         if (0 > createSercvice.addCreate(card)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
@@ -90,7 +85,7 @@ public class CreateController {
     @PutMapping("/updataCreate")
     @ApiOperation("更新會員卡模板信息")
     public ResponseObj updataCreate(@RequestBody MemberAlCard card) {
-        String templateId = "";
+        String templateId;
 
         String sourceAppId = "dasd";
         String phome = "1237281391723913";
@@ -106,11 +101,7 @@ public class CreateController {
         customizeArrs.put("titl", list);
         customizeArrs.put("url", list2);
 
-        try {
-            templateId = crateUtil.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
-        } catch (AlipayApiException e) {
-            return ResponseObj.createErrResponse("調用失敗");
-        }
+        templateId = aliCrateServiceImpl.updataCrate(card.getTitle(), card.getLogo(), card.getImg(), customizeArrs, sourceAppId, phome, card.getTemplateId());
 
         if (0 > createSercvice.updata(card)) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER20503);
@@ -128,12 +119,7 @@ public class CreateController {
     @ApiOperation("會員卡開卡")
     @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
     public ResponseObj setCrad(@RequestParam String templateId) {
-        try {
-            crateUtil.setCard(templateId);
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-            return ResponseObj.createErrResponse("開卡失敗");
-        }
+        aliCrateServiceImpl.setCard(templateId);
         return ResponseObj.createSuccessResponse();
     }
 
@@ -148,12 +134,7 @@ public class CreateController {
     @ApiImplicitParam(name = "templateId", value = "會員卡模板id", paramType = "query", dataType = "String")
     public ResponseObj getCardQrcode(@RequestParam String templateId) {
         String cardQrcode;
-        try {
-            cardQrcode = crateUtil.cardQrcode(templateId);
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-            return ResponseObj.createErrResponse("獲取失敗");
-        }
+        cardQrcode = aliCrateServiceImpl.cardQrcode(templateId);
         return ResponseObj.createSuccessResponse(cardQrcode);
     }
 

@@ -1,17 +1,23 @@
-package com.moonlit.kingserp.login.common;
+package com.moonlit.kingserp.login.service.impl;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.AlipayObject;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayMarketingCardOpenModel;
+import com.alipay.api.domain.CardUserInfo;
+import com.alipay.api.domain.MerchantCard;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
 import com.moonlit.kingserp.common.util.ChineseToEnUtil;
 import com.moonlit.kingserp.common.util.CommonUtil;
+import com.moonlit.kingserp.login.common.AliCreateConfig;
+import com.moonlit.kingserp.login.service.ali.AliCrateService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -22,9 +28,11 @@ import java.util.HashMap;
  * @Version 1.0
  */
 @Slf4j
-public class CrateUtil {
+@Service
+public class AliCrateServiceImpl implements AliCrateService {
 
-    private static AlipayClient alipayClient = new DefaultAlipayClient(AliCreateConfig.gatewayUrl, AliCreateConfig.app_id, AliCreateConfig.merchant_private_key, AliCreateConfig.format, AliCreateConfig.charset, AliCreateConfig.alipay_public_key, AliCreateConfig.sign_type);
+    //    private static AlipayClient alipayClient = new DefaultAlipayClient(AliCreateConfig.gatewayUrl, AliCreateConfig.app_id, AliCreateConfig.merchant_private_key, AliCreateConfig.format, AliCreateConfig.charset, AliCreateConfig.alipay_public_key, AliCreateConfig.sign_type);
+    private static AlipayClient alipayClient = AliCreateConfig.alipayClient;
 
     /**
      * 會員卡模板創建
@@ -37,7 +45,8 @@ public class CrateUtil {
      * @param sourceAppId  商家token
      * @throws AlipayApiException
      */
-    public String crateModel(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId) throws AlipayApiException {
+    @Override
+    public String crateModel(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId) {
         // 初始化
         AlipayMarketingCardTemplateCreateRequest request = new AlipayMarketingCardTemplateCreateRequest();
         // 幫用戶創建模板需傳入該用戶token
@@ -109,7 +118,8 @@ public class CrateUtil {
      * @param templateId   模板卡id
      * @throws AlipayApiException
      */
-    public String updataCrate(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId, String templateId) throws AlipayApiException {
+    @Override
+    public String updataCrate(String title, String logo, String backgroundId, HashMap<String, ArrayList<String>> customizeArr, String phone, String sourceAppId, String templateId) {
         // 初始化
         AlipayMarketingCardTemplateModifyRequest request = new AlipayMarketingCardTemplateModifyRequest();
         // 幫用戶創建模板需傳入該用戶token
@@ -173,9 +183,9 @@ public class CrateUtil {
      * 會員卡開卡表單
      *
      * @param templateId
-     * @throws AlipayApiException
      */
-    public void setCard(String templateId) throws AlipayApiException {
+    @Override
+    public void setCard(String templateId) {
         AlipayMarketingCardFormtemplateSetRequest request = new AlipayMarketingCardFormtemplateSetRequest();
         request.setBizContent("{"
                 + "\"template_id\":\"" + templateId + "\","
@@ -184,7 +194,12 @@ public class CrateUtil {
                 // 用戶可選字段，可自定
 //                + ",\"optional\":\"{\\\"common_fields\\\":[\\\"OPEN_FORM_FIELD_GENDER\\\"]}\""
                 + "}}");
-        AlipayMarketingCardFormtemplateSetResponse response = alipayClient.execute(request);
+        AlipayMarketingCardFormtemplateSetResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
@@ -199,17 +214,23 @@ public class CrateUtil {
      * @return 投放鏈接
      * @throws AlipayApiException
      */
-    public String cardQrcode(String templateId) throws AlipayApiException {
+    @Override
+    public String cardQrcode(String templateId) {
         AlipayMarketingCardActivateurlApplyRequest request = new AlipayMarketingCardActivateurlApplyRequest();
         request.setBizContent("{"
                 + "\"template_id\":\"" + templateId + "\","
                 + "\"out_string\":\"201928393932\","
                 // 回調地址，不可帶參
-                + "\"callback\":\"https://wenjiang.natapp4.cc/ali/authorization\","
+                + "\"callback\":\"https://wenjiang.natapp4.cc/ali/authorization\""
                 // 需要关注的生活号AppId。若需要在领卡页面展示“关注生活号”提示，需开通生活号并绑定会员卡。生活号快速接入详见：https://doc.open.alipay.com/docs/doc.htm?treeId=193&articleId=105933&docType=1
-//                + "\"follow_app_id\":\"20150000000000000\""
+//                + ",\"follow_app_id\":\"20150000000000000\""
                 + "}");
-        AlipayMarketingCardActivateurlApplyResponse response = alipayClient.execute(request);
+        AlipayMarketingCardActivateurlApplyResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
         if (response.isSuccess()) {
             System.out.println("调用成功");
             // 返回投放鏈接
@@ -228,21 +249,26 @@ public class CrateUtil {
      * @param requestId   回調Id
      * @param accessToken 用戶token
      */
-    public void getUserData(String templateId, String requestId, String accessToken) throws AlipayApiException {
+    @Override
+    public void getUserData(String templateId, String requestId, String accessToken) {
         AlipayMarketingCardActivateformQueryRequest request = new AlipayMarketingCardActivateformQueryRequest();
         request.setBizContent("{" +
                 "\"biz_type\":\"MEMBER_CARD\"," +
                 "\"template_id\":\"" + templateId + "\"," +
                 "\"request_id\":\"" + requestId + "\"" +
                 "}");
-        AlipayMarketingCardActivateformQueryResponse response = alipayClient.execute(request, accessToken);
+        AlipayMarketingCardActivateformQueryResponse response = null;
+        try {
+            response = alipayClient.execute(request, accessToken);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
         if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
         }
     }
-
 
     /**
      * 會員卡開卡
@@ -251,10 +277,10 @@ public class CrateUtil {
      * @param accessToken  填写表单后获取到auth_code后通过alipay.system.oauth.token接口换取到用户访问令牌accessToken
      * @param templateId   模板id
      * @param userUniId    支付寶賬號id
-     * @throws AlipayApiException
+     * @return
      */
-    public void openCard(String appAuthToken, String accessToken, String templateId, String userUniId) throws AlipayApiException {
-
+    @Override
+    public AlipayObject openCard(String appAuthToken, String accessToken, String templateId, String userUniId) {
         // 過期時間
         String validDate = "2035-12-30-00:00:00";
 
@@ -278,7 +304,13 @@ public class CrateUtil {
                 // 用戶會員信息
 //                + "\"member_ext_info\":{\"name\":\"萧沫\",\"gende\":\"FEMALE\",\"birth\":\"2016-06-27\",\"cell\":\"13000000000\"}"
                 + "}");
-        AlipayMarketingCardOpenResponse response = alipayClient.execute(request, accessToken);
-        System.out.println(response.getBody());
+        AlipayMarketingCardOpenResponse response = null;
+        try {
+            response = alipayClient.execute(request, accessToken);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        assert response != null;
+        return response.getCardInfo();
     }
 }

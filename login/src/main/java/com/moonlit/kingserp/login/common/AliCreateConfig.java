@@ -1,5 +1,7 @@
 package com.moonlit.kingserp.login.common;
 
+import com.alipay.api.AlipayClient;
+
 /**
  * @Description: 设置帐户有关信息及返回路径
  * @Author: Joshua
@@ -8,6 +10,7 @@ package com.moonlit.kingserp.login.common;
  */
 public class AliCreateConfig {
 
+    public static AlipayClient alipayClient;
     /**
      * 支付宝网关
      */
