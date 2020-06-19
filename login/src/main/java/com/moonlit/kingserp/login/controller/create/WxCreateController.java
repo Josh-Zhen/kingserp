@@ -63,7 +63,7 @@ public class WxCreateController {
 
         //創建會員卡
         WxMpCardCreateResult openCard = wxMpMemberCardService.createMemberCard(memberCardToString);
-        if (openCard.getErrmsg()=="ok"){
+        if ("ok".equals(openCard.getErrmsg())){
             openCard.getCardId();
 
         }
