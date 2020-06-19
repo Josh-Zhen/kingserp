@@ -21,15 +21,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * 会员卡
- *
- * @author Joshua
+ * @Description: 会员卡
+ * @Author: Joshua
+ * @CreateDate: 2020-06-16 10:04
+ * @Version 1.0
  */
 @Slf4j
 @RestController
-@RequestMapping("/createController")
+@RequestMapping("/aliCreateController")
 @Api(value = "会员卡", tags = {"会员卡"})
-public class CreateController {
+public class AliCreateController {
 
     @Autowired
     private AliCrateService aliCrateService;

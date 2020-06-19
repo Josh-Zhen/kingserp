@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * @Description:
+ * @Description: 阿里會員卡接口
  * @Author: Joshua
  * @CreateDate: 2020-06-18 11:16
  * @Version 1.0
