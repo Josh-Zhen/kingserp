@@ -36,7 +36,9 @@ public class WxCreateController {
     /**
      * 創建會員卡模板
      *
+     * @param memberCard 會員卡實體
      * @return
+     * @throws WxErrorException
      */
     @PostMapping("/addCeateModel")
     @ApiOperation("創建會員卡模板")
@@ -52,8 +54,6 @@ public class WxCreateController {
         memberCard.setBalanceUrl("");
 
 
-
-
         MemberCardCreateRequest createRequest = new MemberCardCreateRequest();
         createRequest.setMemberCard(memberCard);
 
@@ -63,7 +63,7 @@ public class WxCreateController {
 
         //創建會員卡
         WxMpCardCreateResult openCard = wxMpMemberCardService.createMemberCard(memberCardToString);
-        if ("ok".equals(openCard.getErrmsg())){
+        if ("ok".equals(openCard.getErrmsg())) {
             openCard.getCardId();
 
         }
