@@ -34,3 +34,8 @@ spring:
         min-idle: 50
         max-active: 2000
         max-wait: 1000
+
+wx:
+  mp:
+    appId: wx731d90c10c7980e5
+    secret: f04f3f5cf99b7839a66fa405a2a52e11
