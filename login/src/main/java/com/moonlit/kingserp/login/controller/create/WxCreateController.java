@@ -6,11 +6,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpCardService;
 import me.chanjar.weixin.mp.api.WxMpMemberCardService;
 import me.chanjar.weixin.mp.bean.card.MemberCard;
 import me.chanjar.weixin.mp.bean.card.MemberCardCreateRequest;
-import me.chanjar.weixin.mp.bean.card.WxMpCardCreateRequest;
 import me.chanjar.weixin.mp.bean.card.WxMpCardCreateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,18 +51,19 @@ public class WxCreateController {
         memberCard.setBonusUrl("");
         memberCard.setBalanceUrl("");
 
-
         MemberCardCreateRequest createRequest = new MemberCardCreateRequest();
         createRequest.setMemberCard(memberCard);
-
-
-        // 轉String
         String memberCardToString = JSON.toJSONString(createRequest);
 
         //創建會員卡
-        WxMpCardCreateResult openCard = wxMpMemberCardService.createMemberCard(memberCardToString);
-        if ("ok".equals(openCard.getErrmsg())) {
-            openCard.getCardId();
+        WxMpCardCreateResult openCard;
+        try {
+            openCard = wxMpMemberCardService.createMemberCard(memberCardToString);
+            if ("ok".equals(openCard.getErrmsg())) {
+                openCard.getCardId();
+            }
+        } catch (WxErrorException e) {
+            //Todo 補異常處理
 
         }
 
