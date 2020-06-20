@@ -141,10 +141,10 @@ public class WxMemberCard implements Serializable {
     private String customCells;
 
     /**
-     * 二維碼地址，需要調用二維碼轉圖片接口
+     * 二維碼地址
      */
-    @ApiModelProperty(name = "ticket", value = "二維碼地址，需要調用二維碼轉圖片接口")
-    private String ticket;
+    @ApiModelProperty(name = "showQrcodeUrl", value = "二維碼地址")
+    private String showQrcodeUrl;
 
     /**
      * 創建時間

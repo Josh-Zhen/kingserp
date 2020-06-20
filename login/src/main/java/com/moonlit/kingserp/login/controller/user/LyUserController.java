@@ -94,6 +94,7 @@ public class LyUserController {
      */
     @DeleteMapping("/deleteUser")
     @ApiOperation("删除客戶")
+    @ApiImplicitParam(name = "userId", value = "商戶id", paramType = "query", dataType = "Integer")
     public ResponseObj deleteUser(@RequestParam Integer userId) {
         if (null != userId) {
             if (0 > userService.deleteUser(userId)) {

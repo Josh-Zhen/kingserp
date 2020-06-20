@@ -34,4 +34,32 @@ public class WxMemberCardServiceImpl implements WxMemberCardService {
         }
         return i;
     }
+
+    /**
+     * 更新
+     *
+     * @param wxMemberCard 微信會員卡實體
+     * @return
+     */
+    @Override
+    public Integer updata(WxMemberCard wxMemberCard) {
+        int i = 0;
+        try {
+            i = memberCardMapper.updateByPrimaryKey(wxMemberCard);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return i;
+    }
+
+    /**
+     * 根據商戶id查詢商戶微信會員卡模板
+     *
+     * @param wxMemberCard 商戶id
+     * @return 商戶實體
+     */
+    @Override
+    public WxMemberCard select(WxMemberCard wxMemberCard) {
+        return memberCardMapper.selectOne(wxMemberCard);
+    }
 }
