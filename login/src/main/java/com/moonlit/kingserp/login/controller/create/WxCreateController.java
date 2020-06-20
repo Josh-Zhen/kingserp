@@ -1,7 +1,10 @@
 package com.moonlit.kingserp.login.controller.create;
 
 import com.alibaba.fastjson.JSON;
+import com.moonlit.kingserp.common.errer.ErrerMsg;
 import com.moonlit.kingserp.common.response.ResponseObj;
+import com.moonlit.kingserp.entity.login.WxMemberCard;
+import com.moonlit.kingserp.login.service.wx.WxMemberCardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,8 @@ public class WxCreateController {
 
     @Autowired
     private WxMpMemberCardService wxMpMemberCardService;
+    @Autowired
+    private WxMemberCardService wxMemberCardService;
 
     /**
      * 創建會員卡模板
@@ -56,15 +61,32 @@ public class WxCreateController {
         String memberCardToString = JSON.toJSONString(createRequest);
 
         //創建會員卡
-        WxMpCardCreateResult openCard;
         try {
-            openCard = wxMpMemberCardService.createMemberCard(memberCardToString);
+            WxMpCardCreateResult openCard = wxMpMemberCardService.createMemberCard(memberCardToString);
             if ("ok".equals(openCard.getErrmsg())) {
-                openCard.getCardId();
+                WxMemberCard wxMemberCard = new WxMemberCard();
+                wxMemberCard.setBackgroundPicUrl(memberCard.getBackgroundPicUrl());
+                wxMemberCard.setBrandName(memberCard.getBaseInfo().getBrandName());
+                wxMemberCard.setLogoUrl(memberCard.getBaseInfo().getLogoUrl());
+                wxMemberCard.setTitle(memberCard.getBaseInfo().getTitle());
+                wxMemberCard.setCodeType(memberCard.getBaseInfo().getCodeType());
+                wxMemberCard.setNotice(memberCard.getBaseInfo().getNotice());
+                wxMemberCard.setDescription(memberCard.getBaseInfo().getDescription());
+                wxMemberCard.setServicePhone(memberCard.getBaseInfo().getServicePhone());
+                wxMemberCard.setPrerogative(memberCard.getPrerogative());
+                wxMemberCard.setBusinessService(memberCard.getAdvancedInfo().getBusinessServiceList().toString());
+                wxMemberCard.setTextImageList(memberCard.getAdvancedInfo().getTextImageList().toString());
+
+                wxMemberCard.setCardId(openCard.getCardId());
+                if (0 > wxMemberCardService.insetr(wxMemberCard)) {
+                    return ResponseObj.createErrResponse(ErrerMsg.ERRER20504);
+                }
+            } else {
+
             }
         } catch (WxErrorException e) {
-            //Todo 補異常處理
-
+            //TODO 補異常處理
+            e.getError();
         }
 
 

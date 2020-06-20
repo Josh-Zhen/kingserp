@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "wx_member_card")
 @ApiModel(value = "WxMemberCard", description = "微信会员卡")
-public class WxMemberCard implements Serializable{
+public class WxMemberCard implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -94,13 +94,12 @@ public class WxMemberCard implements Serializable{
 
     /**
      * 图文列表，显示在详情内页 ，优惠券券开发者须至少传入 一组图文列表
-     * <p>
      * 格式
      * {
-     * "k1":{"name":"充值记录","tips":"","url":"地址"},
-     * "k2":{"name":"充值记录","tips":"","url":"地址"},
-     * "k3":{"name":"充值记录","tips":"","url":"地址"},
-     * "k4":{"name":"充值记录","tips":"","url":"地址"}
+     * "k1":{"image_url":"圖片地址","text":"文案"},
+     * "k2":{"image_url":"圖片地址","text":"文案"},
+     * "k3":{"image_url":"圖片地址","text":"文案"},
+     * "k4":{"image_url":"圖片地址","text":"文案"}
      * }
      */
     private String textImageList;
@@ -110,4 +109,15 @@ public class WxMemberCard implements Serializable{
      */
     private String cardId;
 
+    /**
+     * 自定義會員信息欄目
+     * 格式
+     * {
+     * "k1":{"name":"充值记录","tips":"","url":"地址"},
+     * "k2":{"name":"充值记录","tips":"","url":"地址"},
+     * "k3":{"name":"充值记录","tips":"","url":"地址"},
+     * "k4":{"name":"充值记录","tips":"","url":"地址"}
+     * }
+     */
+    private String custom_fields;
 }
