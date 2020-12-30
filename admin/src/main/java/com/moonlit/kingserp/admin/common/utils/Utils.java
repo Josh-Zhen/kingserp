@@ -16,7 +16,7 @@ public class Utils {
      * @return
      */
     public static boolean checkUserIsSuper() {
-        return ShiroUtils.getUserInfo().getUserIsSuper() == 1;
+        return ShiroUtils.getUserInfo().getUserIsSuper() != 1;
     }
 
 

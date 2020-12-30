@@ -54,7 +54,7 @@ public class SysRoleController {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10015);
             }
             // 校驗是否是超級管理員
-            if (!Utils.checkUserIsSuper()) {
+            if (Utils.checkUserIsSuper()) {
                 return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
             }
             sysRole.setCreateUserId(ShiroUtils.getUserInfo().getId());
@@ -79,7 +79,7 @@ public class SysRoleController {
     @ApiOperation("修改角色信息")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj updateRole(@RequestBody SysRole sysRole) {
-        if (!Utils.checkUserIsSuper()) {
+        if (Utils.checkUserIsSuper()) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         if (sysRole.getRoleName() != null) {
@@ -118,7 +118,7 @@ public class SysRoleController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj updateRoleState(@RequestParam Integer roleId, @RequestParam Integer state) {
-        if (!Utils.checkUserIsSuper()) {
+        if (Utils.checkUserIsSuper()) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         if (null != roleId) {
@@ -150,7 +150,7 @@ public class SysRoleController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delectRole(@RequestParam Integer roleId) {
-        if (!Utils.checkUserIsSuper()) {
+        if (Utils.checkUserIsSuper()) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         if (null != roleId) {

@@ -171,7 +171,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj delSysUser(@RequestParam Integer id) {
-        if (!Utils.checkUserIsSuper()) {
+        if (Utils.checkUserIsSuper()) {
             ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         if (null != id) {
@@ -222,7 +222,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     })
     public ResponseObj updateSysUserStatus(@RequestParam Integer sysUserId, @RequestParam Integer type) {
-        if (!Utils.checkUserIsSuper()) {
+        if (Utils.checkUserIsSuper()) {
             ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         if (null != sysUserId) {

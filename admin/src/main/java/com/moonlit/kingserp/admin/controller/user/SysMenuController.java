@@ -101,7 +101,7 @@ public class SysMenuController {
     @ApiOperation("添加角色和目錄权限的关系")
     @ApiImplicitParam(name = "token", value = "Authorization token", required = true, dataType = "String", paramType = "header")
     public ResponseObj setRoleMenus(@RequestBody RoleMenu roleMenu) {
-        if (!Utils.checkUserIsSuper()) {
+        if (Utils.checkUserIsSuper()) {
             return ResponseObj.createErrResponse(ErrerMsg.ERRER10008);
         }
         try {
