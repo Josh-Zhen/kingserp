@@ -1,7 +1,6 @@
-package com.moonlit.kingserp.admin.common.utils;
+package com.moonlit.kingserp.common.util;
 
 import com.sun.istack.internal.Nullable;
-import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 
@@ -11,7 +10,6 @@ import java.math.BigDecimal;
  * @CreateDate: 2020/12/29 22:59
  * @Version 1.0
  */
-@Slf4j
 public class BigDecimalUtils {
 
     /**

@@ -8,7 +8,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Description:日期时间操作的工具类
+ * @Author: Joshua
+ * @Description: 日期时间操作的工具类
  */
 public class DateUtil {
     /**
@@ -66,7 +67,7 @@ public class DateUtil {
     /**
      * DateFormat缓存
      */
-    private static Map<String, DateFormat> dateFormatMap = new ConcurrentHashMap<>();
+    private static final Map<String, DateFormat> dateFormatMap = new ConcurrentHashMap<>();
 
     /**
      * 获取DateFormat
@@ -84,7 +85,6 @@ public class DateUtil {
     }
 
     public static Date getDate() {
-
         return Calendar.getInstance().getTime();
     }
 
@@ -97,7 +97,7 @@ public class DateUtil {
      */
     public static Date getDate(String dateTimeStr, String formatStr) {
         try {
-            if (dateTimeStr == null || dateTimeStr.equals("")) {
+            if (dateTimeStr == null || "".equals(dateTimeStr)) {
                 return null;
             }
             DateFormat sdf = DateUtil.getDateFormat(formatStr);
@@ -115,7 +115,7 @@ public class DateUtil {
      */
     public static Date convertDate2(String dateTimeStr) {
         try {
-            if (dateTimeStr == null || dateTimeStr.equals("")) {
+            if (dateTimeStr == null || "".equals(dateTimeStr)) {
                 return null;
             }
             DateFormat sdf = DateUtil.getDateFormat(yyyy_MM_dd_HH_mm_ss_EN);
@@ -133,7 +133,7 @@ public class DateUtil {
      */
     public static Date convertDate(String dateTimeStr) {
         try {
-            if (dateTimeStr == null || dateTimeStr.equals("")) {
+            if (dateTimeStr == null || "".equals(dateTimeStr)) {
                 return null;
             }
             DateFormat sdf = DateUtil.getDateFormat(yyyy_MM_dd_EN);
@@ -307,9 +307,13 @@ public class DateUtil {
      * @return
      */
     public static long compareDateStr(String time1, String time2, String format) {
+        long l = 0;
         Date d1 = getDate(time1, format);
         Date d2 = getDate(time2, format);
-        return d2.getTime() - d1.getTime();
+        if (d1 != null && d2 != null) {
+            l = d2.getTime() - d1.getTime();
+        }
+        return l;
     }
 
     /**
@@ -321,6 +325,7 @@ public class DateUtil {
      */
     public static long compareDateNow(String time, String format) {
         Date date = getDate(time, format);
+        assert date != null;
         return System.currentTimeMillis() - date.getTime();
     }
 
@@ -449,7 +454,7 @@ public class DateUtil {
      */
     public static String getDateOfMon(String date, int mon, String formatStr) {
         Calendar now = Calendar.getInstance(TimeZone.getDefault());
-        now.setTime(DateUtil.getDate(date, formatStr));
+        now.setTime(Objects.requireNonNull(DateUtil.getDate(date, formatStr)));
         now.add(Calendar.MONTH, mon);
         return dateToDateString(now.getTime(), formatStr);
     }
@@ -463,7 +468,7 @@ public class DateUtil {
      */
     public static String getDateOfDay(String date, int day, String formatStr) {
         Calendar now = Calendar.getInstance(TimeZone.getDefault());
-        now.setTime(DateUtil.getDate(date, formatStr));
+        now.setTime(Objects.requireNonNull(DateUtil.getDate(date, formatStr)));
         now.add(Calendar.DATE, day);
         return dateToDateString(now.getTime(), formatStr);
     }
@@ -477,8 +482,7 @@ public class DateUtil {
             Calendar date = Calendar.getInstance();
             date.setTime(beginDate);
             date.set(Calendar.DATE, date.get(Calendar.DATE) - ds);
-            Date endDate = dft.parse(dft.format(date.getTime()));
-            return endDate;
+            return dft.parse(dft.format(date.getTime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -503,7 +507,7 @@ public class DateUtil {
      */
     public static String getDateOfMin(String date, int mins, String formatStr) {
         Calendar now = Calendar.getInstance(TimeZone.getDefault());
-        now.setTime(DateUtil.getDate(date, formatStr));
+        now.setTime(Objects.requireNonNull(DateUtil.getDate(date, formatStr)));
         now.add(Calendar.SECOND, mins * 60);
         return dateToDateString(now.getTime(), formatStr);
     }
@@ -690,8 +694,9 @@ public class DateUtil {
     public static String getSundayOfThisWeek() {
         Calendar c = Calendar.getInstance();
         int day_of_week = c.get(Calendar.DAY_OF_WEEK) - 1;
-        if (day_of_week == 0)
+        if (day_of_week == 0) {
             day_of_week = 7;
+        }
         c.add(Calendar.DATE, -day_of_week + 7);
         return dateToDateString(c.getTime());
     }
@@ -730,7 +735,7 @@ public class DateUtil {
      * @return
      */
     public static long getQuotByDays(String beginDate, String endDate) {
-        long quot = 0;
+        long quot;
         DateFormat df = getDateFormat(yyyy_MM_dd_EN);
         try {
             Date d1 = df.parse(beginDate);
@@ -878,6 +883,18 @@ public class DateUtil {
     }
 
     /**
+     * 将当前时间转成格林尼治时间（10位）
+     *
+     * @param date 时间
+     * @return rangeDate
+     */
+    public static String getRangeDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return String.valueOf(calendar.getTimeInMillis() / 1000);
+    }
+
+    /**
      * 13位时间戳转时间
      *
      * @param time
@@ -909,7 +926,7 @@ public class DateUtil {
     public static String getMillsStr(long time) {
         String timeStr = String.valueOf(time);
         String suffix = timeStr.substring(0, timeStr.length() - 3);
-        String prefix = timeStr.substring(timeStr.length() - 3, timeStr.length());
+        String prefix = timeStr.substring(timeStr.length() - 3);
         return suffix + "." + prefix;
     }
 
@@ -1017,7 +1034,7 @@ public class DateUtil {
      * @return
      */
     public static Integer hourTosec(String time) {
-        if ("null".equals(time) || StringUtils.isEmpty(time)) {
+        if ("null".equals(time) || (null == time || 0 == time.trim().length())) {
             return null;
         }
         if (time.length() <= 5) {
@@ -1125,19 +1142,22 @@ public class DateUtil {
             // 当前时间小时数在开始时间和结束时间小时数之间
             if (strDateH > strDateBeginH && strDateH < strDateEndH) {
                 return true;
-                // 当前时间小时数等于开始时间小时数，分钟数在开始和结束之间
-            } else if (strDateH == strDateBeginH && strDateM >= strDateBeginM && strDateM <= strDateEndM) {
+            }
+            // 当前时间小时数等于开始时间小时数，分钟数在开始和结束之间
+            else if (strDateH == strDateBeginH && strDateM >= strDateBeginM && strDateM <= strDateEndM) {
                 return true;
-                // 当前时间小时数等于开始时间小时数，分钟数等于开始时间分钟数，秒数在开始和结束之间
-            } else if (strDateH == strDateBeginH && strDateM == strDateBeginM && strDateS >= strDateBeginS && strDateS <= strDateEndS) {
+            }
+            // 当前时间小时数等于开始时间小时数，分钟数等于开始时间分钟数，秒数在开始和结束之间
+            else if (strDateH == strDateBeginH && strDateM == strDateBeginM && strDateS >= strDateBeginS && strDateS <= strDateEndS) {
                 return true;
             }
             // 当前时间小时数大等于开始时间小时数，等于结束时间小时数，分钟数小等于结束时间分钟数
             else if (strDateH >= strDateBeginH && strDateH == strDateEndH && strDateM <= strDateEndM) {
                 return true;
-                // 当前时间小时数大等于开始时间小时数，等于结束时间小时数，分钟数等于结束时间分钟数，秒数小等于结束时间秒数
-            } else if (strDateH >= strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS <= strDateEndS) {
-                return true;
+            }
+            // 当前时间小时数大等于开始时间小时数，等于结束时间小时数，分钟数等于结束时间分钟数，秒数小等于结束时间秒数
+            else {
+                return strDateH >= strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS <= strDateEndS;
             }
         }
         return false;
@@ -1152,8 +1172,7 @@ public class DateUtil {
      * @param strDateEnd   结束时间 00:05:00
      * @return
      */
-    public static boolean isInDate(Date date, String strDateBegin,
-                                   String strDateEnd) {
+    public static boolean isInDate(Date date, String strDateBegin, String strDateEnd) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = sdf.format(date);
         // 截取当前时间时分秒
@@ -1172,23 +1191,22 @@ public class DateUtil {
             // 当前时间小时数在开始时间和结束时间小时数之间
             if (strDateH > strDateBeginH && strDateH < strDateEndH) {
                 return true;
-                // 当前时间小时数等于开始时间小时数，分钟数在开始和结束之间
-            } else if (strDateH == strDateBeginH && strDateM >= strDateBeginM
-                    && strDateM <= strDateEndM) {
+            }
+            // 当前时间小时数等于开始时间小时数，分钟数在开始和结束之间
+            else if (strDateH == strDateBeginH && strDateM >= strDateBeginM && strDateM <= strDateEndM) {
                 return true;
-                // 当前时间小时数等于开始时间小时数，分钟数等于开始时间分钟数，秒数在开始和结束之间
-            } else if (strDateH == strDateBeginH && strDateM == strDateBeginM
-                    && strDateS >= strDateBeginS && strDateS <= strDateEndS) {
+            }
+            // 当前时间小时数等于开始时间小时数，分钟数等于开始时间分钟数，秒数在开始和结束之间
+            else if (strDateH == strDateBeginH && strDateM == strDateBeginM && strDateS >= strDateBeginS && strDateS <= strDateEndS) {
                 return true;
             }
             // 当前时间小时数大等于开始时间小时数，等于结束时间小时数，分钟数小等于结束时间分钟数
-            else if (strDateH >= strDateBeginH && strDateH == strDateEndH
-                    && strDateM <= strDateEndM) {
+            else if (strDateH >= strDateBeginH && strDateH == strDateEndH && strDateM <= strDateEndM) {
                 return true;
-                // 当前时间小时数大等于开始时间小时数，等于结束时间小时数，分钟数等于结束时间分钟数，秒数小等于结束时间秒数
-            } else if (strDateH >= strDateBeginH && strDateH == strDateEndH
-                    && strDateM == strDateEndM && strDateS <= strDateEndS) {
-                return true;
+            }
+            // 当前时间小时数大等于开始时间小时数，等于结束时间小时数，分钟数等于结束时间分钟数，秒数小等于结束时间秒数
+            else {
+                return strDateH >= strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS <= strDateEndS;
             }
         }
         return false;
@@ -1208,9 +1226,7 @@ public class DateUtil {
     public static long dateToStamp(String str) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = simpleDateFormat.parse(str);
-        long ts = date.getTime();
-        System.out.println(ts);
-        return ts;
+        return date.getTime();
     }
 
     /**
@@ -1225,16 +1241,14 @@ public class DateUtil {
         String[] weekDays = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
         // 获得一个日历
         Calendar cal = Calendar.getInstance();
-        Date datet = null;
-        datet = (Date) f.parse(datetime);
+        Date datet;
+        datet = f.parse(datetime);
         cal.setTime(datet);
         // 指示一个星期中的某天。
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
         if (w < 0) {
             w = 0;
         }
-        //星期二
-        System.out.println(weekDays[w]);
         return weekDays[w];
     }
 
@@ -1279,7 +1293,6 @@ public class DateUtil {
                 runFlag = true;
                 System.out.println("系统时间在早上9点到下午17点之间.");
             } else {
-                runFlag = false;
                 System.out.println("系统时间不在早上9点到下午17点之间.");
             }
         } catch (ParseException e) {
@@ -1295,8 +1308,7 @@ public class DateUtil {
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.clear(Calendar.MINUTE);
         cal.clear(Calendar.SECOND);
-        Date time = cal.getTime();
-        return time;
+        return cal.getTime();
     }
 
     public static Date getWeekStart() {
@@ -1306,8 +1318,7 @@ public class DateUtil {
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.clear(Calendar.MINUTE);
         cal.clear(Calendar.SECOND);
-        Date time = cal.getTime();
-        return time;
+        return cal.getTime();
     }
 
 }

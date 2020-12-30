@@ -2,6 +2,7 @@ package com.moonlit.kingserp.common.util;
 
 import org.springframework.util.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 /**
@@ -188,15 +189,24 @@ public class ValidateUtil {
     /**
      * 校验email格式是否正确
      *
-     * @param email
+     * @param email 邮箱
      */
     public static boolean isEmail(String email) {
         if (StringUtils.isEmpty(email)) {
             return false;
         }
-        String str = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+        String str = "^\\w+((-\\w+)|(\\.\\w+))*@[A-Za-z0-9]+(([.\\-])[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
         Pattern pattern = Pattern.compile(str);
         return pattern.matcher(email).matches();
     }
 
+    /**
+     * 判断金额
+     *
+     * @param s 金额
+     * @return money
+     */
+    public static String isMoney(String s) {
+        return new DecimalFormat("0.00").format(Double.valueOf(s));
+    }
 }

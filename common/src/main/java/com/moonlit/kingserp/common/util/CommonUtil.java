@@ -2,7 +2,6 @@ package com.moonlit.kingserp.common.util;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -44,11 +43,6 @@ public class CommonUtil {
         return verificationCode.toString();
     }
 
-    public static void main(String[] args) {
-        String ss = getVerificationCode(11);
-        System.out.println(ss);
-    }
-
     /**
      * 生产订单号
      *
@@ -71,7 +65,7 @@ public class CommonUtil {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; ++i) {
             int number = random.nextInt(3);
-            long ResponseObj = 0;
+            long ResponseObj;
 
             switch (number) {
                 case 0:
@@ -250,20 +244,13 @@ public class CommonUtil {
      * @return
      */
     public static Map<String, Object> sortMap(Map<String, Object> map) {
-        SortedMap<String, Object> sort = new TreeMap<String, Object>(map);
-        return sort;
-    }
-
-    public static float floatMul(float num1, float num2) {
-        BigDecimal b1 = new BigDecimal(Double.toString(num1));
-        BigDecimal b2 = new BigDecimal(Double.toString(num2));
-        return b1.multiply(b2).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        return new TreeMap<>(map);
     }
 
     /**
      * 生成会员卡号
      *
-     * @return
+     * @return memberCode
      */
     public static String getMemberCode() {
         String time = DateUtil.getCurDate().replace("-", "");
@@ -273,7 +260,7 @@ public class CommonUtil {
     /**
      * 生成订单的编号order_sn
      *
-     * @return
+     * @return order_sn
      */
     public static String generateOrderNumber() {
         Calendar cal = Calendar.getInstance();
@@ -285,8 +272,8 @@ public class CommonUtil {
     /**
      * 获取随机字符串
      *
-     * @param num
-     * @return
+     * @param num 生成位数
+     * @return String
      */
     public static String getRandomNum(Integer num) {
         String base = "0123456789";

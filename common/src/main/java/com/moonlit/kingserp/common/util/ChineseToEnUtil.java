@@ -9,9 +9,10 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 /**
- * @author wxl
- * @date 2019/10/10
- * @description 获取汉字拼音首字母
+ * @Description: 获取汉字拼音首字母
+ * @Author: Joshua
+ * @CreateDate: 2020-02-08 22:40
+ * @Version 1.0
  */
 @Slf4j
 public class ChineseToEnUtil {

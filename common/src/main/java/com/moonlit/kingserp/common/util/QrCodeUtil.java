@@ -1,4 +1,4 @@
-package com.moonlit.kingserp.admin.common.utils;
+package com.moonlit.kingserp.common.util;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;

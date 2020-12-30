@@ -10,11 +10,10 @@ public class CaesarCipher {
 
     /**
      * 加密
-     * str：輸入值，k：偏移位
      *
-     * @param str
-     * @param k
-     * @return
+     * @param str 輸入值
+     * @param k   偏移位
+     * @return 編譯碼
      */
     public static String encryption(String str, int k) {
         //加密
@@ -53,8 +52,14 @@ public class CaesarCipher {
         return string.toString();
     }
 
+    /**
+     * 解密
+     *
+     * @param str 輸入值
+     * @param n   偏移位
+     * @return 原碼
+     */
     public static String decrypt(String str, int n) {
-        //解密
         int k = Integer.parseInt("-" + n);
         StringBuilder string = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
@@ -95,7 +100,7 @@ public class CaesarCipher {
         String encryption = encryption("abCz", 1);
         System.out.println(encryption);
         String decrypt = decrypt(encryption, 1);
-        System.out.printf(decrypt);
+        System.out.println(decrypt);
     }
 
 }
