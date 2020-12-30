@@ -22,12 +22,12 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入，可為null)
      * @return sum
      */
-    public static BigDecimal add(String v1, String v2, @Nullable Integer scale) {
+    public static String add(String v1, String v2, @Nullable Integer scale) {
         BigDecimal sum = new BigDecimal(v1).add(new BigDecimal(v2));
         if (scale != null) {
             sum = round(sum, scale);
         }
-        return sum;
+        return sum.toString();
     }
 
     /**
@@ -38,12 +38,12 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入，可為null)
      * @return sum
      */
-    public static BigDecimal add(double v1, double v2, @Nullable Integer scale) {
+    public static double add(double v1, double v2, @Nullable Integer scale) {
         BigDecimal sum = new BigDecimal(v1).add(new BigDecimal(v2));
         if (scale != null) {
             sum = round(sum, scale);
         }
-        return sum;
+        return sum.doubleValue();
     }
 
     /**
@@ -54,12 +54,12 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入，可為null)
      * @return 兩數差
      */
-    public static BigDecimal subtract(String v1, String v2, @Nullable Integer scale) {
+    public static String subtract(String v1, String v2, @Nullable Integer scale) {
         BigDecimal difference = new BigDecimal(v1).subtract(new BigDecimal(v2));
         if (scale != null) {
             difference = round(difference, scale);
         }
-        return difference;
+        return difference.toString();
     }
 
     /**
@@ -70,12 +70,12 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入，可為null)
      * @return 兩數差
      */
-    public static BigDecimal subtract(double v1, double v2, @Nullable Integer scale) {
+    public static double subtract(double v1, double v2, @Nullable Integer scale) {
         BigDecimal difference = new BigDecimal(v1).subtract(new BigDecimal(v2));
         if (scale != null) {
             difference = round(difference, scale);
         }
-        return difference;
+        return difference.doubleValue();
     }
 
     /**
@@ -86,12 +86,12 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入，可為null)
      * @return 兩數积
      */
-    public static BigDecimal multiply(String v1, String v2, @Nullable Integer scale) {
+    public static String multiply(String v1, String v2, @Nullable Integer scale) {
         BigDecimal accumulated = new BigDecimal(v1).multiply(new BigDecimal(v2));
         if (scale != null) {
             round(accumulated, scale);
         }
-        return accumulated;
+        return accumulated.toString();
     }
 
     /**
@@ -102,12 +102,12 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入，可為null)
      * @return 兩數积
      */
-    public static BigDecimal multiply(double v1, double v2, @Nullable Integer scale) {
+    public static double multiply(double v1, double v2, @Nullable Integer scale) {
         BigDecimal accumulated = new BigDecimal(v1).multiply(new BigDecimal(v2));
         if (scale != null) {
             round(accumulated, scale);
         }
-        return accumulated;
+        return accumulated.doubleValue();
     }
 
     /**
@@ -117,7 +117,7 @@ public class BigDecimalUtils {
      * @param v2 除數
      * @return 两个數的商
      */
-    public static BigDecimal divide(String v1, String v2) {
+    public static String divide(String v1, String v2) {
         return divide(v1, v2, BigDecimal.ROUND_HALF_UP);
     }
 
@@ -128,7 +128,7 @@ public class BigDecimalUtils {
      * @param v2 除數
      * @return 两个數的商
      */
-    public static BigDecimal divide(double v1, double v2) {
+    public static double divide(double v1, double v2) {
         return divide(v1, v2, BigDecimal.ROUND_HALF_UP);
     }
 
@@ -140,11 +140,11 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入)
      * @return 两个數的商
      */
-    public static BigDecimal divide(String v1, String v2, Integer scale) {
+    public static String divide(String v1, String v2, Integer scale) {
         if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
-        return new BigDecimal(v1).divide(new BigDecimal(v2), scale, BigDecimal.ROUND_HALF_UP);
+        return new BigDecimal(v1).divide(new BigDecimal(v2), scale, BigDecimal.ROUND_HALF_UP).toString();
     }
 
     /**
@@ -155,11 +155,11 @@ public class BigDecimalUtils {
      * @param scale 保留幾位小數(會四捨五入)
      * @return 两个數的商
      */
-    public static BigDecimal divide(double v1, double v2, Integer scale) {
+    public static double divide(double v1, double v2, Integer scale) {
         if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
-        return new BigDecimal(v1).divide(new BigDecimal(v2), scale, BigDecimal.ROUND_HALF_UP);
+        return new BigDecimal(v1).divide(new BigDecimal(v2), scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     /**
@@ -170,11 +170,11 @@ public class BigDecimalUtils {
      * @param scale 小数点后保留几位
      * @return 餘數
      */
-    public static BigDecimal remainder(String v1, String v2, Integer scale) {
+    public static String remainder(String v1, String v2, Integer scale) {
         if (scale < 0) {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
-        return new BigDecimal(v1).remainder(new BigDecimal(v2)).setScale(scale, BigDecimal.ROUND_HALF_UP);
+        return new BigDecimal(v1).remainder(new BigDecimal(v2)).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
     }
 
     /**
