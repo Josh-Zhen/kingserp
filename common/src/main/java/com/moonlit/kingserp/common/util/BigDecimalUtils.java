@@ -1,6 +1,7 @@
 package com.moonlit.kingserp.common.util;
 
 import com.sun.istack.internal.Nullable;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
  * @CreateDate: 2020/12/29 22:59
  * @Version 1.0
  */
+@Slf4j
 public class BigDecimalUtils {
 
     /**
@@ -18,7 +20,7 @@ public class BigDecimalUtils {
      * @param v1    加數
      * @param v2    被加數
      * @param scale 保留幾位小數(會四捨五入，可為null)
-     * @return 兩數和
+     * @return sum
      */
     public static BigDecimal add(String v1, String v2, @Nullable Integer scale) {
         BigDecimal sum = new BigDecimal(v1).add(new BigDecimal(v2));
@@ -34,7 +36,7 @@ public class BigDecimalUtils {
      * @param v1    加數
      * @param v2    被加數
      * @param scale 保留幾位小數(會四捨五入，可為null)
-     * @return 兩數和
+     * @return sum
      */
     public static BigDecimal add(double v1, double v2, @Nullable Integer scale) {
         BigDecimal sum = new BigDecimal(v1).add(new BigDecimal(v2));
