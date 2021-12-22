@@ -64,22 +64,21 @@ public class CommonUtil {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; ++i) {
-            int number = random.nextInt(3);
-            long ResponseObj;
+            int number = random.nextInt(2);
+            long responseObj;
 
             switch (number) {
                 case 0:
-                    ResponseObj = Math.round(Math.random() * 25 + 65);
-                    sb.append((char) ResponseObj);
+                    responseObj = Math.round(Math.random() * 25 + 65);
+                    sb.append((char) responseObj);
                     break;
                 case 1:
-                    ResponseObj = Math.round(Math.random() * 25 + 97);
-                    sb.append((char) ResponseObj);
-                    break;
-                case 2:
-                    sb.append(new Random().nextInt(10));
+                    responseObj = Math.round(Math.random() * 25 + 97);
+                    sb.append((char) responseObj);
                     break;
                 default:
+                    sb.append(new Random().nextInt(10));
+                    break;
             }
         }
         return sb.toString();
