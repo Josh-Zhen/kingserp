@@ -11,9 +11,8 @@ eureka:
     registerWithEureka: false
     # 获取注册信息（高可用配置、默认配置true）
     fetchRegistry: false
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-
+    service-url:
+      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 #---
 ## 高可用Eureka-Server
@@ -37,9 +36,9 @@ eureka:
 #    # registerWithEureka: false
 #    # 获取注册信息（高可用配置、默认配置true）
 #    # fetchRegistry: false
-#    serviceUrl:
+#    service-url:
 #      # 节点1向节点2/3进行服务注册
-#      defaultZone: http://peer2:8802/eureka/,http://peer3:8803/eureka/
+#      default-zone: http://peer2:8802/eureka/,http://peer3:8803/eureka/
 #
 #---
 ## 高可用节点2的配置
@@ -53,9 +52,9 @@ eureka:
 #  instance:
 #    hostname: peer2
 #  client:
-#    serviceUrl:
+#    service-url:
 #      # 节点2向节点1/3进行服务注册
-#      defaultZone: http://peer1:8801/eureka/,http://peer3:8803/eureka/
+#      default-zone: http://peer1:8801/eureka/,http://peer3:8803/eureka/
 #
 #---
 ## 高可用节点3的配置
@@ -69,9 +68,9 @@ eureka:
 #  instance:
 #    hostname: peer3
 #  client:
-#    serviceUrl:
+#    service-url:
 #      # 节点3向节点1/2进行服务注册
-#      defaultZone: http://peer1:8801/eureka/,http://peer2:8802/eureka/
+#      default-zone: http://peer1:8801/eureka/,http://peer2:8802/eureka/
 #
 ## Eureka高可用，节点均出现在unavailable-replicas下：
 ## 由于我们在yml文件里设置了类似defaultZone: http://localhost:8801/eureka/,http://localhost:8802/eureka/, 符合上述问题， 所以这里的注册url不能设置为localhost
@@ -80,3 +79,8 @@ eureka:
 ## 127.0.0.1	peer1
 ## 127.0.0.1	peer2
 ## 127.0.0.1	peer3
+##
+## 高可用服務啓動需要勾選 Store as project file
+## 在Environment下將下面兩個參數填上
+## VM options: -Dserver.port=8801
+## Program arguments: -spring.profiles.active=peer1
